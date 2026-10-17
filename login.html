@@ -4,126 +4,117 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#0b1730">
+  <meta name="theme-color" content="#0b1630">
   <title>Login | Mandiri Startup Academy</title>
 
   <style>
     :root {
-      --navy: #0b1730;
-      --navy-light: #142747;
-      --gold: #d8b56a;
+      --navy: #0b1630;
+      --navy-light: #14264a;
+      --gold: #d7b56d;
       --white: #ffffff;
-      --muted: #64748b;
-      --border: #dce3ed;
+      --muted: #667085;
+      --border: #e4e7ec;
       --danger: #b42318;
       --success: #067647;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
       font-family: Inter, "Segoe UI", Arial, sans-serif;
-      background: #f4f6fa;
+      background:
+        radial-gradient(circle at 15% 15%, #263e68 0, transparent 35%),
+        linear-gradient(135deg, #081225, #13264b 65%, #0b1630);
       color: var(--navy);
-      display: flex;
-      flex-direction: column;
-    }
-
-    .topbar {
-      background: var(--navy);
-      color: white;
-      padding: 20px 6%;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      border-bottom: 3px solid var(--gold);
-    }
-
-    .brand-mark {
-      width: 45px;
-      height: 45px;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      border-radius: 12px;
       display: grid;
       place-items: center;
-      font-size: 22px;
-      font-weight: 800;
-      flex-shrink: 0;
+      padding: 24px;
     }
 
-    .brand-title {
-      font-weight: 800;
-      font-size: 17px;
-      letter-spacing: .2px;
-    }
-
-    .brand-subtitle {
-      font-size: 12px;
-      color: #c5cede;
-      margin-top: 4px;
-    }
-
-    main {
-      flex: 1;
+    .layout {
+      width: min(100%, 960px);
+      min-height: 560px;
       display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(340px, 440px);
-      max-width: 1150px;
-      width: 100%;
-      margin: auto;
-      padding: 48px 24px;
-      gap: 65px;
-      align-items: center;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      border-radius: 24px;
+      background: var(--white);
+      box-shadow: 0 28px 80px #0005;
     }
 
     .intro {
-      padding: 10px 0;
+      padding: 48px 40px;
+      color: var(--white);
+      background: linear-gradient(155deg, #172b51, #0b1630 75%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 32px;
+      position: relative;
     }
 
-    .eyebrow {
-      color: #8a6b2c;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      font-size: 12px;
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #d7b56d99;
+      border-radius: 14px;
+      color: var(--gold);
+      font-size: 22px;
       font-weight: 800;
-      margin-bottom: 18px;
     }
 
-    h1 {
-      font-size: clamp(34px, 4vw, 52px);
-      line-height: 1.12;
-      letter-spacing: -1.4px;
-      margin: 0 0 22px;
-      color: var(--navy);
+    .brand-name {
+      font-weight: 750;
+      line-height: 1.35;
     }
 
-    h1 span {
-      color: #a98132;
+    .brand-name small {
+      display: block;
+      color: #c3cce0;
+      font-size: 11px;
+      letter-spacing: 2px;
+      margin-top: 3px;
     }
+
+    .intro h1 {
+      font-size: clamp(30px, 4vw, 43px);
+      line-height: 1.15;
+      margin: 0 0 18px;
+      letter-spacing: -1px;
+    }
+
+    .intro h1 span { color: var(--gold); }
 
     .intro p {
-      color: #64748b;
-      font-size: 16px;
-      line-height: 1.85;
-      max-width: 530px;
+      color: #d0d8e8;
+      line-height: 1.8;
+      font-size: 14px;
+      max-width: 350px;
     }
 
     .feature-list {
-      margin-top: 28px;
       display: grid;
       gap: 14px;
+      margin-top: 28px;
     }
 
     .feature {
       display: flex;
       align-items: center;
       gap: 12px;
-      color: #334155;
-      font-size: 14px;
+      color: #e6ebf5;
+      font-size: 13px;
     }
 
     .feature-icon {
@@ -131,144 +122,140 @@
       height: 30px;
       display: grid;
       place-items: center;
+      color: var(--gold);
+      border: 1px solid #d7b56d55;
       border-radius: 9px;
-      background: #e9edf5;
-      color: #9b762b;
-      font-weight: 800;
       flex-shrink: 0;
     }
 
-    .login-card {
-      background: white;
-      border: 1px solid #e5eaf1;
-      border-radius: 22px;
-      padding: 34px;
-      box-shadow: 0 22px 60px rgba(11, 23, 48, .09);
+    .intro-footer {
+      color: #aebbd3;
+      font-size: 11px;
+      line-height: 1.7;
     }
 
-    .card-heading {
-      margin-bottom: 28px;
+    .form-panel {
+      padding: 48px 42px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
 
-    .card-heading h2 {
-      margin: 0 0 9px;
-      font-size: 25px;
+    .eyebrow {
+      color: #98752d;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
     }
 
-    .card-heading p {
-      margin: 0;
+    .form-panel h2 {
+      margin: 12px 0 8px;
+      font-size: 29px;
+      letter-spacing: -0.7px;
+    }
+
+    .subtitle {
+      margin: 0 0 28px;
       color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
+      font-size: 13px;
+      line-height: 1.7;
     }
 
-    .field {
-      margin-bottom: 19px;
-    }
+    .field { margin-bottom: 18px; }
 
     label {
       display: block;
+      font-size: 12px;
       font-weight: 700;
-      font-size: 13px;
-      margin-bottom: 9px;
+      margin-bottom: 8px;
     }
 
     input {
       width: 100%;
-      padding: 14px 15px;
+      min-height: 48px;
+      padding: 13px 14px;
       border: 1px solid var(--border);
       border-radius: 11px;
       outline: none;
-      font-size: 14px;
       background: #fff;
-      color: var(--navy);
+      font: inherit;
+      font-size: 14px;
       transition: border-color .2s, box-shadow .2s;
     }
 
     input:focus {
-      border-color: #b48c3f;
-      box-shadow: 0 0 0 3px rgba(216, 181, 106, .18);
+      border-color: #b7964d;
+      box-shadow: 0 0 0 3px #d7b56d26;
     }
 
-    .password-wrap {
-      position: relative;
-    }
-
-    .password-wrap input {
-      padding-right: 100px;
-    }
+    .password-wrap { position: relative; }
+    .password-wrap input { padding-right: 72px; }
 
     .show-password {
       position: absolute;
-      right: 10px;
+      right: 9px;
       top: 50%;
       transform: translateY(-50%);
       border: 0;
       background: transparent;
-      color: #64748b;
-      font-size: 12px;
+      color: #475467;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
       padding: 8px;
     }
 
-    .forgot-row {
+    .options {
       display: flex;
       justify-content: flex-end;
-      margin-top: -5px;
-      margin-bottom: 22px;
+      margin: -3px 0 22px;
     }
 
-    a {
-      color: #8a6828;
-      font-size: 13px;
+    .text-button {
+      border: 0;
+      padding: 0;
+      background: none;
+      color: #8b6a28;
+      font: inherit;
+      font-size: 12px;
       font-weight: 700;
-      text-decoration: none;
+      cursor: pointer;
     }
 
-    a:hover {
-      text-decoration: underline;
-    }
-
-    .primary-button {
+    .submit {
       width: 100%;
+      min-height: 49px;
+      padding: 14px;
       border: 0;
       border-radius: 11px;
       background: var(--navy);
       color: white;
-      padding: 15px;
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 750;
       cursor: pointer;
       transition: background .2s, transform .2s;
     }
 
-    .primary-button:hover {
-      background: var(--navy-light);
-      transform: translateY(-1px);
-    }
-
-    .primary-button:disabled {
-      opacity: .65;
-      cursor: wait;
-      transform: none;
-    }
+    .submit:hover { background: var(--navy-light); }
+    .submit:active { transform: scale(.99); }
+    .submit:disabled { opacity: .65; cursor: wait; }
 
     .message {
       display: none;
-      padding: 12px 14px;
+      margin: 0 0 18px;
+      padding: 12px 13px;
       border-radius: 10px;
-      margin-bottom: 18px;
-      font-size: 13px;
-      line-height: 1.6;
+      font-size: 12px;
+      line-height: 1.65;
       overflow-wrap: anywhere;
     }
 
     .message.error {
       display: block;
       color: var(--danger);
-      background: #fff0ef;
-      border: 1px solid #ffd5d1;
+      background: #fef3f2;
+      border: 1px solid #fecdca;
     }
 
     .message.success {
@@ -278,133 +265,111 @@
       border: 1px solid #abefc6;
     }
 
-    .register-link {
+    .bottom {
+      margin-top: 25px;
       text-align: center;
-      margin-top: 23px;
       color: var(--muted);
-      font-size: 13px;
+      font-size: 12px;
+    }
+
+    .bottom a {
+      color: #8b6a28;
+      text-decoration: none;
+      font-weight: 750;
     }
 
     .security-note {
-      background: #f8f9fc;
-      border: 1px solid #edf0f5;
-      border-radius: 10px;
-      padding: 12px;
-      color: #64748b;
-      font-size: 12px;
-      line-height: 1.6;
-      margin-top: 22px;
-    }
-
-    footer {
-      padding: 20px;
+      margin-top: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #eef0f3;
+      color: #98a2b3;
+      font-size: 10px;
+      line-height: 1.7;
       text-align: center;
-      color: #7b8798;
-      font-size: 12px;
     }
 
-    @media (max-width: 800px) {
-      main {
+    @media (max-width: 700px) {
+      body { padding: 14px; }
+
+      .layout {
+        max-width: 440px;
+        min-height: auto;
         grid-template-columns: 1fr;
-        gap: 30px;
-        max-width: 520px;
-        padding: 34px 18px;
+        border-radius: 19px;
       }
 
       .intro {
-        text-align: center;
+        padding: 23px 24px;
+        gap: 20px;
       }
 
-      .intro p {
-        margin-left: auto;
-        margin-right: auto;
+      .intro h1 {
+        font-size: 27px;
+        margin-bottom: 10px;
       }
 
-      .feature-list {
-        max-width: 360px;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: left;
-      }
+      .intro p { margin-bottom: 0; }
+      .feature-list, .intro-footer { display: none; }
 
-      h1 {
-        font-size: 36px;
-      }
-
-      .login-card {
-        padding: 26px 22px;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .brand-title {
-        font-size: 15px;
-      }
-
-      .brand-subtitle {
-        font-size: 11px;
-      }
-
-      h1 {
-        font-size: 31px;
-      }
+      .form-panel { padding: 30px 24px; }
+      .form-panel h2 { font-size: 26px; }
     }
   </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="brand-mark">M</div>
-    <div>
-      <div class="brand-title">MANDIRI STARTUP ACADEMY</div>
-      <div class="brand-subtitle">SMKS Mandiri Bandar Agung</div>
-    </div>
-  </header>
-
-  <main>
+  <main class="layout">
     <section class="intro">
-      <div class="eyebrow">Student Entrepreneurship Platform</div>
-
-      <h1>
-        Bangun Ide.<br>
-        Kembangkan <span>Bisnis.</span>
-      </h1>
-
-      <p>
-        Platform pembelajaran kewirausahaan digital untuk membantu siswa
-        mengembangkan ide, membangun merek, mengelola produk, dan
-        mempersiapkan bisnis masa depan.
-      </p>
-
-      <div class="feature-list">
-        <div class="feature">
-          <div class="feature-icon">01</div>
-          <span>Kelola identitas dan merek bisnis siswa.</span>
+      <div class="brand">
+        <div class="brand-mark">M</div>
+        <div class="brand-name">
+          MANDIRI STARTUP ACADEMY
+          <small>LEARN · BUILD · GROW</small>
         </div>
+      </div>
 
-        <div class="feature">
-          <div class="feature-icon">02</div>
-          <span>Kembangkan produk dan promosi digital.</span>
-        </div>
+      <div>
+        <h1>Bangun ide.<br><span>Wujudkan peluang.</span></h1>
+        <p>
+          Platform pembelajaran dan pengembangan bisnis digital
+          untuk membantu Anda belajar, membangun produk, dan
+          mengembangkan usaha secara terarah.
+        </p>
 
-        <div class="feature">
-          <div class="feature-icon">03</div>
-          <span>Belajar mengelola usaha secara terstruktur.</span>
+        <div class="feature-list">
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Akses sesuai peran akun Anda</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Kelola pembelajaran dan proyek bisnis</span>
+          </div>
+          <div class="feature">
+            <span class="feature-icon">✓</span>
+            <span>Terhubung dengan akun Firebase</span>
+          </div>
         </div>
+      </div>
+
+      <div class="intro-footer">
+        MANDIRI STARTUP ACADEMY<br>
+        Platform pembelajaran dan pengembangan startup.
       </div>
     </section>
 
-    <section class="login-card">
-      <div class="card-heading">
-        <h2>Selamat Datang</h2>
-        <p>Masuk menggunakan akun Mandiri Startup Academy Anda.</p>
-      </div>
+    <section class="form-panel">
+      <div class="eyebrow">Selamat datang kembali</div>
+      <h2>Masuk ke akun</h2>
+      <p class="subtitle">
+        Gunakan email dan kata sandi yang terdaftar untuk melanjutkan.
+      </p>
 
-      <div id="message" class="message" role="alert" aria-live="polite"></div>
+      <div id="message" class="message" role="status" aria-live="polite"></div>
 
       <form id="loginForm">
         <div class="field">
-          <label for="email">Alamat Email</label>
+          <label for="email">Alamat email</label>
           <input
             id="email"
             name="email"
@@ -416,7 +381,7 @@
         </div>
 
         <div class="field">
-          <label for="password">Kata Sandi</label>
+          <label for="password">Kata sandi</label>
           <div class="password-wrap">
             <input
               id="password"
@@ -426,271 +391,184 @@
               autocomplete="current-password"
               required
             >
-            <button
-              class="show-password"
-              id="togglePassword"
-              type="button"
-            >Lihat</button>
+            <button class="show-password" id="togglePassword" type="button">
+              Lihat
+            </button>
           </div>
         </div>
 
-        <div class="forgot-row">
-          <a href="#" id="forgotPassword">Lupa kata sandi?</a>
+        <div class="options">
+          <button class="text-button" id="forgotPassword" type="button">
+            Lupa kata sandi?
+          </button>
         </div>
 
-        <button class="primary-button" id="loginButton" type="submit">
-          Masuk ke Akun
+        <button class="submit" id="loginButton" type="submit">
+          Masuk ke dashboard
         </button>
       </form>
 
-      <div class="register-link">
-        Belum mempunyai akun?
-        <a href="register.html">Daftar sebagai siswa</a>
+      <div class="bottom">
+        Belum memiliki akun? <a href="./register.html">Daftar sekarang</a>
       </div>
 
       <div class="security-note">
-        <strong>Keamanan akun</strong><br>
-        Akun siswa baru memerlukan persetujuan administrator sebelum
-        dapat menggunakan seluruh fitur platform.
+        Akses akun dilindungi melalui Firebase Authentication.
+        Jangan bagikan kata sandi Anda kepada siapa pun.
       </div>
     </section>
   </main>
 
-  <footer>
-    © <span id="year"></span> Mandiri Startup Academy · SMKS Mandiri Bandar Agung
-  </footer>
-
   <script type="module">
-    import { initializeApp }
-      from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+    import { auth, db, authPersistenceReady } from "./js/firebase.js";
 
     import {
-      getAuth,
       signInWithEmailAndPassword,
-      sendPasswordResetEmail,
-      signOut
+      onAuthStateChanged,
+      sendPasswordResetEmail
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
 
     import {
-      getFirestore,
       doc,
-      getDocFromServer
+      getDoc
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-    // Konfigurasi Firebase Mandiri Startup Academy.
-    // Pastikan apiKey disalin persis dari Firebase Console.
-    const firebaseConfig = {
-      apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud8-9pvYGNr0",
-      authDomain: "mandiri-startup-academy.firebaseapp.com",
-      projectId: "mandiri-startup-academy",
-      storageBucket: "mandiri-startup-academy.firebasestorage.app",
-      messagingSenderId: "245277580741",
-      appId: "1:245277580741:web:2e534e65504ba6800c3fac"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app, "(default)");
-
-    console.log("Mandiri Startup Academy");
-    console.log("Firebase project:", app.options.projectId);
-    console.log("Firestore database:", "(default)");
-
-    const loginForm = document.getElementById("loginForm");
+    const form = document.getElementById("loginForm");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
     const loginButton = document.getElementById("loginButton");
     const messageBox = document.getElementById("message");
-    const togglePassword = document.getElementById("togglePassword");
-    const forgotPassword = document.getElementById("forgotPassword");
 
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
+    let loginInProgress = false;
 
-    function showMessage(message, type = "error") {
-      messageBox.textContent = message;
-      messageBox.className = `message ${type}`;
+    function showMessage(text, type = "error") {
+      messageBox.textContent = text;
+      messageBox.className = "message " + type;
     }
 
-    function clearMessage() {
-      messageBox.textContent = "";
-      messageBox.className = "message";
+    function friendlyAuthError(error) {
+      const code = error?.code || "";
+
+      const messages = {
+        "auth/invalid-email": "Format email tidak valid.",
+        "auth/invalid-credential": "Email atau kata sandi tidak sesuai.",
+        "auth/user-not-found": "Akun dengan email tersebut tidak ditemukan.",
+        "auth/wrong-password": "Email atau kata sandi tidak sesuai.",
+        "auth/too-many-requests": "Terlalu banyak percobaan. Coba kembali nanti.",
+        "auth/network-request-failed": "Koneksi internet bermasalah. Periksa koneksi Anda.",
+        "auth/user-disabled": "Akun ini dinonaktifkan. Hubungi administrator.",
+        "auth/operation-not-allowed": "Login email dan kata sandi belum diaktifkan di Firebase."
+      };
+
+      return messages[code] || "Login belum berhasil. Periksa koneksi dan konfigurasi Firebase. Kode: " + (code || "tidak diketahui");
     }
 
-    function firebaseErrorMessage(error) {
-      console.error("Firebase error:", error.code, error.message);
+    async function routeUser(user) {
+      if (!user) return;
 
-      switch (error.code) {
-        case "auth/invalid-api-key":
-        case "auth/api-key-not-valid":
-          return "API Key Firebase tidak valid. Salin ulang konfigurasi Web dari Firebase Console dan pastikan berasal dari project mandiri-startup-academy.";
+      const userRef = doc(db, "Users", user.uid);
+      const userSnap = await getDoc(userRef);
 
-        case "auth/invalid-email":
-          return "Format email tidak valid.";
-
-        case "auth/invalid-credential":
-        case "auth/invalid-login-credentials":
-        case "auth/wrong-password":
-        case "auth/user-not-found":
-          return "Email atau kata sandi tidak cocok dengan akun Firebase.";
-
-        case "auth/user-disabled":
-          return "Akun ini dinonaktifkan di Firebase Authentication.";
-
-        case "auth/operation-not-allowed":
-          return "Metode login Email/Password belum diaktifkan di Firebase Authentication.";
-
-        case "auth/too-many-requests":
-          return "Terlalu banyak percobaan login. Tunggu beberapa saat sebelum mencoba kembali.";
-
-        case "auth/network-request-failed":
-          return "Koneksi internet bermasalah. Periksa koneksi Anda.";
-
-        case "auth/unauthorized-domain":
-        case "auth/app-not-authorized":
-          return "Domain website belum diizinkan di pengaturan Firebase Authentication.";
-
-        case "permission-denied":
-        case "firestore/permission-denied":
-          return "Akses profil ditolak oleh Firestore. Periksa aturan keamanan Firestore.";
-
-        default:
-          return `Login gagal. ${error.message || "Silakan coba kembali."}`;
+      if (!userSnap.exists()) {
+        throw new Error(
+          "Akun berhasil login, tetapi profil belum ditemukan di koleksi Users. Hubungi administrator agar profil akun diperiksa."
+        );
       }
+
+      const profile = userSnap.data();
+      const role = String(profile.role || "").trim().toLowerCase();
+      const status = String(profile.status || "active").trim().toLowerCase();
+
+      if (status !== "active") {
+        throw new Error(
+          "Status akun Anda belum aktif. Hubungi administrator."
+        );
+      }
+
+      const routes = {
+        admin: "./dashboard/admin.html",
+        teacher: "./dashboard/teacher.html",
+        student: "./dashboard/student.html"
+      };
+
+      const destination = routes[role];
+
+      if (!destination) {
+        throw new Error(
+          "Peran akun belum dikenali. Periksa nilai role pada dokumen Users di Firestore."
+        );
+      }
+
+      window.location.replace(destination);
     }
 
-    togglePassword.addEventListener("click", () => {
-      const show = passwordInput.type === "password";
-      passwordInput.type = show ? "text" : "password";
-      togglePassword.textContent = show ? "Sembunyikan" : "Lihat";
+    document.getElementById("togglePassword").addEventListener("click", () => {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      document.getElementById("togglePassword").textContent =
+        isPassword ? "Sembunyikan" : "Lihat";
     });
 
-    forgotPassword.addEventListener("click", async (event) => {
-      event.preventDefault();
-      clearMessage();
-
+    document.getElementById("forgotPassword").addEventListener("click", async () => {
       const email = emailInput.value.trim();
 
       if (!email) {
-        showMessage("Masukkan alamat email terlebih dahulu.");
+        showMessage("Masukkan alamat email terlebih dahulu, lalu pilih Lupa kata sandi.");
         emailInput.focus();
         return;
       }
 
       try {
+        await authPersistenceReady;
         await sendPasswordResetEmail(auth, email);
         showMessage(
-          "Jika email terdaftar, instruksi reset kata sandi akan dikirim. Periksa kotak masuk dan folder spam.",
+          "Jika email tersebut terdaftar, instruksi reset kata sandi akan dikirim. Periksa kotak masuk dan folder spam.",
           "success"
         );
       } catch (error) {
-        showMessage(firebaseErrorMessage(error));
+        showMessage(friendlyAuthError(error));
       }
     });
 
-    loginForm.addEventListener("submit", async (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
-      clearMessage();
+
+      if (loginInProgress) return;
+
+      loginInProgress = true;
+      loginButton.disabled = true;
+      loginButton.textContent = "Memeriksa akun...";
+      messageBox.className = "message";
 
       const email = emailInput.value.trim();
       const password = passwordInput.value;
 
-      if (!email || !password) {
-        showMessage("Email dan kata sandi wajib diisi.");
-        return;
-      }
-
-      loginButton.disabled = true;
-      loginButton.textContent = "Memeriksa akun...";
-
-      let signedInUser = null;
-
       try {
-        // 1. Login menggunakan Firebase Authentication.
+        await authPersistenceReady;
+
         const credential = await signInWithEmailAndPassword(
           auth,
           email,
           password
         );
 
-        signedInUser = credential.user;
-
-        console.log("Login email:", signedInUser.email);
-        console.log("Login UID:", signedInUser.uid);
-
-        // 2. Cari profil berdasarkan UID pada users/{UID}.
-       const profileRef = doc(db, "Users", signedInUser.uid);
-        console.log("Firestore document path:", profileRef.path);
-
-        const profileSnapshot = await getDocFromServer(profileRef);
-
-        console.log("Profile exists on server:", profileSnapshot.exists());
-
-        if (!profileSnapshot.exists()) {
-          await signOut(auth);
-          signedInUser = null;
-
-          showMessage(
-            "Login Firebase berhasil, tetapi dokumen users/{UID} tidak ditemukan pada database (default). Periksa Document ID dan project Firebase."
-          );
-          return;
-        }
-
-        const profile = profileSnapshot.data();
-
-        // 3. Pastikan akun aktif.
-        if (profile.status !== "active") {
-          await signOut(auth);
-          signedInUser = null;
-
-          showMessage(
-            "Akun Anda belum aktif atau masih menunggu persetujuan administrator."
-          );
-          return;
-        }
-
-        // 4. Arahkan pengguna berdasarkan peran di Firestore.
-        const destinations = {
-          siswa: "dashboard/student.html",
-          guru: "dashboard/teacher.html",
-          admin: "dashboard/admin.html"
-        };
-
-        const destination = destinations[profile.role];
-
-        if (!destination) {
-          await signOut(auth);
-          signedInUser = null;
-
-          showMessage(
-            "Peran akun belum valid. Hubungi administrator untuk memeriksa profil pengguna."
-          );
-          return;
-        }
-
-        showMessage(
-          "Login berhasil. Mengalihkan ke dashboard...",
-          "success"
-        );
-
-        window.location.assign(destination);
-
+        await routeUser(credential.user);
       } catch (error) {
-        if (signedInUser) {
-          try {
-            await signOut(auth);
-          } catch (signOutError) {
-            console.error("Gagal membersihkan sesi:", signOutError);
-          }
-        }
+        showMessage(error.message?.startsWith("Akun berhasil login") ||
+                    error.message?.startsWith("Status akun") ||
+                    error.message?.startsWith("Peran akun")
+          ? error.message
+          : friendlyAuthError(error));
 
-        showMessage(firebaseErrorMessage(error));
-
-      } finally {
         loginButton.disabled = false;
-        loginButton.textContent = "Masuk ke Akun";
+        loginButton.textContent = "Masuk ke dashboard";
+        loginInProgress = false;
       }
     });
+
+    // Tidak melakukan redirect otomatis di halaman login.
+    // Pengguna dapat memasukkan akun yang berbeda secara sengaja.
+    await authPersistenceReady;
   </script>
 </body>
 </html>
