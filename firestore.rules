@@ -42,9 +42,9 @@ service cloud.firestore {
     }
 
     // PROFIL AKUN
-    // Registrasi publik hanya boleh membuat profil siswa pending.
-    // Hanya admin yang boleh mengaktifkan, mengubah role/status, atau
-    // menetapkan groupId. Siswa tidak dapat mengangkat hak akses sendiri.
+    // Registrasi publik langsung membuat profil siswa aktif tanpa persetujuan.
+    // Role tetap siswa dan groupId wajib null; hanya admin yang dapat
+    // menetapkan kelompok atau mengubah peran akun.
     match /Users/{uid} {
       allow read: if signedIn()
         && (request.auth.uid == uid || isActiveAdmin());
@@ -52,13 +52,13 @@ service cloud.firestore {
       allow create: if signedIn()
         && request.auth.uid == uid
         && request.resource.data.role in ['student', 'siswa']
-        && request.resource.data.status == 'pending'
+        && request.resource.data.status == 'active'
         && request.resource.data.groupId == null;
 
       allow update, delete: if isActiveAdmin();
     }
 
-    // Kompatibilitas baca profil lama; pendaftaran baru menggunakan Users.
+    // Kompatibilitas profil lama; pendaftaran baru menggunakan Users.
     match /users/{uid} {
       allow read: if signedIn()
         && (request.auth.uid == uid || isActiveAdmin());
@@ -66,7 +66,8 @@ service cloud.firestore {
       allow create: if signedIn()
         && request.auth.uid == uid
         && request.resource.data.role in ['student', 'siswa']
-        && request.resource.data.status == 'pending';
+        && request.resource.data.status == 'active'
+        && request.resource.data.groupId == null;
 
       allow update, delete: if isActiveAdmin();
     }
