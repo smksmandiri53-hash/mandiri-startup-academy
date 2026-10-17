@@ -25,7 +25,7 @@ footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
 <section class="hero"><div class="eyebrow">STUDENT BUSINESS WORKSPACE</div><h1 id="welcomeTitle">Selamat datang di ruang kerja bisnis!</h1><p>Kerjakan proyek kewirausahaan bersama kelompok. Setiap anggota bertanggung jawab, berdiskusi, membuat produk, mempromosikan, dan mencatat keuangan secara kolaboratif.</p></section>
 <div id="accountStatus" class="status" style="margin-top:16px" role="status" aria-live="polite">Memeriksa akun...</div>
 <div class="grid">
-<section class="panel"><h2>Kelompok Saya</h2><p class="muted" id="groupDescription">Informasi kelompok akan muncul setelah akun diaktifkan dan admin menetapkan kelompok.</p><div id="members" class="members"></div></section>
+<section class="panel"><h2>Kelompok Saya</h2><p class="muted" id="groupDescription">Informasi kelompok akan muncul setelah admin menetapkan kelompok.</p><div id="members" class="members"></div></section>
 <section class="panel"><h2>Alur Kerja Kelompok</h2><p class="muted">Gunakan pembagian tugas berikut agar seluruh anggota terlibat aktif.</p><div class="steps">
 <div class="step"><div class="number">1</div><div><strong>Riset masalah pelanggan</strong><p>Diskusikan kebutuhan calon pembeli dan tulis alasan produk kelompok layak dibuat.</p></div></div>
 <div class="step"><div class="number">2</div><div><strong>Rancang brand dan produk</strong><p>Tentukan nama, target pasar, keunikan, biaya produksi, dan harga jual.</p></div></div>
@@ -53,8 +53,8 @@ onAuthStateChanged(auth,async user=>{
   if(normalized==="admin"){window.location.replace("./admin.html");return;}
   if(normalized!=="student"){status("Peran akun tidak dikenali. Hubungi administrator.","error");return;}
   $("welcomeTitle").textContent="Halo, "+(profile.displayName||user.displayName||"Siswa")+"!";
-  if(profile.status!=="active"){status("Pendaftaran diterima. Akun Anda masih menunggu persetujuan admin dan penempatan ke kelompok.","error");$("groupDescription").textContent="Kelompok akan terlihat setelah akun disetujui administrator.";return;}
-  if(!profile.groupId){status("Akun aktif, tetapi belum ditempatkan ke kelompok. Hubungi administrator.","error");$("groupDescription").textContent="Admin perlu memasukkan Anda ke kelompok berisi 3–4 siswa.";return;}
+  if(profile.status!=="active"){status("Status akun tidak aktif. Hubungi administrator untuk pemeriksaan.","error");return;}
+  if(!profile.groupId){status("Akun Anda sudah aktif. Anda bisa login, tetapi belum ditempatkan ke kelompok. Admin akan mengatur kelompok berisi 3–4 siswa.","");$("groupDescription").textContent="Anda belum masuk kelompok. Silakan tunggu sampai admin menempatkan Anda ke kelompok berisi 3–4 siswa.";return;}
   const groupSnap=await getDoc(doc(db,"Groups",profile.groupId));
   if(!groupSnap.exists()){status("ID kelompok tidak ditemukan. Hubungi administrator.","error");return;}
   const group=groupSnap.data();
