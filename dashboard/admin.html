@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,194 +5,1024 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1730">
 <title>Dashboard Admin | Mandiri Startup Academy</title>
+
 <style>
-:root{--navy:#0b1730;--navy2:#142747;--gold:#d8b56a;--bg:#f4f6fa;--white:#fff;--text:#24334b;--muted:#718096;--border:#e4e9f1;--red:#b42318;--green:#067647}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.layout{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}
-.sidebar{background:var(--navy);color:#fff;padding:24px 17px;display:flex;flex-direction:column;gap:28px}
-.brand{display:flex;align-items:center;gap:12px;padding:0 5px 22px;border-bottom:1px solid #293750}
-.logo{height:43px;width:43px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold);font-weight:900;font-size:22px;flex-shrink:0}
-.brand strong{display:block;font-size:13px;line-height:1.5}
-.brand small{display:block;color:#bac5d5;font-size:11px;margin-top:4px}
-.nav-label{font-size:10px;color:#9eabc0;font-weight:800;letter-spacing:1.5px;padding:0 10px}
-.nav{display:grid;gap:7px}
-.nav a{display:flex;align-items:center;gap:11px;color:#d7dfeb;padding:12px;border-radius:9px;font-size:13px;text-decoration:none}
-.nav a.active,.nav a:hover{background:#203453;color:#f0d596}
-.nav a span:first-child{width:22px;text-align:center;font-size:17px}
-.sidebar-note{margin-top:auto;padding:14px;border:1px solid #34415a;border-radius:12px;color:#c5cede;font-size:11px;line-height:1.7}
-.main{min-width:0}
-.topbar{min-height:76px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:14px 30px;gap:14px}
-.topbar h1{font-size:19px;color:var(--navy);margin:0}
-.topbar p{font-size:12px;color:var(--muted);margin:5px 0 0}
-.user-area{display:flex;align-items:center;gap:12px}
-.avatar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#f5eedf;color:#8a6828;font-weight:800}
-.user-info strong{display:block;font-size:12px}
-.user-info small{font-size:11px;color:var(--muted)}
-.logout{border:1px solid var(--border);background:white;color:var(--navy);border-radius:9px;padding:10px 13px;font-size:12px;font-weight:750}
-.content{padding:28px 30px;max-width:1500px;margin:auto}
-.welcome{background:linear-gradient(115deg,var(--navy),var(--navy2));color:#fff;padding:27px;border-radius:17px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;overflow:hidden}
-.welcome:after{content:"M";position:absolute;right:40px;top:-48px;font-size:190px;font-weight:900;color:#ffffff08;pointer-events:none}
-.welcome>*{position:relative;z-index:1}
-.welcome .eyebrow{color:#e6ca88;font-size:10px;font-weight:800;letter-spacing:2px}
-.welcome h2{font-size:clamp(21px,3vw,29px);margin:9px 0}
-.welcome p{color:#d1d9e5;font-size:13px;margin:0;max-width:650px}
-.date{color:#f1d99e;font-size:12px;font-weight:700}
-.section-title{display:flex;align-items:end;justify-content:space-between;gap:12px;margin:28px 0 15px}
-.section-title h2{font-size:17px;color:var(--navy);margin:0}
-.section-title p{font-size:12px;color:var(--muted);margin:5px 0 0}
-.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
-.stat{background:#fff;border:1px solid var(--border);border-radius:13px;padding:20px;min-width:0;box-shadow:0 4px 15px #0b173008}
-.stat-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.stat-label{font-size:12px;color:var(--muted)}
-.stat-icon{width:36px;height:36px;border-radius:10px;background:#f5eedf;color:#8a6828;display:grid;place-items:center;font-size:18px}
-.stat-value{font-size:29px;font-weight:850;color:var(--navy);margin-top:12px;overflow-wrap:anywhere}
-.stat-foot{font-size:11px;color:var(--muted);margin-top:5px}
-.panel{background:white;border:1px solid var(--border);border-radius:13px;padding:21px;margin-top:22px;scroll-margin-top:18px}
-.panel h2{font-size:16px;margin:0;color:var(--navy)}
-.panel>p{font-size:12px;color:var(--muted);line-height:1.7}
-.quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:17px}
-.quick{border:1px solid var(--border);border-radius:11px;padding:16px;text-decoration:none;color:var(--navy);display:block}
-.quick:hover{border-color:var(--gold);background:#fffdf8}
-.quick strong{font-size:13px;display:block;margin-bottom:6px}
-.quick span{font-size:11px;color:var(--muted);line-height:1.6}
-.status{padding:13px 15px;border-radius:10px;background:#f8f9fc;border:1px solid var(--border);font-size:12px;line-height:1.7;overflow-wrap:anywhere}
-.status.error{color:var(--red);background:#fff0ef;border-color:#ffd5d1}
-.status.success{color:var(--green);background:#ecfdf3;border-color:#abefc6}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:17px}
-.field{display:grid;gap:6px;min-width:0}
-.field.full{grid-column:1/-1}
-.field label{font-size:12px;font-weight:700;color:var(--text)}
-.field input,.field select,.field textarea{width:100%;min-width:0;padding:11px 12px;border:1px solid var(--border);border-radius:9px;background:white;color:var(--text);font-size:13px}
-.field textarea{min-height:76px;resize:vertical}
-.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid #d8b56a66;border-color:var(--gold)}
-.btn{border:0;border-radius:9px;padding:11px 15px;font-size:12px;font-weight:750}
-.btn-primary{background:var(--navy);color:white}
-.btn-primary:hover{background:var(--navy2)}
-.btn:disabled{opacity:.6;cursor:wait}
-.btn-delete{background:#fff0ef;color:var(--red);border:1px solid #ffd5d1;padding:7px 10px;border-radius:7px;font-size:11px}
-.form-actions{grid-column:1/-1;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.module-status{margin-top:12px}
-.table-wrap{overflow-x:auto;margin-top:18px}
-table{border-collapse:collapse;width:100%;font-size:12px;min-width:570px}
-th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:top}
-th{background:#f8f9fc;color:var(--muted);font-size:11px;white-space:nowrap}
-td{overflow-wrap:anywhere}
-.empty{text-align:center;color:var(--muted);padding:22px}
-.pill{display:inline-block;border-radius:20px;padding:4px 8px;font-size:10px;font-weight:750;background:#f5eedf;color:#8a6828}
-.balance-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
-.balance-card{padding:16px;border:1px solid var(--border);border-radius:11px;background:#fafbfe}
-.balance-card span{display:block;font-size:11px;color:var(--muted)}
-.balance-card strong{display:block;font-size:19px;color:var(--navy);margin-top:8px;overflow-wrap:anywhere}
-.footer{padding:25px 0 10px;color:var(--muted);font-size:11px;text-align:center}
-@media(max-width:1050px){.layout{grid-template-columns:215px minmax(0,1fr)}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:23px 20px}.topbar{padding:14px 20px}}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{padding:13px 16px;gap:12px}.brand{padding-bottom:12px}.nav-label,.sidebar-note{display:none}.nav{display:flex;overflow-x:auto;padding-bottom:3px}.nav a{white-space:nowrap;padding:9px 11px}.topbar{padding:14px 16px}.topbar h1{font-size:16px}.user-info{display:none}.content{padding:17px 13px}.welcome{padding:22px}.cards{gap:10px}.stat{padding:14px}.stat-value{font-size:25px}.quick-grid,.form-grid,.balance-grid{grid-template-columns:1fr}.field.full,.form-actions{grid-column:auto}.panel{padding:16px}.logout{padding:9px}}
-@media(max-width:370px){.cards{grid-template-columns:1fr}.user-area{gap:6px}}
+:root {
+  --navy: #0b1730;
+  --navy2: #142747;
+  --gold: #d8b56a;
+  --bg: #f4f6fa;
+  --white: #fff;
+  --text: #24334b;
+  --muted: #718096;
+  --border: #e4e9f1;
+  --red: #b42318;
+  --green: #067647;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+}
+
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+
+.layout {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+}
+
+.sidebar {
+  background: var(--navy);
+  color: white;
+  padding: 24px 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  min-width: 0;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 5px 22px;
+  border-bottom: 1px solid #293750;
+}
+
+.logo {
+  height: 43px;
+  width: 43px;
+  border: 1px solid var(--gold);
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  color: var(--gold);
+  font-weight: 900;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.brand strong {
+  display: block;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.brand small {
+  display: block;
+  color: #bac5d5;
+  font-size: 11px;
+  margin-top: 4px;
+}
+
+.nav-label {
+  font-size: 10px;
+  color: #9eabc0;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  padding: 0 10px;
+}
+
+.nav {
+  display: grid;
+  gap: 7px;
+}
+
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: #d7dfeb;
+  padding: 12px;
+  border-radius: 9px;
+  font-size: 13px;
+  text-decoration: none;
+  transition: background .2s, color .2s;
+}
+
+.nav a.active,
+.nav a:hover {
+  background: #203453;
+  color: #f0d596;
+}
+
+.nav a.active {
+  box-shadow: inset 3px 0 0 var(--gold);
+  font-weight: 750;
+}
+
+.nav a span:first-child {
+  width: 22px;
+  text-align: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.sidebar-note {
+  margin-top: auto;
+  padding: 14px;
+  border: 1px solid #34415a;
+  border-radius: 12px;
+  color: #c5cede;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.main { min-width: 0; }
+
+.topbar {
+  min-height: 76px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 30px;
+  gap: 14px;
+}
+
+.topbar h1 {
+  font-size: 19px;
+  color: var(--navy);
+  margin: 0;
+}
+
+.topbar p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 5px 0 0;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #f5eedf;
+  color: #8a6828;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.user-info strong {
+  display: block;
+  font-size: 12px;
+}
+
+.user-info small {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.logout {
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--navy);
+  border-radius: 9px;
+  padding: 10px 13px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.logout:hover { border-color: var(--gold); }
+.logout:disabled { opacity: .6; cursor: wait; }
+
+.content {
+  padding: 28px 30px;
+  max-width: 1500px;
+  margin: auto;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Navigasi panel: hanya panel aktif yang terlihat */
+.menu-panel[hidden] {
+  display: none !important;
+}
+
+.menu-panel {
+  width: 100%;
+  min-width: 0;
+  animation: panelFadeIn .18s ease-out;
+}
+
+@keyframes panelFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome {
+  background: linear-gradient(115deg, var(--navy), var(--navy2));
+  color: white;
+  padding: 27px;
+  border-radius: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome:after {
+  content: "M";
+  position: absolute;
+  right: 40px;
+  top: -48px;
+  font-size: 190px;
+  font-weight: 900;
+  color: #ffffff08;
+  pointer-events: none;
+}
+
+.welcome > * {
+  position: relative;
+  z-index: 1;
+}
+
+.welcome .eyebrow {
+  color: #e6ca88;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.welcome h2 {
+  font-size: clamp(21px, 3vw, 29px);
+  margin: 9px 0;
+}
+
+.welcome p {
+  color: #d1d9e5;
+  font-size: 13px;
+  margin: 0;
+  max-width: 650px;
+  line-height: 1.7;
+}
+
+.date {
+  color: #f1d99e;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.section-title {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 28px 0 15px;
+}
+
+.section-title h2 {
+  font-size: 17px;
+  color: var(--navy);
+  margin: 0;
+}
+
+.section-title p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 5px 0 0;
+  line-height: 1.7;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+}
+
+.stat {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 20px;
+  min-width: 0;
+  box-shadow: 0 4px 15px #0b173008;
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #f5eedf;
+  color: #8a6828;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.stat-value {
+  font-size: 29px;
+  font-weight: 850;
+  color: var(--navy);
+  margin-top: 12px;
+  overflow-wrap: anywhere;
+}
+
+.stat-foot {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  padding: 21px;
+  margin-top: 22px;
+}
+
+.panel h2 {
+  font-size: 16px;
+  margin: 0;
+  color: var(--navy);
+}
+
+.panel > p {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 17px;
+}
+
+.quick {
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 16px;
+  text-decoration: none;
+  color: var(--navy);
+  display: block;
+}
+
+.quick:hover {
+  border-color: var(--gold);
+  background: #fffdf8;
+}
+
+.quick strong {
+  font-size: 13px;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.quick span {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.status {
+  padding: 13px 15px;
+  border-radius: 10px;
+  background: #f8f9fc;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.status.error {
+  color: var(--red);
+  background: #fff0ef;
+  border-color: #ffd5d1;
+}
+
+.status.success {
+  color: var(--green);
+  background: #ecfdf3;
+  border-color: #abefc6;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 13px;
+  margin-top: 17px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.field.full { grid-column: 1 / -1; }
+
+.field label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: white;
+  color: var(--text);
+  font-size: 13px;
+}
+
+.field textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid #d8b56a66;
+  border-color: var(--gold);
+}
+
+.btn {
+  border: 0;
+  border-radius: 9px;
+  padding: 11px 15px;
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.btn-primary {
+  background: var(--navy);
+  color: white;
+}
+
+.btn-primary:hover { background: var(--navy2); }
+.btn:disabled { opacity: .6; cursor: wait; }
+
+.btn-delete {
+  background: #fff0ef;
+  color: var(--red);
+  border: 1px solid #ffd5d1;
+  padding: 7px 10px;
+  border-radius: 7px;
+  font-size: 11px;
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.module-status { margin-top: 12px; }
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 18px;
+  max-width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 12px;
+  min-width: 570px;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th {
+  background: #f8f9fc;
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+td { overflow-wrap: anywhere; }
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 22px;
+}
+
+.pill {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 750;
+  background: #f5eedf;
+  color: #8a6828;
+}
+
+.balance-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.balance-card {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: #fafbfe;
+  min-width: 0;
+}
+
+.balance-card span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.balance-card strong {
+  display: block;
+  font-size: 19px;
+  color: var(--navy);
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+}
+
+.footer {
+  padding: 25px 0 10px;
+  color: var(--muted);
+  font-size: 11px;
+  text-align: center;
+}
+
+@media (max-width: 1050px) {
+  .layout { grid-template-columns: 215px minmax(0, 1fr); }
+  .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .content { padding: 23px 20px; }
+  .topbar { padding: 14px 20px; }
+}
+
+@media (max-width: 700px) {
+  .layout { grid-template-columns: 1fr; }
+
+  .sidebar {
+    padding: 13px 16px;
+    gap: 12px;
+  }
+
+  .brand { padding-bottom: 12px; }
+  .nav-label, .sidebar-note { display: none; }
+
+  .nav {
+    display: flex;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    scrollbar-width: thin;
+    gap: 6px;
+  }
+
+  .nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    padding: 10px 11px;
+  }
+
+  .topbar { padding: 14px 16px; }
+  .topbar h1 { font-size: 16px; }
+  .user-info { display: none; }
+  .content { padding: 17px 13px; }
+  .welcome { padding: 22px; }
+  .cards { gap: 10px; }
+  .stat { padding: 14px; }
+  .stat-value { font-size: 25px; }
+
+  .quick-grid,
+  .form-grid,
+  .balance-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field.full,
+  .form-actions {
+    grid-column: auto;
+  }
+
+  .panel { padding: 16px; }
+  .logout { padding: 9px; }
+}
+
+@media (max-width: 370px) {
+  .cards { grid-template-columns: 1fr; }
+  .user-area { gap: 6px; }
+}
 </style>
 </head>
+
 <body>
 <div class="layout">
+
 <aside class="sidebar">
-  <div class="brand"><div class="logo">M</div><div><strong>MANDIRI STARTUP ACADEMY</strong><small>SMKS Mandiri Bandar Agung</small></div></div>
+  <div class="brand">
+    <div class="logo">M</div>
+    <div>
+      <strong>MANDIRI STARTUP ACADEMY</strong>
+      <small>SMKS Mandiri Bandar Agung</small>
+    </div>
+  </div>
+
   <div class="nav-label">MENU UTAMA</div>
-  <nav class="nav" aria-label="Menu dashboard">
-    <a class="active" href="admin.html"><span>▦</span>Ringkasan</a>
-    <a href="#pengguna"><span>♙</span>Data Pengguna</a>
-    <a href="#bisnis"><span>◇</span>Brand &amp; Produk</a>
-    <a href="#promosi"><span>▷</span>Promosi Digital</a>
-    <a href="#keuangan"><span>Rp</span>Keuangan Usaha</a>
+
+  <nav class="nav" id="sidebarNav" aria-label="Menu dashboard">
+    <a class="active" href="#ringkasan" data-panel="ringkasan" aria-current="page">
+      <span>▦</span>Ringkasan
+    </a>
+    <a href="#pengguna" data-panel="pengguna">
+      <span>♙</span>Data Pengguna
+    </a>
+    <a href="#bisnis" data-panel="bisnis">
+      <span>◇</span>Brand &amp; Produk
+    </a>
+    <a href="#promosi" data-panel="promosi">
+      <span>▷</span>Promosi Digital
+    </a>
+    <a href="#keuangan" data-panel="keuangan">
+      <span>Rp</span>Keuangan Usaha
+    </a>
   </nav>
-  <div class="sidebar-note">PORTAL ADMINISTRATOR<br>Kelola dan pantau aktivitas platform inkubator bisnis siswa.</div>
+
+  <div class="sidebar-note">
+    PORTAL ADMINISTRATOR<br>
+    Kelola dan pantau aktivitas platform inkubator bisnis siswa.
+  </div>
 </aside>
 
 <main class="main">
+
 <header class="topbar">
-  <div><h1>Dashboard Administrator</h1><p>Ringkasan Mandiri Startup Academy</p></div>
-  <div class="user-area"><div class="avatar" id="avatar">A</div><div class="user-info"><strong id="userName">Administrator</strong><small id="userEmail">Memeriksa akun...</small></div><button class="logout" id="logoutButton" type="button">Keluar ↗</button></div>
+  <div>
+    <h1 id="pageTitle">Dashboard Administrator</h1>
+    <p id="pageSubtitle">Ringkasan Mandiri Startup Academy</p>
+  </div>
+
+  <div class="user-area">
+    <div class="avatar" id="avatar">A</div>
+    <div class="user-info">
+      <strong id="userName">Administrator</strong>
+      <small id="userEmail">Memeriksa akun...</small>
+    </div>
+    <button class="logout" id="logoutButton" type="button">Keluar ↗</button>
+  </div>
 </header>
 
 <div class="content">
-  <section class="welcome">
-    <div><div class="eyebrow">ADMINISTRATOR PORTAL</div><h2 id="welcomeTitle">Selamat datang!</h2><p>Kelola pengguna dan pantau perkembangan program kewirausahaan siswa SMKS Mandiri Bandar Agung.</p></div>
-    <div class="date" id="currentDate"></div>
+
+  <!-- PANEL RINGKASAN -->
+  <section class="menu-panel" id="ringkasan">
+    <section class="welcome">
+      <div>
+        <div class="eyebrow">ADMINISTRATOR PORTAL</div>
+        <h2 id="welcomeTitle">Selamat datang!</h2>
+        <p>
+          Kelola pengguna dan pantau perkembangan program kewirausahaan
+          siswa SMKS Mandiri Bandar Agung.
+        </p>
+      </div>
+      <div class="date" id="currentDate"></div>
+    </section>
+
+    <div class="section-title">
+      <div>
+        <h2>Ringkasan Platform</h2>
+        <p>Angka di bawah berasal dari data yang berhasil dibaca dari Firestore.</p>
+      </div>
+    </div>
+
+    <section class="cards" aria-label="Ringkasan data">
+      <article class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Total Pengguna</span>
+          <span class="stat-icon">♙</span>
+        </div>
+        <div class="stat-value" id="totalUsers">—</div>
+        <div class="stat-foot">Dokumen profil pada Users</div>
+      </article>
+
+      <article class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Siswa Aktif</span>
+          <span class="stat-icon">▣</span>
+        </div>
+        <div class="stat-value" id="totalStudents">—</div>
+        <div class="stat-foot">Profil dengan role siswa dan status aktif</div>
+      </article>
+
+      <article class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Guru Aktif</span>
+          <span class="stat-icon">♧</span>
+        </div>
+        <div class="stat-value" id="totalTeachers">—</div>
+        <div class="stat-foot">Profil dengan role guru dan status aktif</div>
+      </article>
+
+      <article class="stat">
+        <div class="stat-top">
+          <span class="stat-label">Menunggu Aktivasi</span>
+          <span class="stat-icon">◷</span>
+        </div>
+        <div class="stat-value" id="pendingUsers">—</div>
+        <div class="stat-foot">Profil berstatus selain aktif</div>
+      </article>
+    </section>
   </section>
 
-  <div class="section-title"><div><h2>Ringkasan Platform</h2><p>Angka di bawah berasal dari data yang berhasil dibaca dari Firestore.</p></div></div>
-  <section class="cards" aria-label="Ringkasan data">
-    <article class="stat"><div class="stat-top"><span class="stat-label">Total Pengguna</span><span class="stat-icon">♙</span></div><div class="stat-value" id="totalUsers">—</div><div class="stat-foot">Dokumen profil pada Users</div></article>
-    <article class="stat"><div class="stat-top"><span class="stat-label">Siswa Aktif</span><span class="stat-icon">▣</span></div><div class="stat-value" id="totalStudents">—</div><div class="stat-foot">Profil dengan role siswa dan status aktif</div></article>
-    <article class="stat"><div class="stat-top"><span class="stat-label">Guru Aktif</span><span class="stat-icon">♧</span></div><div class="stat-value" id="totalTeachers">—</div><div class="stat-foot">Profil dengan role guru dan status aktif</div></article>
-    <article class="stat"><div class="stat-top"><span class="stat-label">Menunggu Aktivasi</span><span class="stat-icon">◷</span></div><div class="stat-value" id="pendingUsers">—</div><div class="stat-foot">Profil berstatus selain aktif</div></article>
-  </section>
-
-  <section class="panel" id="pengguna">
+  <!-- PANEL DATA PENGGUNA -->
+  <section class="panel menu-panel" id="pengguna" hidden>
     <h2>Status Koneksi dan Data</h2>
-    <p id="connectionStatus" class="status">Memverifikasi sesi administrator dan membaca data...</p>
-    <p>Ringkasan pengguna diambil dari koleksi Users. Jika pembacaan gagal, periksa Firestore Rules.</p>
+    <p id="connectionStatus" class="status">
+      Memverifikasi sesi administrator dan membaca data...
+    </p>
+    <p>
+      Ringkasan pengguna diambil dari koleksi Users. Jika pembacaan gagal,
+      periksa Firestore Rules.
+    </p>
   </section>
 
-  <section class="panel" id="bisnis">
+  <!-- PANEL PRODUK -->
+  <section class="panel menu-panel" id="bisnis" hidden>
     <h2>Brand &amp; Produk</h2>
-    <p>Tambahkan produk usaha siswa. Data disimpan ke Firestore dan dapat dibuka kembali setelah halaman dimuat ulang.</p>
+    <p>
+      Tambahkan produk usaha siswa. Data disimpan ke Firestore dan dapat
+      dibuka kembali setelah halaman dimuat ulang.
+    </p>
+
     <form id="productForm" class="form-grid">
-      <div class="field"><label for="productName">Nama produk *</label><input id="productName" maxlength="120" required placeholder="Contoh: Keripik pisang"></div>
-      <div class="field"><label for="productCategory">Kategori *</label><input id="productCategory" maxlength="80" required placeholder="Contoh: Makanan"></div>
-      <div class="field"><label for="productPrice">Harga (Rp) *</label><input id="productPrice" type="number" min="0" step="1" required placeholder="15000"></div>
-      <div class="field"><label for="productStock">Stok *</label><input id="productStock" type="number" min="0" step="1" required value="0"></div>
-      <div class="field full"><label for="productDescription">Deskripsi</label><textarea id="productDescription" maxlength="1000" placeholder="Deskripsi singkat produk"></textarea></div>
-      <div class="form-actions"><button class="btn btn-primary" type="submit">+ Simpan Produk</button></div>
+      <div class="field">
+        <label for="productName">Nama produk *</label>
+        <input id="productName" maxlength="120" required
+          placeholder="Contoh: Keripik pisang">
+      </div>
+
+      <div class="field">
+        <label for="productCategory">Kategori *</label>
+        <input id="productCategory" maxlength="80" required
+          placeholder="Contoh: Makanan">
+      </div>
+
+      <div class="field">
+        <label for="productPrice">Harga (Rp) *</label>
+        <input id="productPrice" type="number" min="0" step="1"
+          required placeholder="15000">
+      </div>
+
+      <div class="field">
+        <label for="productStock">Stok *</label>
+        <input id="productStock" type="number" min="0" step="1"
+          required value="0">
+      </div>
+
+      <div class="field full">
+        <label for="productDescription">Deskripsi</label>
+        <textarea id="productDescription" maxlength="1000"
+          placeholder="Deskripsi singkat produk"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">+ Simpan Produk</button>
+      </div>
     </form>
-    <p id="productStatus" class="status module-status" aria-live="polite">Menunggu verifikasi admin.</p>
-    <div class="table-wrap"><table><thead><tr><th>Nama Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr></thead><tbody id="productsBody"><tr><td colspan="5" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
+
+    <p id="productStatus" class="status module-status" aria-live="polite">
+      Menunggu verifikasi admin.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Produk</th>
+            <th>Kategori</th>
+            <th>Harga</th>
+            <th>Stok</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="productsBody">
+          <tr><td colspan="5" class="empty">Data belum dimuat.</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <section class="panel" id="promosi">
+  <!-- PANEL PROMOSI -->
+  <section class="panel menu-panel" id="promosi" hidden>
     <h2>Promosi Digital</h2>
     <p>Catat rencana promosi dan kanal pemasaran produk.</p>
+
     <form id="promotionForm" class="form-grid">
-      <div class="field"><label for="promotionTitle">Judul promosi *</label><input id="promotionTitle" maxlength="120" required placeholder="Contoh: Promo produk baru"></div>
-      <div class="field"><label for="promotionChannel">Kanal promosi *</label><select id="promotionChannel" required><option value="">Pilih kanal</option><option>Instagram</option><option>TikTok</option><option>Facebook</option><option>WhatsApp</option><option marketplace</option><option>Offline</option><option>Lainnya</option></select></div>
-      <div class="field"><label for="promotionDate">Tanggal promosi *</label><input id="promotionDate" type="date" required></div>
-      <div class="field"><label for="promotionStatus">Status *</label><select id="promotionStatus" required><option value="Rencana">Rencana</option><option value="Berjalan">Berjalan</option><option value="Selesai">Selesai</option></select></div>
-      <div class="field full"><label for="promotionDescription">Keterangan</label><textarea id="promotionDescription" maxlength="1000" placeholder="Target promosi, tautan, atau catatan"></textarea></div>
-      <div class="form-actions"><button class="btn btn-primary" type="submit">+ Simpan Promosi</button></div>
-    </form>
-    <p id="promotionStatusMessage" class="status module-status" aria-live="polite">Menunggu verifikasi admin.</p>
-    <div class="table-wrap"><table><thead><tr><th>Judul</th><th>Kanal</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="promotionsBody"><tr><td colspan="5" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
-  </section>
+      <div class="field">
+        <label for="promotionTitle">Judul promosi *</label>
+        <input id="promotionTitle" maxlength="120" required
+          placeholder="Contoh: Promo produk baru">
+      </div>
 
-  <section class="panel" id="keuangan">
-    <h2>Keuangan Usaha</h2>
-    <p>Catat pemasukan dan pengeluaran. Saldo dihitung dari seluruh transaksi yang berhasil dibaca.</p>
-    <div class="balance-grid">
-      <div class="balance-card"><span>Total Pemasukan</span><strong id="totalIncome">—</strong></div>
-      <div class="balance-card"><span>Total Pengeluaran</span><strong id="totalExpense">—</strong></div>
-      <div class="balance-card"><span>Saldo</span><strong id="netBalance">—</strong></div>
+      <div class="field">
+        <label for="promotionChannel">Kanal promosi *</label>
+        <select id="promotionChannel" required>
+          <option value="">Pilih kanal</option>
+          <option>Instagram</option>
+          <option>TikTok</option>
+          <option>Facebook</option>
+          <option>WhatsApp</option>
+          <option>Marketplace</option>
+          <option>Offline</option>
+          <option>Lainnya</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="promotionDate">Tanggal promosi *</label>
+        <input id="promotionDate" type="date" required>
+      </div>
+
+      <div class="field">
+        <label for="promotionStatus">Status *</label>
+        <select id="promotionStatus" required>
+          <option value="Rencana">Rencana</option>
+          <option value="Berjalan">Berjalan</option>
+          <option value="Selesai">Selesai</option>
+        </select>
+      </div>
+
+      <div class="field full">
+        <label for="promotionDescription">Keterangan</label>
+        <textarea id="promotionDescription" maxlength="1000"
+          placeholder="Target promosi, tautan, atau catatan"></textarea>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">+ Simpan Promosi</button>
+      </div>
+    </form>
+
+    <p id="promotionStatusMessage" class="status module-status" aria-live="polite">
+      Menunggu verifikasi admin.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Judul</th>
+            <th>Kanal</th>
+            <th>Tanggal</th>
+            <th>Status</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="promotionsBody">
+          <tr><td colspan="5" class="empty">Data belum dimuat.</td></tr>
+        </tbody>
+      </table>
     </div>
-    <form id="transactionForm" class="form-grid">
-      <div class="field"><label for="transactionType">Jenis transaksi *</label><select id="transactionType" required><option value="pemasukan">Pemasukan</option><option value="pengeluaran">Pengeluaran</option></select></div>
-      <div class="field"><label for="transactionAmount">Nominal (Rp) *</label><input id="transactionAmount" type="number" min="1" step="1" required placeholder="50000"></div>
-      <div class="field"><label for="transactionDate">Tanggal *</label><input id="transactionDate" type="date" required></div>
-      <div class="field"><label for="transactionDescription">Keterangan *</label><input id="transactionDescription" maxlength="200" required placeholder="Contoh: Penjualan produk"></div>
-      <div class="form-actions"><button class="btn btn-primary" type="submit">+ Simpan Transaksi</button></div>
-    </form>
-    <p id="transactionStatusMessage" class="status module-status" aria-live="polite">Menunggu verifikasi admin.</p>
-    <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Keterangan</th><th>Nominal</th><th>Aksi</th></tr></thead><tbody id="transactionsBody"><tr><td colspan="5" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
   </section>
 
-  <footer class="footer">© <span id="year"></span> Mandiri Startup Academy · SMKS Mandiri Bandar Agung</footer>
+  <!-- PANEL KEUANGAN -->
+  <section class="panel menu-panel" id="keuangan" hidden>
+    <h2>Keuangan Usaha</h2>
+    <p>
+      Catat pemasukan dan pengeluaran. Saldo dihitung dari seluruh transaksi
+      yang berhasil dibaca.
+    </p>
+
+    <div class="balance-grid">
+      <div class="balance-card">
+        <span>Total Pemasukan</span>
+        <strong id="totalIncome">—</strong>
+      </div>
+      <div class="balance-card">
+        <span>Total Pengeluaran</span>
+        <strong id="totalExpense">—</strong>
+      </div>
+      <div class="balance-card">
+        <span>Saldo</span>
+        <strong id="netBalance">—</strong>
+      </div>
+    </div>
+
+    <form id="transactionForm" class="form-grid">
+      <div class="field">
+        <label for="transactionType">Jenis transaksi *</label>
+        <select id="transactionType" required>
+          <option value="pemasukan">Pemasukan</option>
+          <option value="pengeluaran">Pengeluaran</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="transactionAmount">Nominal (Rp) *</label>
+        <input id="transactionAmount" type="number" min="1" step="1"
+          required placeholder="50000">
+      </div>
+
+      <div class="field">
+        <label for="transactionDate">Tanggal *</label>
+        <input id="transactionDate" type="date" required>
+      </div>
+
+      <div class="field">
+        <label for="transactionDescription">Keterangan *</label>
+        <input id="transactionDescription" maxlength="200" required
+          placeholder="Contoh: Penjualan produk">
+      </div>
+
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">+ Simpan Transaksi</button>
+      </div>
+    </form>
+
+    <p id="transactionStatusMessage" class="status module-status" aria-live="polite">
+      Menunggu verifikasi admin.
+    </p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Jenis</th>
+            <th>Keterangan</th>
+            <th>Nominal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="transactionsBody">
+          <tr><td colspan="5" class="empty">Data belum dimuat.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer class="footer">
+    © <span id="year"></span> Mandiri Startup Academy · SMKS Mandiri Bandar Agung
+  </footer>
 </div>
 </main>
 </div>
 
 <script type="module">
-import { initializeApp, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { initializeApp, getApp } from
+  "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+
+import { getAuth, onAuthStateChanged, signOut } from
+  "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
 import {
-  getFirestore, doc, getDocFromServer, collection, getDocsFromServer,
-  addDoc, deleteDoc, serverTimestamp
+  getFirestore,
+  doc,
+  getDocFromServer,
+  collection,
+  getDocsFromServer,
+  addDoc,
+  deleteDoc,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -206,9 +1035,13 @@ const firebaseConfig = {
 };
 
 const app = (() => {
-  try { return getApp(); }
-  catch { return initializeApp(firebaseConfig); }
+  try {
+    return getApp();
+  } catch {
+    return initializeApp(firebaseConfig);
+  }
 })();
+
 const auth = getAuth(app);
 const db = getFirestore(app, "(default)");
 const $ = id => document.getElementById(id);
@@ -217,24 +1050,34 @@ let currentAdmin = null;
 let authReady = false;
 
 $("year").textContent = new Date().getFullYear();
+
 $("currentDate").textContent = new Intl.DateTimeFormat("id-ID", {
-  weekday:"long", day:"numeric", month:"long", year:"numeric"
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric"
 }).format(new Date());
 
 const today = new Date();
-const localToday = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+const localToday =
+  `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+
 $("promotionDate").value = localToday;
 $("transactionDate").value = localToday;
 
-function showStatus(id, message, type="") {
+function showStatus(id, message, type = "") {
   const el = $(id);
+  if (!el) return;
+
   el.textContent = message;
   el.className = "status" + (type ? " " + type : "");
 }
 
 function money(value) {
   return new Intl.NumberFormat("id-ID", {
-    style:"currency", currency:"IDR", maximumFractionDigits:0
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0
   }).format(Number(value) || 0);
 }
 
@@ -245,17 +1088,47 @@ function makeCell(row, value) {
   return td;
 }
 
-function makeAction(row, collectionName, id, label="Hapus") {
+function statusIdFor(collectionName) {
+  return {
+    Products: "productStatus",
+    Promotions: "promotionStatusMessage",
+    Transactions: "transactionStatusMessage"
+  }[collectionName];
+}
+
+function friendlyError(error) {
+  if (error?.code === "permission-denied") {
+    return "Akses ditolak oleh Firestore Rules. Periksa izin admin pada koleksi terkait.";
+  }
+
+  if (error?.code === "unavailable") {
+    return "Firebase tidak tersedia saat ini. Periksa koneksi internet lalu coba lagi.";
+  }
+
+  if (error?.code === "unauthenticated") {
+    return "Sesi login tidak valid. Silakan login kembali.";
+  }
+
+  return `Operasi gagal: ${error?.message || "kesalahan tidak diketahui"}`;
+}
+
+function makeAction(row, collectionName, id, label = "Hapus") {
   const td = document.createElement("td");
   const button = document.createElement("button");
+
   button.type = "button";
   button.className = "btn-delete";
   button.textContent = label;
+
   button.addEventListener("click", async () => {
-    if (!currentAdmin) return;
-    if (!confirm(`Yakin ingin menghapus data ini dari ${collectionName}?`)) return;
+    if (!currentAdmin || !authReady) return;
+
+    if (!confirm(`Yakin ingin menghapus data ini dari ${collectionName}?`)) {
+      return;
+    }
 
     button.disabled = true;
+
     try {
       await deleteDoc(doc(db, collectionName, id));
       await loadBusinessData();
@@ -266,39 +1139,22 @@ function makeAction(row, collectionName, id, label="Hapus") {
       button.disabled = false;
     }
   });
+
   td.appendChild(button);
   row.appendChild(td);
-}
-
-function statusIdFor(collectionName) {
-  return {
-    Products:"productStatus",
-    Promotions:"promotionStatusMessage",
-    Transactions:"transactionStatusMessage"
-  }[collectionName];
-}
-
-function friendlyError(error) {
-  if (error?.code === "permission-denied") {
-    return "Akses ditolak oleh Firestore Rules. Periksa izin untuk admin aktif pada koleksi terkait.";
-  }
-  if (error?.code === "unavailable") {
-    return "Firebase tidak tersedia saat ini. Periksa koneksi internet lalu coba lagi.";
-  }
-  if (error?.code === "unauthenticated") {
-    return "Sesi login tidak valid. Silakan login kembali.";
-  }
-  return `Operasi gagal: ${error?.message || "kesalahan tidak diketahui"}`;
 }
 
 function setEmpty(tbodyId, columns, message) {
   const body = $(tbodyId);
   body.replaceChildren();
+
   const row = document.createElement("tr");
   const cell = document.createElement("td");
+
   cell.colSpan = columns;
   cell.className = "empty";
   cell.textContent = message;
+
   row.appendChild(cell);
   body.appendChild(row);
 }
@@ -311,37 +1167,63 @@ async function loadUsers() {
   try {
     const snapshot = await getDocsFromServer(collection(db, "Users"));
     const users = snapshot.docs.map(d => d.data());
+
     $("totalUsers").textContent = users.length;
-    $("totalStudents").textContent = users.filter(u => u.role === "siswa" && u.status === "active").length;
-    $("totalTeachers").textContent = users.filter(u => u.role === "guru" && u.status === "active").length;
-    $("pendingUsers").textContent = users.filter(u => u.status !== "active").length;
-    showStatus("connectionStatus", "Login admin terverifikasi. Ringkasan pengguna berhasil dibaca dari Firestore.", "success");
+
+    $("totalStudents").textContent =
+      users.filter(u => u.role === "siswa" && u.status === "active").length;
+
+    $("totalTeachers").textContent =
+      users.filter(u => u.role === "guru" && u.status === "active").length;
+
+    $("pendingUsers").textContent =
+      users.filter(u => u.status !== "active").length;
+
+    showStatus(
+      "connectionStatus",
+      "Login admin terverifikasi. Ringkasan pengguna berhasil dibaca dari Firestore.",
+      "success"
+    );
   } catch (error) {
     console.error("Gagal membaca Users:", error);
+
     $("totalUsers").textContent = "—";
     $("totalStudents").textContent = "—";
     $("totalTeachers").textContent = "—";
     $("pendingUsers").textContent = "—";
-    showStatus("connectionStatus", "Login berhasil, tetapi koleksi Users tidak dapat dibaca. Periksa Firestore Rules.", "error");
+
+    showStatus(
+      "connectionStatus",
+      "Login berhasil, tetapi koleksi Users tidak dapat dibaca. Periksa Firestore Rules.",
+      "error"
+    );
   }
 }
 
 async function loadProducts() {
   const snapshot = await getDocsFromServer(collection(db, "Products"));
   clearBody("productsBody");
+
   if (snapshot.empty) {
     setEmpty("productsBody", 5, "Belum ada produk. Tambahkan produk melalui formulir di atas.");
     return;
   }
-  const items = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
-  items.sort((a,b) => String(b.createdAt?.seconds || 0).localeCompare(String(a.createdAt?.seconds || 0)));
+
+  const items = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  items.sort((a, b) =>
+    Number(b.createdAt?.seconds || 0) - Number(a.createdAt?.seconds || 0)
+  );
+
   for (const item of items) {
     const row = document.createElement("tr");
+
     makeCell(row, item.name);
     makeCell(row, item.category);
     makeCell(row, money(item.price));
     makeCell(row, item.stock);
     makeAction(row, "Products", item.id);
+
     $("productsBody").appendChild(row);
   }
 }
@@ -349,23 +1231,32 @@ async function loadProducts() {
 async function loadPromotions() {
   const snapshot = await getDocsFromServer(collection(db, "Promotions"));
   clearBody("promotionsBody");
+
   if (snapshot.empty) {
     setEmpty("promotionsBody", 5, "Belum ada promosi. Tambahkan promosi melalui formulir di atas.");
     return;
   }
-  const items = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
-  items.sort((a,b) => String(b.date || "").localeCompare(String(a.date || "")));
+
+  const items = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+
+  items.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+
   for (const item of items) {
     const row = document.createElement("tr");
+
     makeCell(row, item.title);
     makeCell(row, item.channel);
     makeCell(row, item.date);
-    const statusCell = makeCell(row, item.status);
+
+    const statusCell = makeCell(row, "");
     const pill = document.createElement("span");
+
     pill.className = "pill";
     pill.textContent = item.status || "Rencana";
-    statusCell.replaceChildren(pill);
+
+    statusCell.appendChild(pill);
     makeAction(row, "Promotions", item.id);
+
     $("promotionsBody").appendChild(row);
   }
 }
@@ -373,12 +1264,15 @@ async function loadPromotions() {
 async function loadTransactions() {
   const snapshot = await getDocsFromServer(collection(db, "Transactions"));
   clearBody("transactionsBody");
+
   let income = 0;
   let expense = 0;
-  const items = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
+
+  const items = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
 
   for (const item of items) {
     const amount = Number(item.amount) || 0;
+
     if (item.type === "pemasukan") income += amount;
     if (item.type === "pengeluaran") expense += amount;
   }
@@ -392,24 +1286,30 @@ async function loadTransactions() {
     return;
   }
 
-  items.sort((a,b) => String(b.date || "").localeCompare(String(a.date || "")));
+  items.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+
   for (const item of items) {
     const row = document.createElement("tr");
+
     makeCell(row, item.date);
+
     const typeCell = makeCell(row, "");
     const pill = document.createElement("span");
+
     pill.className = "pill";
     pill.textContent = item.type === "pemasukan" ? "Pemasukan" : "Pengeluaran";
+
     typeCell.appendChild(pill);
     makeCell(row, item.description);
     makeCell(row, money(item.amount));
     makeAction(row, "Transactions", item.id);
+
     $("transactionsBody").appendChild(row);
   }
 }
 
 async function loadBusinessData() {
-  if (!currentAdmin) return;
+  if (!currentAdmin || !authReady) return;
 
   const jobs = [
     ["Products", loadProducts, "productsBody", 5],
@@ -418,12 +1318,21 @@ async function loadBusinessData() {
   ];
 
   const results = await Promise.allSettled(jobs.map(job => job[1]()));
+
   results.forEach((result, index) => {
     if (result.status === "rejected") {
       const [name, , bodyId, columns] = jobs[index];
+
       console.error(`Gagal membaca ${name}:`, result.reason);
-      setEmpty(bodyId, columns, `Gagal membaca ${name}. Periksa izin read pada Firestore Rules.`);
+
+      setEmpty(
+        bodyId,
+        columns,
+        `Gagal membaca ${name}. Periksa izin read pada Firestore Rules.`
+      );
+
       showStatus(statusIdFor(name), friendlyError(result.reason), "error");
+
       if (name === "Transactions") {
         $("totalIncome").textContent = "—";
         $("totalExpense").textContent = "—";
@@ -441,6 +1350,7 @@ async function saveDocument(collectionName, data, formId, statusId) {
 
   const form = $(formId);
   const submit = form.querySelector('button[type="submit"]');
+
   submit.disabled = true;
 
   try {
@@ -450,11 +1360,23 @@ async function saveDocument(collectionName, data, formId, statusId) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp()
     });
+
     form.reset();
-    if (collectionName === "Promotions") $("promotionDate").value = localToday;
-    if (collectionName === "Transactions") $("transactionDate").value = localToday;
-    if (collectionName === "Products") $("productStock").value = "0";
+
+    if (collectionName === "Promotions") {
+      $("promotionDate").value = localToday;
+    }
+
+    if (collectionName === "Transactions") {
+      $("transactionDate").value = localToday;
+    }
+
+    if (collectionName === "Products") {
+      $("productStock").value = "0";
+    }
+
     await loadBusinessData();
+
     showStatus(statusId, "Data berhasil disimpan ke Firestore.", "success");
   } catch (error) {
     console.error(`Gagal menyimpan ${collectionName}:`, error);
@@ -466,79 +1388,214 @@ async function saveDocument(collectionName, data, formId, statusId) {
 
 $("productForm").addEventListener("submit", async event => {
   event.preventDefault();
+
   const name = $("productName").value.trim();
   const category = $("productCategory").value.trim();
   const price = Number($("productPrice").value);
   const stock = Number($("productStock").value);
-  if (!name || !category || !Number.isSafeInteger(price) || price < 0 ||
-      !Number.isSafeInteger(stock) || stock < 0) {
+
+  if (
+    !name ||
+    !category ||
+    !Number.isSafeInteger(price) ||
+    price < 0 ||
+    !Number.isSafeInteger(stock) ||
+    stock < 0
+  ) {
     showStatus("productStatus", "Periksa nama, kategori, harga, dan stok produk.", "error");
     return;
   }
+
   await saveDocument("Products", {
-    name, category, price, stock,
+    name,
+    category,
+    price,
+    stock,
     description: $("productDescription").value.trim()
   }, "productForm", "productStatus");
 });
 
 $("promotionForm").addEventListener("submit", async event => {
   event.preventDefault();
+
   const title = $("promotionTitle").value.trim();
   const channel = $("promotionChannel").value;
   const date = $("promotionDate").value;
   const status = $("promotionStatus").value;
+
   if (!title || !channel || !date || !status) {
     showStatus("promotionStatusMessage", "Lengkapi semua kolom wajib promosi.", "error");
     return;
   }
+
   await saveDocument("Promotions", {
-    title, channel, date, status,
+    title,
+    channel,
+    date,
+    status,
     description: $("promotionDescription").value.trim()
   }, "promotionForm", "promotionStatusMessage");
 });
 
 $("transactionForm").addEventListener("submit", async event => {
   event.preventDefault();
+
   const type = $("transactionType").value;
   const amount = Number($("transactionAmount").value);
   const date = $("transactionDate").value;
   const description = $("transactionDescription").value.trim();
-  if (!["pemasukan","pengeluaran"].includes(type) ||
-      !Number.isSafeInteger(amount) || amount <= 0 || !date || !description) {
-    showStatus("transactionStatusMessage", "Periksa jenis, nominal, tanggal, dan keterangan transaksi.", "error");
+
+  if (
+    !["pemasukan", "pengeluaran"].includes(type) ||
+    !Number.isSafeInteger(amount) ||
+    amount <= 0 ||
+    !date ||
+    !description
+  ) {
+    showStatus(
+      "transactionStatusMessage",
+      "Periksa jenis, nominal, tanggal, dan keterangan transaksi.",
+      "error"
+    );
     return;
   }
+
   await saveDocument("Transactions", {
-    type, amount, date, description
+    type,
+    amount,
+    date,
+    description
   }, "transactionForm", "transactionStatusMessage");
 });
 
 $("logoutButton").addEventListener("click", async () => {
   $("logoutButton").disabled = true;
+
   try {
     await signOut(auth);
     window.location.replace("../login.html");
   } catch (error) {
     console.error(error);
-    showStatus("connectionStatus", "Logout gagal. Periksa koneksi lalu coba kembali.", "error");
+
+    showStatus(
+      "connectionStatus",
+      "Logout gagal. Periksa koneksi lalu coba kembali.",
+      "error"
+    );
+
     $("logoutButton").disabled = false;
   }
 });
 
+/*
+ * Navigasi panel.
+ * Klik menu hanya mengganti panel yang terlihat.
+ * Tidak memuat ulang halaman dan tidak mengubah sesi Firebase.
+ */
+(() => {
+  const nav = $("sidebarNav");
+  const links = Array.from(nav.querySelectorAll("[data-panel]"));
+  const panels = Array.from(document.querySelectorAll(".menu-panel"));
+
+  const labels = {
+    ringkasan: [
+      "Dashboard Administrator",
+      "Ringkasan Mandiri Startup Academy"
+    ],
+    pengguna: [
+      "Data Pengguna",
+      "Status koneksi dan ringkasan pengguna"
+    ],
+    bisnis: [
+      "Brand & Produk",
+      "Kelola produk usaha siswa"
+    ],
+    promosi: [
+      "Promosi Digital",
+      "Kelola rencana dan kanal pemasaran"
+    ],
+    keuangan: [
+      "Keuangan Usaha",
+      "Pantau pemasukan, pengeluaran, dan saldo"
+    ]
+  };
+
+  function showPanel(id, updateUrl = true) {
+    const target = panels.find(panel => panel.id === id);
+
+    if (!target) return;
+
+    panels.forEach(panel => {
+      panel.hidden = panel !== target;
+    });
+
+    links.forEach(link => {
+      const active = link.dataset.panel === id;
+
+      link.classList.toggle("active", active);
+
+      if (active) {
+        link.setAttribute("aria-current", "page");
+      } else {
+        link.removeAttribute("aria-current");
+      }
+    });
+
+    if (labels[id]) {
+      $("pageTitle").textContent = labels[id][0];
+      $("pageSubtitle").textContent = labels[id][1];
+    }
+
+    if (updateUrl && location.hash !== "#" + id) {
+      history.replaceState(null, "", "#" + id);
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  nav.addEventListener("click", event => {
+    const link = event.target.closest("a[data-panel]");
+
+    if (!link || !nav.contains(link)) return;
+
+    event.preventDefault();
+    showPanel(link.dataset.panel);
+  });
+
+  window.addEventListener("hashchange", () => {
+    const id = location.hash.slice(1);
+
+    if (panels.some(panel => panel.id === id)) {
+      showPanel(id, false);
+    }
+  });
+
+  const requested = location.hash.slice(1);
+
+  showPanel(
+    panels.some(panel => panel.id === requested) ? requested : "ringkasan",
+    false
+  );
+})();
+
+/*
+ * Verifikasi autentikasi dan profil administrator.
+ */
 onAuthStateChanged(auth, async user => {
   if (!user) {
     currentAdmin = null;
     authReady = false;
+
     showStatus(
       "connectionStatus",
       "Sesi login tidak ditemukan. Silakan login kembali.",
       "error"
     );
 
-    // Beri waktu agar pesan terlihat sebelum pindah halaman.
     setTimeout(() => {
       window.location.replace("../login.html");
     }, 1200);
+
     return;
   }
 
@@ -547,7 +1604,6 @@ onAuthStateChanged(auth, async user => {
   $("userEmail").textContent = user.email || "Email tidak tersedia";
 
   try {
-    // Gunakan nama koleksi yang sama persis dengan Firestore.
     const profileSnapshot = await getDocFromServer(
       doc(db, "Users", user.uid)
     );
@@ -558,11 +1614,13 @@ onAuthStateChanged(auth, async user => {
         "Profil admin tidak ditemukan di Users. Pastikan ID dokumen sama dengan UID akun Authentication.",
         "error"
       );
+
       console.error("Profil tidak ditemukan:", {
         projectId: app.options.projectId,
         uid: user.uid,
         collection: "Users"
       });
+
       return;
     }
 
@@ -581,6 +1639,7 @@ onAuthStateChanged(auth, async user => {
         "Akses dashboard ditolak. Role harus admin dan status harus active.",
         "error"
       );
+
       return;
     }
 
@@ -592,8 +1651,7 @@ onAuthStateChanged(auth, async user => {
 
     $("userName").textContent = name;
     $("welcomeTitle").textContent = "Selamat datang, " + name + "!";
-    $("avatar").textContent =
-      name.trim().charAt(0).toUpperCase() || "A";
+    $("avatar").textContent = name.trim().charAt(0).toUpperCase() || "A";
 
     showStatus(
       "connectionStatus",
@@ -601,7 +1659,6 @@ onAuthStateChanged(auth, async user => {
       "success"
     );
 
-    // Kegagalan membaca modul bisnis tidak akan menghapus sesi admin.
     await Promise.allSettled([
       loadUsers(),
       loadBusinessData()
@@ -626,3 +1683,7 @@ onAuthStateChanged(auth, async user => {
     );
   }
 });
+</script>
+
+</body>
+</html>
