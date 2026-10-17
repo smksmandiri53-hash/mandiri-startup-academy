@@ -466,8 +466,9 @@
     async function routeUser(user) {
       if (!user) return;
 
-      const userRef = doc(db, "Users", user.uid);
-      const userSnap = await getDoc(userRef);
+      let userSnap = await getDoc(doc(db, "Users", user.uid));
+      // Kompatibilitas sementara dengan profil lama pada koleksi users.
+      if (!userSnap.exists()) userSnap = await getDoc(doc(db, "users", user.uid));
 
       if (!userSnap.exists()) {
         throw new Error(
@@ -485,17 +486,17 @@
         );
       }
 
+      const normalizedRole = role === "siswa" ? "student" : role;
       const routes = {
         admin: "./dashboard/admin.html",
-        teacher: "./dashboard/teacher.html",
         student: "./dashboard/student.html"
       };
 
-      const destination = routes[role];
+      const destination = routes[normalizedRole];
 
       if (!destination) {
         throw new Error(
-          "Peran akun belum dikenali. Periksa nilai role pada dokumen Users di Firestore."
+          "Peran akun belum dikenali. Peran yang didukung adalah admin dan student/siswa. Periksa profil akun di Firestore."
         );
       }
 
