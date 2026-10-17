@@ -1,65 +1,165 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
+
     function signedIn() {
       return request.auth != null;
     }
 
-    function adminProfile() {
-      return get(/databases/$(database)/documents/Users/$(request.auth.uid)).data;
+    function profilePath(uid) {
+      return /databases/$(database)/documents/Users/$(uid);
     }
 
-    function isAdmin() {
+    function hasProfile() {
       return signedIn()
-        && exists(/databases/$(database)/documents/Users/$(request.auth.uid))
-        && adminProfile().role == 'admin'
-        && adminProfile().status == 'active';
+        && exists(profilePath(request.auth.uid));
     }
 
-    function isSelf(userId) {
-      return signedIn() && request.auth.uid == userId;
+    function myProfile() {
+      return get(profilePath(request.auth.uid)).data;
     }
 
-    // Canonical profile collection. Public registration may create only
-    // a pending student profile; it cannot assign an admin role.
-    match /Users/{userId} {
-      allow read: if isAdmin() || isSelf(userId);
-      allow create: if isSelf(userId)
-        && request.resource.data.role == 'student'
+    function isActiveAdmin() {
+      return hasProfile()
+        && myProfile().role == 'admin'
+        && myProfile().status == 'active';
+    }
+
+    function isActiveStudent() {
+      return hasProfile()
+        && myProfile().status == 'active'
+        && myProfile().role in ['student', 'siswa'];
+    }
+
+    function isMyGroup(groupId) {
+      return isActiveStudent()
+        && myProfile().groupId == groupId
+        && exists(/databases/$(database)/documents/Groups/$(groupId))
+        && request.auth.uid in get(
+          /databases/$(database)/documents/Groups/$(groupId)
+        ).data.memberUids;
+    }
+
+    // PROFIL AKUN
+    // Registrasi publik hanya boleh membuat profil siswa pending.
+    // Hanya admin yang boleh mengaktifkan, mengubah role/status, atau
+    // menetapkan groupId. Siswa tidak dapat mengangkat hak akses sendiri.
+    match /Users/{uid} {
+      allow read: if signedIn()
+        && (request.auth.uid == uid || isActiveAdmin());
+
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.role in ['student', 'siswa']
         && request.resource.data.status == 'pending'
         && request.resource.data.groupId == null;
-      allow update, delete: if isAdmin();
+
+      allow update, delete: if isActiveAdmin();
     }
 
-    // Read-only compatibility for legacy profiles in the lowercase collection.
-    match /users/{userId} {
-      allow read: if isAdmin() || isSelf(userId);
-      allow create: if isSelf(userId)
+    // Kompatibilitas baca profil lama; pendaftaran baru menggunakan Users.
+    match /users/{uid} {
+      allow read: if signedIn()
+        && (request.auth.uid == uid || isActiveAdmin());
+
+      allow create: if signedIn()
+        && request.auth.uid == uid
         && request.resource.data.role in ['student', 'siswa']
         && request.resource.data.status == 'pending';
-      allow update, delete: if isAdmin();
+
+      allow update, delete: if isActiveAdmin();
     }
 
-    // Only the administrator can create/assign/manage groups.
-    // A student can read only a group that lists their UID as a member.
+    // KELOMPOK
+    // Admin membuat kelompok dan menetapkan 3-4 siswa melalui dashboard.
+    // Batas jumlah anggota ditegakkan di aplikasi admin; Rules juga
+    // membatasi dokumen kelompok baru agar tidak dibuat oleh siswa.
     match /Groups/{groupId} {
-      allow read: if isAdmin()
+      allow read: if isActiveAdmin()
         || (signedIn()
-          && request.auth.uid in resource.data.memberUids);
-      allow create, update, delete: if isAdmin();
+          && isActiveStudent()
+          && request.auth.uid in resource.data.memberUids
+          && myProfile().groupId == groupId);
+
+      allow create: if isActiveAdmin()
+        && request.resource.data.memberUids is list
+        && request.resource.data.memberUids.size() >= 3
+        && request.resource.data.memberUids.size() <= 4
+        && request.resource.data.createdBy == request.auth.uid;
+
+      allow update, delete: if isActiveAdmin();
     }
 
-    // The current business-record forms are administrator-managed.
-    // Add student/team-scoped access only when the student business modules
-    // are ready to write records with verified groupId ownership.
+    // PRODUK USAHA
+    // Admin tetap dapat mengelola seluruh data. Siswa aktif hanya dapat
+    // membaca/membuat/mengubah/menghapus data milik kelompoknya sendiri.
+    // Dokumen siswa wajib memiliki groupId dan createdBy.
     match /Products/{documentId} {
-      allow read, write: if isAdmin();
+      allow read: if isActiveAdmin()
+        || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
+
+      allow create: if isActiveAdmin()
+        || (isActiveStudent()
+          && request.resource.data.groupId is string
+          && request.resource.data.groupId == myProfile().groupId
+          && isMyGroup(request.resource.data.groupId)
+          && request.resource.data.createdBy == request.auth.uid);
+
+      allow update: if isActiveAdmin()
+        || (resource.data.groupId is string
+          && isMyGroup(resource.data.groupId)
+          && request.resource.data.groupId == resource.data.groupId
+          && request.resource.data.createdBy == resource.data.createdBy);
+
+      allow delete: if isActiveAdmin()
+        || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
     }
+
+    // PROMOSI DIGITAL
     match /Promotions/{documentId} {
-      allow read, write: if isAdmin();
+      allow read: if isActiveAdmin()
+        || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
+
+      allow create: if isActiveAdmin()
+        || (isActiveStudent()
+          && request.resource.data.groupId is string
+          && request.resource.data.groupId == myProfile().groupId
+          && isMyGroup(request.resource.data.groupId)
+          && request.resource.data.createdBy == request.auth.uid);
+
+      allow update: if isActiveAdmin()
+        || (resource.data.groupId is string
+          && isMyGroup(resource.data.groupId)
+          && request.resource.data.groupId == resource.data.groupId
+          && request.resource.data.createdBy == resource.data.createdBy);
+
+      allow delete: if isActiveAdmin()
+        || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
     }
+
+    // TRANSAKSI KEUANGAN
     match /Transactions/{documentId} {
-      allow read, write: if isAdmin();
+      allow read: if isActiveAdmin()
+        || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
+
+      allow create: if isActiveAdmin()
+        || (isActiveStudent()
+          && request.resource.data.groupId is string
+          && request.resource.data.groupId == myProfile().groupId
+          && isMyGroup(request.resource.data.groupId)
+          && request.resource.data.createdBy == request.auth.uid);
+
+      allow update: if isActiveAdmin()
+        || (resource.data.groupId is string
+          && isMyGroup(resource.data.groupId)
+          && request.resource.data.groupId == resource.data.groupId
+          && request.resource.data.createdBy == resource.data.createdBy);
+
+      allow delete: if isActiveAdmin()
+        || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
     }
+
+    // Tolak akses ke koleksi lain yang belum diberi aturan secara eksplisit.
   }
 }
