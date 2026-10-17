@@ -1008,14 +1008,14 @@ td { overflow-wrap: anywhere; }
 </div>
 
 <script type="module">
-import { initializeApp, getApp } from
-  "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
-
-import { getAuth, onAuthStateChanged, signOut } from
-  "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import { app, auth, db, authPersistenceReady } from "../js/firebase.js";
 
 import {
-  getFirestore,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+import {
   doc,
   getDocFromServer,
   collection,
@@ -1025,25 +1025,6 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud-8-9pvYGNr0",
-  authDomain: "mandiri-startup-academy.firebaseapp.com",
-  projectId: "mandiri-startup-academy",
-  storageBucket: "mandiri-startup-academy.firebasestorage.app",
-  messagingSenderId: "245277580741",
-  appId: "1:245277580741:web:2e534e65504ba6800c3fac"
-};
-
-const app = (() => {
-  try {
-    return getApp();
-  } catch {
-    return initializeApp(firebaseConfig);
-  }
-})();
-
-const auth = getAuth(app);
-const db = getFirestore(app, "(default)");
 const $ = id => document.getElementById(id);
 
 let currentAdmin = null;
@@ -1581,6 +1562,8 @@ $("logoutButton").addEventListener("click", async () => {
 /*
  * Verifikasi autentikasi dan profil administrator.
  */
+await authPersistenceReady;
+
 onAuthStateChanged(auth, async user => {
   if (!user) {
     currentAdmin = null;
