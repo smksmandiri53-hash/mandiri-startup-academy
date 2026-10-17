@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#0b1730">
+<meta name="description" content="Etalase publik produk dan brand karya siswa Mandiri Startup Academy.">
+<title>Etalase Produk Siswa | Mandiri Startup Academy</title>
+<style>
+:root{--navy:#0b1730;--navy2:#142747;--gold:#d8b56a;--bg:#f4f6fa;--text:#24334b;--muted:#718096;--border:#e4e9f1;--green:#067647}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--text)}a{color:inherit}header{background:var(--navy);color:white;padding:18px max(18px,calc((100% - 1160px)/2));display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:11px}.logo{height:42px;width:42px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold);font-weight:900;font-size:21px}.brand strong{display:block;font-size:13px}.brand small{display:block;color:#bac5d5;font-size:11px;margin-top:4px}.nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.nav a{border:1px solid #ffffff40;border-radius:8px;padding:9px 12px;text-decoration:none;font-size:12px}.hero{background:linear-gradient(115deg,var(--navy),var(--navy2));color:#fff;padding:48px 20px}.hero-inner{max-width:1120px;margin:auto}.eyebrow{font-size:10px;letter-spacing:2px;color:#e6ca88;font-weight:800}.hero h1{font-size:clamp(28px,4vw,43px);margin:10px 0}.hero p{max-width:670px;color:#d1d9e5;line-height:1.75;margin:0}.container{max-width:1160px;margin:auto;padding:26px 18px 60px}.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}.tools input,.tools select{background:#fff;border:1px solid var(--border);border-radius:9px;padding:12px;font:inherit;font-size:13px;min-width:160px}.tools input{flex:1}.notice{padding:13px 15px;border:1px solid var(--border);border-radius:10px;background:#fff;color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:18px}.notice.error{color:#b42318;background:#fff0ef}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}.card{background:white;border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-width:0}.photo{height:190px;background:#edf1f7;display:grid;place-items:center;color:#8b98aa;font-size:13px;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover}.body{padding:16px;display:flex;flex-direction:column;gap:9px;flex:1}.tag{font-size:10px;letter-spacing:.6px;color:#8a6828;background:#f8f1e1;border-radius:20px;padding:5px 8px;align-self:flex-start;font-weight:800}.body h2{margin:0;color:var(--navy);font-size:18px;overflow-wrap:anywhere}.brandname{font-size:12px;font-weight:750;color:#53647c}.desc{font-size:12px;line-height:1.7;color:var(--muted);white-space:pre-wrap;overflow-wrap:anywhere}.price{font-size:21px;font-weight:850;color:var(--navy);margin-top:auto}.stock{font-size:11px;color:var(--muted)}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px}.action{display:inline-block;text-decoration:none;border-radius:8px;padding:10px 12px;font-size:12px;font-weight:750;background:var(--navy);color:white}.action.secondary{background:#f5eedf;color:#71551c}.empty{background:white;border:1px dashed var(--border);border-radius:12px;padding:28px;text-align:center;color:var(--muted);line-height:1.8;grid-column:1/-1}.empty strong{display:block;color:var(--navy);margin-bottom:6px}.footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.grid{grid-template-columns:1fr}.photo{height:220px}.hero{padding:35px 18px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">M</div><div><strong>MANDIRI STARTUP ACADEMY</strong><small>Etalase Produk Siswa · SMKS Mandiri Bandar Agung</small></div></div><nav class="nav"><a href="index.html">Beranda</a><a href="login.html">Ruang Siswa</a></nav></header>
+<section class="hero"><div class="hero-inner"><div class="eyebrow">KARYA SISWA · USAHA MUDA</div><h1>Temukan produk dan brand karya siswa.</h1><p>Jelajahi produk yang dibuat dan dipasarkan siswa. Setiap pembelian, pertanyaan, atau masukan dapat menjadi pengalaman usaha nyata bagi calon wirausaha muda.</p></div></section>
+<main class="container"><div class="tools"><input id="search" type="search" placeholder="Cari produk atau brand..."><select id="category"><option value="">Semua kategori</option></select></div><div id="notice" class="notice" role="status" aria-live="polite">Memuat etalase produk...</div><div id="products" class="grid"></div></main>
+<footer class="footer">© <span id="year"></span> Mandiri Startup Academy · Katalog produk karya siswa</footer>
+<script type="module">
+import {db} from "./js/firebase.js";
+import {collection,getDocs,query,where} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+const $=id=>document.getElementById(id);$("year").textContent=new Date().getFullYear();
+let allProducts=[];
+const money=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+function safeUrl(value){try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:"?u.href:"";}catch{return "";}}
+function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function render(){
+ const term=$("search").value.trim().toLocaleLowerCase("id"),cat=$("category").value;
+ const list=allProducts.filter(p=>(!cat||p.category===cat)&&[p.name,p.brandName,p.category,p.description,p.brandSlogan].some(v=>String(v||"").toLocaleLowerCase("id").includes(term)));
+ const root=$("products");root.replaceChildren();
+ if(!list.length){const e=node("div","empty");e.append(node("strong","","Belum ada produk yang cocok."),node("span","","Produk akan muncul di sini setelah siswa menyimpan dan memublikasikannya dari ruang kerja siswa."));root.append(e);return;}
+ for(const p of list){
+  const card=node("article","card"),photo=node("div","photo"),imgUrl=safeUrl(p.imageUrl);
+  if(imgUrl){const img=document.createElement("img");img.src=imgUrl;img.alt="Foto "+(p.name||"produk");img.loading="lazy";img.referrerPolicy="no-referrer";img.onerror=()=>{photo.replaceChildren(node("span","","Foto produk"));};photo.append(img);}else photo.append(node("span","","Foto produk"));
+  const body=node("div","body");body.append(node("span","tag",p.category||"Produk siswa"),node("h2","",p.name||"Produk"),node("div","brandname",p.brandName||"Brand siswa"));
+  if(p.brandSlogan)body.append(node("div","desc",p.brandSlogan));
+  body.append(node("div","desc",p.description||"Informasi produk belum tersedia."),node("div","price",money(p.price)),node("div","stock","Stok tersedia: "+Math.max(0,Number(p.stock)||0)));
+  const actions=node("div","actions"),video=safeUrl(p.videoUrl);
+  if(video){const a=node("a","action secondary","Tonton video promosi");a.href=video;a.target="_blank";a.rel="noopener noreferrer";actions.append(a);}
+  const phone=String(p.contactPhone||"").replace(/\D/g,"");
+  if(phone.length>=8&&phone.length<=15){const a=node("a","action","Hubungi penjual");a.href="https://wa.me/"+phone+"?text="+encodeURIComponent("Halo, saya tertarik dengan produk "+(p.name||"produk")+" dari brand "+(p.brandName||"Anda")+". Apakah masih tersedia?");a.target="_blank";a.rel="noopener noreferrer";actions.append(a);}
+  else {const a=node("a","action","Tanya melalui sekolah");a.href="index.html";actions.append(a);}
+  body.append(actions);card.append(photo,body);root.append(card);
+ }
+}
+$("search").addEventListener("input",render);$("category").addEventListener("change",render);
+try{
+ const snap=await getDocs(query(collection(db,"Products"),where("publicStatus","==","published")));
+ allProducts=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+ const cats=[...new Set(allProducts.map(p=>p.category).filter(Boolean))].sort();for(const c of cats){const o=document.createElement("option");o.value=c;o.textContent=c;$("category").append(o);}
+ $("notice").textContent=allProducts.length?allProducts.length+" produk telah dipublikasikan oleh siswa. Harga dan stok dapat berubah; silakan hubungi penjual untuk konfirmasi.":"Etalase sudah siap. Belum ada produk yang dipublikasikan siswa.";
+ render();
+}catch(error){console.error("Gagal memuat katalog",error);$("notice").className="notice error";$("notice").textContent="Etalase belum dapat dimuat ("+(error.code||"error")+"). Pastikan Firestore Rules terbaru telah diterbitkan di Firebase Console.";const e=node("div","empty");e.append(node("strong","","Produk belum dapat ditampilkan."),node("span","","Administrator perlu memeriksa Firestore Rules dan konfigurasi Firebase."));$("products").append(e);}
+</script>
+</body></html>
