@@ -674,7 +674,7 @@ td { overflow-wrap: anywhere; }
       <span>▦</span>Ringkasan
     </a>
     <a href="#pengguna" data-panel="pengguna">
-      <span>♙</span>Data Pengguna
+      <span>♙</span>Data Pengguna &amp; Kelompok
     </a>
     <a href="#bisnis" data-panel="bisnis">
       <span>◇</span>Brand &amp; Produk
@@ -780,9 +780,27 @@ td { overflow-wrap: anywhere; }
       Memverifikasi sesi administrator dan membaca data...
     </p>
     <p>
-      Ringkasan pengguna diambil dari koleksi Users. Jika pembacaan gagal,
-      periksa Firestore Rules.
+      Admin menyetujui pendaftaran dan membentuk kelompok berisi 3–4 siswa.
+      Siswa baru berstatus menunggu sampai admin mengaktifkan dan menempatkannya.
     </p>
+    <h2 style="margin-top:24px">Buat Kelompok Siswa</h2>
+    <form id="groupForm" class="form-grid">
+      <div class="field"><label for="groupName">Nama kelompok *</label>
+        <input id="groupName" maxlength="80" required placeholder="Contoh: Startup Kelompok 01"></div>
+      <div class="field"><label for="groupClass">Kelas / program *</label>
+        <input id="groupClass" maxlength="80" required placeholder="Contoh: XI BDP / XI AKL"></div>
+      <div class="field full"><label for="groupMembers">Pilih 3–4 siswa (Ctrl atau Command untuk memilih beberapa)</label>
+        <select id="groupMembers" multiple size="7" required aria-describedby="groupHelp"></select>
+        <small id="groupHelp" class="hint">Pilih 3–4 akun siswa. Akun yang dipilih akan diaktifkan dan ditempatkan dalam kelompok ini.</small></div>
+      <div class="form-actions"><button class="btn btn-primary" id="createGroupButton" type="submit">+ Buat Kelompok &amp; Aktifkan Siswa</button></div>
+    </form>
+    <p id="groupStatus" class="status module-status" aria-live="polite">Kelompok belum dimuat.</p>
+    <h2 style="margin-top:24px">Daftar Kelompok</h2>
+    <div class="table-wrap"><table><thead><tr><th>Kelompok</th><th>Kelas / Program</th><th>Jumlah Anggota</th><th>Anggota</th></tr></thead>
+      <tbody id="groupsBody"><tr><td colspan="4" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
+    <h2 style="margin-top:24px">Daftar Akun Siswa</h2>
+    <div class="table-wrap"><table><thead><tr><th>Nama</th><th>Email</th><th>Status</th><th>Kelompok</th></tr></thead>
+      <tbody id="studentsBody"><tr><td colspan="4" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
   </section>
 
   <!-- PANEL PRODUK -->
@@ -1022,6 +1040,7 @@ import {
   getDocsFromServer,
   addDoc,
   deleteDoc,
+  updateDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
@@ -1029,6 +1048,8 @@ const $ = id => document.getElementById(id);
 
 let currentAdmin = null;
 let authReady = false;
+let cachedUsers = [];
+let cachedGroups = [];
 
 $("year").textContent = new Date().getFullYear();
 
