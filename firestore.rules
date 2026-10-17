@@ -1,0 +1,65 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function adminProfile() {
+      return get(/databases/$(database)/documents/Users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/Users/$(request.auth.uid))
+        && adminProfile().role == 'admin'
+        && adminProfile().status == 'active';
+    }
+
+    function isSelf(userId) {
+      return signedIn() && request.auth.uid == userId;
+    }
+
+    // Canonical profile collection. Public registration may create only
+    // a pending student profile; it cannot assign an admin role.
+    match /Users/{userId} {
+      allow read: if isAdmin() || isSelf(userId);
+      allow create: if isSelf(userId)
+        && request.resource.data.role == 'student'
+        && request.resource.data.status == 'pending'
+        && request.resource.data.groupId == null;
+      allow update, delete: if isAdmin();
+    }
+
+    // Read-only compatibility for legacy profiles in the lowercase collection.
+    match /users/{userId} {
+      allow read: if isAdmin() || isSelf(userId);
+      allow create: if isSelf(userId)
+        && request.resource.data.role in ['student', 'siswa']
+        && request.resource.data.status == 'pending';
+      allow update, delete: if isAdmin();
+    }
+
+    // Only the administrator can create/assign/manage groups.
+    // A student can read only a group that lists their UID as a member.
+    match /Groups/{groupId} {
+      allow read: if isAdmin()
+        || (signedIn()
+          && request.auth.uid in resource.data.memberUids);
+      allow create, update, delete: if isAdmin();
+    }
+
+    // The current business-record forms are administrator-managed.
+    // Add student/team-scoped access only when the student business modules
+    // are ready to write records with verified groupId ownership.
+    match /Products/{documentId} {
+      allow read, write: if isAdmin();
+    }
+    match /Promotions/{documentId} {
+      allow read, write: if isAdmin();
+    }
+    match /Transactions/{documentId} {
+      allow read, write: if isAdmin();
+    }
+  }
+}
