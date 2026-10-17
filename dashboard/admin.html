@@ -528,7 +528,17 @@ $("logoutButton").addEventListener("click", async () => {
 onAuthStateChanged(auth, async user => {
   if (!user) {
     currentAdmin = null;
-    window.location.replace("../login.html");
+    authReady = false;
+    showStatus(
+      "connectionStatus",
+      "Sesi login tidak ditemukan. Silakan login kembali.",
+      "error"
+    );
+
+    // Beri waktu agar pesan terlihat sebelum pindah halaman.
+    setTimeout(() => {
+      window.location.replace("../login.html");
+    }, 1200);
     return;
   }
 
@@ -537,37 +547,82 @@ onAuthStateChanged(auth, async user => {
   $("userEmail").textContent = user.email || "Email tidak tersedia";
 
   try {
-    const profileSnapshot = await getDocFromServer(doc(db, "Users", user.uid));
+    // Gunakan nama koleksi yang sama persis dengan Firestore.
+    const profileSnapshot = await getDocFromServer(
+      doc(db, "Users", user.uid)
+    );
+
     if (!profileSnapshot.exists()) {
-      showStatus("connectionStatus", "Profil akun tidak ditemukan di Users. Silakan periksa data profil.", "error");
-      await signOut(auth);
-      window.location.replace("../login.html");
+      showStatus(
+        "connectionStatus",
+        "Profil admin tidak ditemukan di Users. Pastikan ID dokumen sama dengan UID akun Authentication.",
+        "error"
+      );
+      console.error("Profil tidak ditemukan:", {
+        projectId: app.options.projectId,
+        uid: user.uid,
+        collection: "Users"
+      });
       return;
     }
 
     const profile = profileSnapshot.data();
+
+    console.log("Pemeriksaan profil dashboard:", {
+      projectId: app.options.projectId,
+      uid: user.uid,
+      role: profile.role,
+      status: profile.status
+    });
+
     if (profile.status !== "active" || profile.role !== "admin") {
-      showStatus("connectionStatus", "Akses ditolak. Halaman ini hanya untuk akun admin aktif.", "error");
-      await signOut(auth);
-      window.location.replace("../login.html");
+      showStatus(
+        "connectionStatus",
+        "Akses dashboard ditolak. Role harus admin dan status harus active.",
+        "error"
+      );
       return;
     }
 
     currentAdmin = user;
     authReady = true;
-    const name = profile.displayName || user.displayName || "Administrator";
+
+    const name =
+      profile.displayName || user.displayName || "Administrator";
+
     $("userName").textContent = name;
     $("welcomeTitle").textContent = "Selamat datang, " + name + "!";
-    $("avatar").textContent = name.trim().charAt(0).toUpperCase() || "A";
+    $("avatar").textContent =
+      name.trim().charAt(0).toUpperCase() || "A";
 
-    await Promise.allSettled([loadUsers(), loadBusinessData()]);
+    showStatus(
+      "connectionStatus",
+      "Profil admin terverifikasi. Memuat data dashboard...",
+      "success"
+    );
+
+    // Kegagalan membaca modul bisnis tidak akan menghapus sesi admin.
+    await Promise.allSettled([
+      loadUsers(),
+      loadBusinessData()
+    ]);
+
   } catch (error) {
-    console.error("Pemeriksaan profil gagal:", error);
+    console.error("Pemeriksaan profil dashboard gagal:", {
+      code: error?.code,
+      message: error?.message,
+      projectId: app.options.projectId,
+      uid: user.uid
+    });
+
     currentAdmin = null;
     authReady = false;
-    showStatus("Gagal memverifikasi profil admin. Periksa koneksi Firestore dan Security Rules.", "error");
+
+    showStatus(
+      "connectionStatus",
+      "Gagal memverifikasi profil admin: " +
+        (error?.code || error?.message || "kesalahan tidak diketahui"),
+      "error"
+    );
   }
 });
-</script>
-</body>
-</html>
