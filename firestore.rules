@@ -123,7 +123,10 @@ service cloud.firestore {
     // membaca/membuat/mengubah/menghapus data milik kelompoknya sendiri.
     // Dokumen siswa wajib memiliki groupId dan createdBy.
     match /Products/{documentId} {
-      allow read: if isActiveAdmin()
+      // Produk berstatus published dapat dibaca publik untuk katalog umum.
+      // Draf tetap hanya dapat dibaca admin atau anggota kelompok pemilik.
+      allow read: if resource.data.publicStatus == 'published'
+        || isActiveAdmin()
         || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
 
       allow create: if isActiveAdmin()
@@ -141,6 +144,34 @@ service cloud.firestore {
 
       allow delete: if isActiveAdmin()
         || (resource.data.groupId is string && isMyGroup(resource.data.groupId));
+    }
+
+    // IDENTITAS BRAND: dapat dilihat publik hanya jika disetel public.
+    // Pengelolaan brand hanya untuk admin atau anggota kelompok pemilik.
+    match /Brands/{groupId} {
+      allow read: if (resource.data.public == true)
+        || isActiveAdmin()
+        || isMyGroup(groupId);
+
+      allow create: if isActiveAdmin()
+        || (isActiveStudent()
+          && request.resource.data.groupId == myProfile().groupId
+          && request.resource.data.groupId == groupId
+          && isMyGroup(groupId)
+          && request.resource.data.updatedBy == request.auth.uid);
+
+      allow update: if isActiveAdmin()
+        || (isActiveStudent()
+          && resource.data.groupId == myProfile().groupId
+          && resource.data.groupId == groupId
+          && request.resource.data.groupId == resource.data.groupId
+          && request.resource.data.updatedBy == request.auth.uid
+          && isMyGroup(groupId));
+
+      allow delete: if isActiveAdmin()
+        || (isActiveStudent()
+          && resource.data.groupId == myProfile().groupId
+          && isMyGroup(groupId));
     }
 
     // PROMOSI DIGITAL
