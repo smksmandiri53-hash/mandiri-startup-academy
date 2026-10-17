@@ -53,7 +53,7 @@ onAuthStateChanged(auth,async user=>{
   if(normalized==="admin"){window.location.replace("./admin.html");return;}
   if(normalized!=="student"){status("Peran akun tidak dikenali. Hubungi administrator.","error");return;}
   $("welcomeTitle").textContent="Halo, "+(profile.displayName||user.displayName||"Siswa")+"!";
-  if(profile.status!=="active"){status("Status akun tidak aktif. Hubungi administrator untuk pemeriksaan.","error");return;}
+  if(profile.status!=="active"){status("Akun siswa lama masih berstatus belum aktif. Coba login kembali setelah administrator menerapkan Firestore Rules terbaru.","error");return;}
   if(!profile.groupId){status("Akun Anda sudah aktif. Anda bisa login, tetapi belum ditempatkan ke kelompok. Admin akan mengatur kelompok berisi 3–4 siswa.","");$("groupDescription").textContent="Anda belum masuk kelompok. Silakan tunggu sampai admin menempatkan Anda ke kelompok berisi 3–4 siswa.";return;}
   const groupSnap=await getDoc(doc(db,"Groups",profile.groupId));
   if(!groupSnap.exists()){status("ID kelompok tidak ditemukan. Hubungi administrator.","error");return;}
