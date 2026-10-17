@@ -18,7 +18,9 @@
       --border: #dfe5ed;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -76,7 +78,9 @@
       margin-bottom: 7px;
     }
 
-    .field { margin-bottom: 18px; }
+    .field {
+      margin-bottom: 18px;
+    }
 
     input {
       width: 100%;
@@ -90,7 +94,7 @@
 
     input:focus {
       border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(201,166,93,.16);
+      box-shadow: 0 0 0 3px rgba(201, 166, 93, .16);
     }
 
     button {
@@ -105,6 +109,10 @@
       cursor: pointer;
     }
 
+    button:hover {
+      background: var(--navy-light);
+    }
+
     button:disabled {
       opacity: .6;
       cursor: wait;
@@ -117,11 +125,22 @@
       font-size: 13px;
       margin: 0 0 17px;
       overflow-wrap: anywhere;
+      line-height: 1.5;
     }
 
-    .message.show { display: block; }
-    .message.error { background: #fff0f0; color: #a12626; }
-    .message.success { background: #eaf8ef; color: #17683b; }
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      background: #fff0f0;
+      color: #a12626;
+    }
+
+    .message.success {
+      background: #eaf8ef;
+      color: #17683b;
+    }
 
     .links {
       margin-top: 20px;
@@ -131,32 +150,48 @@
       font-size: 13px;
     }
 
-    a { color: var(--navy-light); font-weight: 700; }
-    .back { color: var(--muted); font-weight: 400; }
+    a {
+      color: var(--navy-light);
+      font-weight: 700;
+    }
+
+    .back {
+      color: var(--muted);
+      font-weight: 400;
+    }
 
     @media (max-width: 480px) {
-      .login-card { padding: 25px 21px; }
+      .login-card {
+        padding: 25px 21px;
+      }
     }
   </style>
 </head>
 
 <body>
   <main class="login-card">
-    <div class="logo">M</div>
+    <div class="logo" aria-label="Mandiri Startup Academy">M</div>
 
     <h1>Selamat Datang</h1>
+
     <p class="subtitle">
       Masuk ke Mandiri Startup Academy untuk membangun brand,
       mengembangkan produk, dan mengelola bisnis Anda.
     </p>
 
-    <div id="message" class="message" role="status" aria-live="polite"></div>
+    <div
+      id="message"
+      class="message"
+      role="status"
+      aria-live="polite"
+    ></div>
 
     <form id="loginForm">
       <div class="field">
         <label for="email">Email</label>
         <input
           id="email"
+          name="email"
           type="email"
           autocomplete="username"
           placeholder="nama@email.com"
@@ -168,6 +203,7 @@
         <label for="password">Kata sandi</label>
         <input
           id="password"
+          name="password"
           type="password"
           autocomplete="current-password"
           placeholder="Masukkan kata sandi"
@@ -175,13 +211,23 @@
         >
       </div>
 
-      <button id="loginButton" type="submit">Masuk ke Platform</button>
+      <button id="loginButton" type="submit">
+        Masuk ke Platform
+      </button>
     </form>
 
     <div class="links">
-      <a href="register.html">Belum memiliki akun? Daftar sebagai siswa</a>
-      <a href="#" id="resetLink">Lupa kata sandi?</a>
-      <a class="back" href="index.html">← Kembali ke beranda</a>
+      <a href="register.html">
+        Belum memiliki akun? Daftar sebagai siswa
+      </a>
+
+      <a href="#" id="resetLink">
+        Lupa kata sandi?
+      </a>
+
+      <a class="back" href="index.html">
+        ← Kembali ke beranda
+      </a>
     </div>
   </main>
 
@@ -203,14 +249,14 @@
       getDoc
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-    // GANTI dengan konfigurasi aplikasi web Firebase milik Anda.
+    // Konfigurasi Firebase Mandiri Startup Academy.
     const firebaseConfig = {
-      apiKey: "GANTI_DENGAN_API_KEY",
-      authDomain: "GANTI_DENGAN_AUTH_DOMAIN",
-      projectId: "GANTI_DENGAN_PROJECT_ID",
-      storageBucket: "GANTI_DENGAN_STORAGE_BUCKET",
-      messagingSenderId: "GANTI_DENGAN_MESSAGING_SENDER_ID",
-      appId: "GANTI_DENGAN_APP_ID"
+      apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud8-9pvYGNr0",
+      authDomain: "mandiri-startup-academy.firebaseapp.com",
+      projectId: "mandiri-startup-academy",
+      storageBucket: "mandiri-startup-academy.firebasestorage.app",
+      messagingSenderId: "245277580741",
+      appId: "1:245277580741:web:2e534e65504ba6800c3fac"
     };
 
     const app = initializeApp(firebaseConfig);
@@ -222,6 +268,7 @@
     const message = document.getElementById("message");
     const emailInput = document.getElementById("email");
     const passwordInput = document.getElementById("password");
+    const resetLink = document.getElementById("resetLink");
 
     function showMessage(text, type = "error") {
       message.textContent = text;
@@ -230,21 +277,43 @@
 
     function getErrorMessage(error) {
       const messages = {
-        "auth/invalid-email": "Format email tidak valid.",
-        "auth/invalid-credential": "Email atau kata sandi tidak cocok.",
-        "auth/user-not-found": "Akun tidak ditemukan.",
-        "auth/wrong-password": "Kata sandi tidak cocok.",
-        "auth/too-many-requests": "Terlalu banyak percobaan. Coba lagi nanti.",
-        "auth/network-request-failed": "Koneksi internet bermasalah.",
-        "permission-denied": "Akses profil ditolak oleh aturan keamanan Firebase."
+        "auth/invalid-email":
+          "Format email tidak valid.",
+
+        "auth/invalid-credential":
+          "Email atau kata sandi tidak cocok.",
+
+        "auth/user-not-found":
+          "Akun tidak ditemukan.",
+
+        "auth/wrong-password":
+          "Kata sandi tidak cocok.",
+
+        "auth/too-many-requests":
+          "Terlalu banyak percobaan. Coba lagi nanti.",
+
+        "auth/network-request-failed":
+          "Koneksi internet bermasalah.",
+
+        "auth/operation-not-allowed":
+          "Metode login Email/Password belum diaktifkan di Firebase.",
+
+        "permission-denied":
+          "Akses profil ditolak oleh aturan keamanan Firebase.",
+
+        "unavailable":
+          "Layanan Firebase sedang tidak tersedia. Coba kembali."
       };
 
       return messages[error.code] ||
-        "Login belum berhasil. Periksa konfigurasi dan pengaturan Firebase.";
+        "Login belum berhasil. Periksa koneksi, konfigurasi, dan pengaturan Firebase.";
     }
 
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
+
+      if (button.disabled) return;
+
       button.disabled = true;
       button.textContent = "Memeriksa akun...";
       message.className = "message";
@@ -265,8 +334,10 @@
 
         if (!profileSnapshot.exists()) {
           await signOut(auth);
+          user = null;
+
           showMessage(
-            "Akun berhasil diautentikasi, tetapi profil pengguna belum tersedia. Hubungi administrator sekolah."
+            "Akun berhasil diautentikasi, tetapi profil pengguna belum tersedia. Hubungi administrator."
           );
           return;
         }
@@ -275,6 +346,8 @@
 
         if (profile.status !== "active") {
           await signOut(auth);
+          user = null;
+
           showMessage(
             "Akun Anda belum aktif atau masih menunggu persetujuan sekolah."
           );
@@ -291,50 +364,65 @@
 
         if (!destination) {
           await signOut(auth);
+          user = null;
+
           showMessage(
-            "Peran akun belum dikenali. Hubungi administrator sekolah."
+            "Peran akun belum dikenali. Hubungi administrator."
           );
           return;
         }
 
+        showMessage("Login berhasil. Membuka dashboard...", "success");
+
         window.location.assign(destination);
+
       } catch (error) {
         if (user) {
           try {
             await signOut(auth);
-          } catch (_) {
-            // Sesi akan diperiksa kembali saat login berikutnya.
+          } catch (signOutError) {
+            console.error("Sign out error:", signOutError);
           }
         }
 
         console.error("Login error:", error);
         showMessage(getErrorMessage(error));
+
       } finally {
         button.disabled = false;
         button.textContent = "Masuk ke Platform";
       }
     });
 
-    document.getElementById("resetLink").addEventListener("click", async (event) => {
+    resetLink.addEventListener("click", async (event) => {
       event.preventDefault();
 
       const email = emailInput.value.trim();
 
       if (!email) {
-        showMessage("Masukkan email Anda terlebih dahulu untuk reset kata sandi.");
+        showMessage(
+          "Masukkan email Anda terlebih dahulu untuk reset kata sandi."
+        );
         emailInput.focus();
         return;
       }
 
+      resetLink.style.pointerEvents = "none";
+
       try {
         await sendPasswordResetEmail(auth, email);
+
         showMessage(
           "Jika email terdaftar, ikuti instruksi reset kata sandi yang dikirimkan.",
           "success"
         );
+
       } catch (error) {
         console.error("Password reset error:", error);
         showMessage(getErrorMessage(error));
+
+      } finally {
+        resetLink.style.pointerEvents = "";
       }
     });
   </script>
