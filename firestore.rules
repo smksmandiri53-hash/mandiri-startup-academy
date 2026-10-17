@@ -55,7 +55,20 @@ service cloud.firestore {
         && request.resource.data.status == 'active'
         && request.resource.data.groupId == null;
 
-      allow update, delete: if isActiveAdmin();
+      allow update: if isActiveAdmin()
+        || (
+          signedIn()
+          && request.auth.uid == uid
+          && resource.data.role in ['student', 'siswa']
+          && resource.data.status == 'pending'
+          && resource.data.groupId == null
+          && request.resource.data.role == resource.data.role
+          && request.resource.data.groupId == null
+          && request.resource.data.status == 'active'
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'updatedAt'])
+        );
+      allow delete: if isActiveAdmin();
     }
 
     // Kompatibilitas profil lama; pendaftaran baru menggunakan Users.
@@ -69,7 +82,20 @@ service cloud.firestore {
         && request.resource.data.status == 'active'
         && request.resource.data.groupId == null;
 
-      allow update, delete: if isActiveAdmin();
+      allow update: if isActiveAdmin()
+        || (
+          signedIn()
+          && request.auth.uid == uid
+          && resource.data.role in ['student', 'siswa']
+          && resource.data.status == 'pending'
+          && resource.data.groupId == null
+          && request.resource.data.role == resource.data.role
+          && request.resource.data.groupId == null
+          && request.resource.data.status == 'active'
+          && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'updatedAt'])
+        );
+      allow delete: if isActiveAdmin();
     }
 
     // KELOMPOK
