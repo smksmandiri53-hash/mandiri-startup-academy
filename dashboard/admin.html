@@ -1165,10 +1165,132 @@ function clearBody(tbodyId) {
   $(tbodyId).replaceChildren();
 }
 
+async function loadGroups() {
+  const snapshot = await getDocsFromServer(collection(db, "Groups"));
+  cachedGroups = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  const groupsBody = $("groupsBody");
+  groupsBody.replaceChildren();
+  if (!cachedGroups.length) {
+    setEmpty("groupsBody", 4, "Belum ada kelompok. Buat kelompok pertama di atas.");
+  } else {
+    for (const group of cachedGroups) {
+      const row = document.createElement("tr");
+      makeCell(row, group.name || "Kelompok");
+      makeCell(row, group.className || "—");
+      makeCell(row, Array.isArray(group.memberUids) ? group.memberUids.length : 0);
+      const memberNames = (Array.isArray(group.memberNames) ? group.memberNames : []);
+      makeCell(row, memberNames.join(", ") || "Nama anggota belum tersedia");
+      groupsBody.appendChild(row);
+    }
+  }
+  refreshGroupMemberOptions();
+  renderStudentRows();
+}
+
+function refreshGroupMemberOptions() {
+  const select = $("groupMembers");
+  if (!select) return;
+  const assigned = new Set(cachedGroups.flatMap(g => Array.isArray(g.memberUids) ? g.memberUids : []));
+  select.replaceChildren();
+  const students = cachedUsers.filter(u =>
+    ["student", "siswa"].includes(String(u.role || "").toLowerCase()) &&
+    !assigned.has(u.uid || u.id)
+  );
+  for (const user of students) {
+    const option = document.createElement("option");
+    option.value = user.uid || user.id;
+    option.textContent = (user.displayName || "Siswa") + " — " + (user.email || "tanpa email") +
+      (user.status === "active" ? "" : " (menunggu aktivasi)");
+    select.appendChild(option);
+  }
+  if (!students.length) {
+    const option = document.createElement("option");
+    option.disabled = true;
+    option.textContent = "Belum ada siswa yang dapat dipilih";
+    select.appendChild(option);
+  }
+}
+
+function renderStudentRows() {
+  const body = $("studentsBody");
+  if (!body) return;
+  body.replaceChildren();
+  const students = cachedUsers.filter(u => ["student", "siswa"].includes(String(u.role || "").toLowerCase()));
+  if (!students.length) {
+    setEmpty("studentsBody", 4, "Belum ada akun siswa.");
+    return;
+  }
+  const groupByUid = new Map();
+  for (const group of cachedGroups) {
+    for (const uid of (Array.isArray(group.memberUids) ? group.memberUids : [])) groupByUid.set(uid, group.name || "Kelompok");
+  }
+  for (const user of students) {
+    const row = document.createElement("tr");
+    makeCell(row, user.displayName || "—");
+    makeCell(row, user.email || "—");
+    makeCell(row, user.status || "pending");
+    makeCell(row, groupByUid.get(user.uid || user.id) || "Belum masuk kelompok");
+    body.appendChild(row);
+  }
+}
+
+$("groupForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  if (!currentAdmin || !authReady) {
+    showStatus("groupStatus", "Sesi admin belum terverifikasi.", "error");
+    return;
+  }
+  const name = $("groupName").value.trim();
+  const className = $("groupClass").value.trim();
+  const selected = Array.from($("groupMembers").selectedOptions)
+    .filter(option => !option.disabled).map(option => option.value);
+  if (!name || !className) {
+    showStatus("groupStatus", "Nama kelompok dan kelas/program wajib diisi.", "error");
+    return;
+  }
+  if (selected.length < 3 || selected.length > 4) {
+    showStatus("groupStatus", "Setiap kelompok harus berisi tepat 3–4 siswa.", "error");
+    return;
+  }
+  const members = selected.map(uid => cachedUsers.find(u => (u.uid || u.id) === uid)).filter(Boolean);
+  if (members.length !== selected.length) {
+    showStatus("groupStatus", "Data anggota berubah. Muat ulang dashboard lalu pilih kembali.", "error");
+    return;
+  }
+  const button = $("createGroupButton");
+  button.disabled = true;
+  try {
+    const created = await addDoc(collection(db, "Groups"), {
+      name, className, memberUids: selected,
+      memberNames: members.map(u => u.displayName || u.email || "Siswa"),
+      memberEmails: members.map(u => u.email || ""),
+      createdBy: currentAdmin.uid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    for (const uid of selected) {
+      await updateDoc(doc(db, "Users", uid), {
+        status: "active",
+        groupId: created.id,
+        updatedAt: serverTimestamp()
+      });
+    }
+    $("groupForm").reset();
+    await Promise.all([loadUsers(), loadGroups()]);
+    showStatus("groupStatus", "Kelompok berhasil dibuat dan akun siswa yang dipilih telah diaktifkan.", "success");
+  } catch (error) {
+    console.error("Gagal membuat kelompok:", error);
+    showStatus("groupStatus", friendlyError(error) + " Jika proses terhenti di tengah, periksa dokumen Groups dan Users di Firestore sebelum mengulangi.", "error");
+  } finally {
+    button.disabled = false;
+  }
+});
+
 async function loadUsers() {
   try {
     const snapshot = await getDocsFromServer(collection(db, "Users"));
-    const users = snapshot.docs.map(d => d.data());
+    const users = snapshot.docs.map(d => ({ id: d.id, ...d.data(), uid: d.id }));
+    cachedUsers = users;
 
     $("totalUsers").textContent = users.length;
 
@@ -1186,6 +1308,8 @@ async function loadUsers() {
       "Login admin terverifikasi. Ringkasan pengguna berhasil dibaca dari Firestore.",
       "success"
     );
+    refreshGroupMemberOptions();
+    renderStudentRows();
   } catch (error) {
     console.error("Gagal membaca Users:", error);
 
@@ -1665,6 +1789,7 @@ onAuthStateChanged(auth, async user => {
 
     await Promise.allSettled([
       loadUsers(),
+      loadGroups(),
       loadBusinessData()
     ]);
 
