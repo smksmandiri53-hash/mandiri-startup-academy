@@ -39,6 +39,19 @@ footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
   <div class="status" id="workStatus" role="status" aria-live="polite">Menyiapkan ruang kerja...</div>
   <div class="work-grid" style="margin-top:15px">
     <section class="work-card">
+      <h3>00 · Identitas Brand Kelompok</h3><p>Bangun merek yang akan dikenal calon pembeli. Identitas ini akan ditampilkan pada etalase publik saat produk dipublikasikan.</p>
+      <form id="brandForm" class="work-form">
+        <div class="work-field full"><label for="brandName">Nama brand / merek</label><input id="brandName" required maxlength="80" placeholder="Contoh: Kreasi Mandiri"></div>
+        <div class="work-field full"><label for="brandSlogan">Slogan brand</label><input id="brandSlogan" maxlength="140" placeholder="Contoh: Kualitas baik, harga bersahabat"></div>
+        <div class="work-field full"><label for="brandLogoUrl">Tautan logo brand (opsional)</label><input id="brandLogoUrl" type="url" placeholder="https://..."></div>
+        <div class="work-field full"><label for="brandDescription">Cerita dan nilai brand</label><textarea id="brandDescription" required maxlength="800" placeholder="Apa yang membuat brand ini berbeda dan nilai apa yang ingin diberikan kepada pelanggan?"></textarea></div>
+        <div class="work-field full"><label for="brandContact">Nomor WhatsApp penjualan (opsional, format internasional, mis. 62812...)</label><input id="brandContact" inputmode="tel" maxlength="20" placeholder="62812xxxxxxxx"></div>
+        <div class="work-field full"><button class="work-button" type="submit">Simpan identitas brand</button></div>
+      </form>
+      <div id="brandStatus" class="work-result"></div>
+      <div class="helper">Gunakan nama dan logo yang dibuat sendiri atau yang kelompok punya izin untuk digunakan. Jangan memasukkan data pribadi selain kontak usaha yang memang siap ditampilkan kepada publik.</div>
+    </section>
+    <section class="work-card">
       <h3>01 · Riset dan Rencana Produk</h3><p>Mulai dari kebutuhan pelanggan, tentukan produk, hitung biaya dan tetapkan harga jual yang masuk akal.</p>
       <div class="helper">Sebelum mengisi: diskusikan siapa calon pembeli, masalah apa yang mereka hadapi, dan apa keunggulan produk kelompok.</div>
       <form id="productForm" class="work-form">
@@ -48,7 +61,10 @@ footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
         <div class="work-field"><label for="productCost">Total biaya produksi (Rp)</label><input id="productCost" type="number" min="0" step="1" required placeholder="Contoh: 75000"></div>
         <div class="work-field"><label for="productPrice">Harga jual per unit (Rp)</label><input id="productPrice" type="number" min="1" step="1" required placeholder="Contoh: 10000"></div>
         <div class="work-field full"><label for="productDescription">Masalah pelanggan, target pembeli, dan keunggulan</label><textarea id="productDescription" required maxlength="1200" placeholder="Jelaskan siapa calon pembeli dan alasan mereka memilih produk ini."></textarea></div>
-        <div class="work-field full"><button class="work-button" type="submit">Simpan rencana produk</button></div>
+        <div class="work-field full"><label for="productImageUrl">Tautan foto produk (opsional)</label><input id="productImageUrl" type="url" placeholder="https://..."></div>
+        <div class="work-field full"><label for="productVideoUrl">Tautan video promosi (YouTube/TikTok/tautan video publik)</label><input id="productVideoUrl" type="url" placeholder="https://..."></div>
+        <div class="work-field full"><label for="productPublicStatus">Status etalase</label><select id="productPublicStatus" required><option value="draft">Simpan sebagai draf (hanya kelompok)</option><option value="published">Publikasikan ke katalog umum</option></select><p class="inline-note">Rekam video menggunakan HP, unggah ke platform yang Anda gunakan, lalu tempel tautannya. Publikasi menampilkan nama brand, harga, foto/video, deskripsi, dan kontak usaha jika diisi.</p></div>
+        <div class="work-field full"><button class="work-button" type="submit">Simpan produk</button></div>
       </form><div id="productStatus" class="work-result"></div>
     </section>
     <section class="work-card">
@@ -87,13 +103,13 @@ footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
 <script type="module">
 import {auth,db,authPersistenceReady} from "../js/firebase.js";
 import {onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import {doc,getDoc,collection,addDoc,getDocs,query,where,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import {doc,getDoc,collection,addDoc,getDocs,query,where,serverTimestamp,setDoc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 const $=id=>document.getElementById(id);
 $("year").textContent=new Date().getFullYear();
 const localToday=new Date().toLocaleDateString("en-CA");
 $("promotionDate").value=localToday;
 $("transactionDate").value=localToday;
-let currentUser=null,currentGroupId=null;
+let currentUser=null,currentGroupId=null,currentBrand=null;
 const money=value=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(value)||0);
 function workStatus(message,type=""){ $("workStatus").textContent=message;$("workStatus").className="status"+(type?" "+type:"");}
 function fieldStatus(id,message,type=""){const el=$(id);el.textContent=message;el.className="status"+(type?" "+type:"");}
@@ -119,7 +135,7 @@ async function loadWorkData(){
   const transactions=transactionsSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
   $("productList").replaceChildren();$("promotionList").replaceChildren();$("transactionList").replaceChildren();
   if(!products.length)$("productList").innerHTML='<div class="work-empty">Belum ada produk tercatat. Mulai dari formulir rencana produk.</div>';
-  products.slice(0,5).forEach(p=>appendWorkItem("productList",p.name,(p.category||"Kategori belum diisi")+" · Biaya "+money(p.cost||0)+" · Harga jual "+money(p.price)+" · Stok "+(p.stock??0),"Produk"));
+  products.slice(0,5).forEach(p=>appendWorkItem("productList",p.name,(p.brandName?p.brandName+" · ":"")+(p.category||"Kategori belum diisi")+" · Biaya "+money(p.cost||0)+" · Harga jual "+money(p.price)+" · Stok "+(p.stock??0),p.publicStatus==="published"?"Tayang publik":"Draf"));
   if(!promotions.length)$("promotionList").innerHTML='<div class="work-empty">Belum ada promosi tercatat.</div>';
   promotions.slice(0,5).forEach(p=>appendWorkItem("promotionList",p.title,(p.channel||"Kanal belum diisi")+" · "+(p.date||"Tanggal belum diisi"),p.status||"Rencana"));
   if(!transactions.length)$("transactionList").innerHTML='<div class="work-empty">Belum ada transaksi tercatat.</div>';
@@ -146,10 +162,11 @@ async function saveWorkDocument(collectionName,data,formId,statusId){
 }
 $("productForm").addEventListener("submit",async event=>{
  event.preventDefault();
- const name=$("productName").value.trim(),category=$("productCategory").value,stock=Number($("productStock").value),cost=Number($("productCost").value),price=Number($("productPrice").value),description=$("productDescription").value.trim();
+ const name=$("productName").value.trim(),category=$("productCategory").value,stock=Number($("productStock").value),cost=Number($("productCost").value),price=Number($("productPrice").value),description=$("productDescription").value.trim(),imageUrl=$("productImageUrl").value.trim(),videoUrl=$("productVideoUrl").value.trim(),publicStatus=$("productPublicStatus").value;
  if(!name||!category||!Number.isSafeInteger(stock)||stock<0||!Number.isSafeInteger(cost)||cost<0||!Number.isSafeInteger(price)||price<=0||!description){fieldStatus("productStatus","Lengkapi data produk. Stok dan biaya tidak boleh negatif; harga jual harus lebih dari nol.","error");return;}
+ if(publicStatus==="published"&&(!currentBrand||!currentBrand.brandName)){fieldStatus("productStatus","Simpan identitas brand terlebih dahulu sebelum mempublikasikan produk.","error");return;}
  if(price<cost/Math.max(stock,1)){if(!confirm("Harga jual per unit lebih rendah daripada perkiraan biaya per unit. Tetap simpan rencana ini?"))return;}
- await saveWorkDocument("Products",{name,category,stock,cost,price,description},"productForm","productStatus");
+ await saveWorkDocument("Products",{name,category,stock,cost,price,description,imageUrl,videoUrl,publicStatus,brandName:currentBrand?.brandName||"",brandSlogan:currentBrand?.slogan||"",brandLogoUrl:currentBrand?.logoUrl||"",contactPhone:currentBrand?.contactPhone||""},"productForm","productStatus");
 });
 $("promotionForm").addEventListener("submit",async event=>{
  event.preventDefault();
@@ -164,6 +181,19 @@ $("transactionForm").addEventListener("submit",async event=>{
  await saveWorkDocument("Transactions",{type,amount,date,description},"transactionForm","transactionStatusMessage");
 });
 $("refreshWork").addEventListener("click",loadWorkData);
+$("brandForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(!currentUser||!currentGroupId){fieldStatus("brandStatus","Anda harus bergabung ke kelompok sebelum menyimpan brand.","error");return;}
+ const brandName=$("brandName").value.trim(),slogan=$("brandSlogan").value.trim(),logoUrl=$("brandLogoUrl").value.trim(),description=$("brandDescription").value.trim(),contactPhone=$("brandContact").value.trim();
+ if(!brandName||!description){fieldStatus("brandStatus","Nama brand dan cerita brand wajib diisi.","error");return;}
+ const button=event.currentTarget.querySelector('button[type="submit"]');button.disabled=true;
+ try{
+  const data={groupId:currentGroupId,brandName,slogan,logoUrl,description,contactPhone,public:true,updatedBy:currentUser.uid,updatedAt:serverTimestamp()};
+  await setDoc(doc(db,"Brands",currentGroupId),data,{merge:true});
+  currentBrand={...data};fieldStatus("brandStatus","Identitas brand berhasil disimpan. Brand ini akan ditampilkan pada produk yang dipublikasikan berikutnya.","success");
+ }catch(error){console.error("Gagal menyimpan brand",error);fieldStatus("brandStatus","Gagal menyimpan brand ("+(error.code||"error")+"). Pastikan Firestore Rules untuk koleksi Brands sudah dipublikasikan.","error");}
+ finally{button.disabled=false;}
+});
 function status(text,type=""){ $("accountStatus").textContent=text;$("accountStatus").className="status"+(type?" "+type:"");}
 function renderMembers(names,emails,uid){const box=$("members");box.replaceChildren();(names||[]).forEach((name,i)=>{const item=document.createElement("div");item.className="member";const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent=String(name||"S").trim().charAt(0).toUpperCase();const details=document.createElement("div");const strong=document.createElement("strong");strong.textContent=name||"Siswa";const small=document.createElement("small");small.textContent=(emails||[])[i]||"";details.append(strong,small);item.append(avatar,details);box.append(item);});}
 await authPersistenceReady;
@@ -182,6 +212,8 @@ onAuthStateChanged(auth,async user=>{
   const groupSnap=await getDoc(doc(db,"Groups",profile.groupId));
   if(!groupSnap.exists()){status("ID kelompok tidak ditemukan. Hubungi administrator.","error");return;}
   const group=groupSnap.data();
+  try{const brandSnap=await getDoc(doc(db,"Brands",profile.groupId));if(brandSnap.exists()){currentBrand=brandSnap.data();$("brandName").value=currentBrand.brandName||"";$("brandSlogan").value=currentBrand.slogan||"";$("brandLogoUrl").value=currentBrand.logoUrl||"";$("brandDescription").value=currentBrand.description||"";$("brandContact").value=currentBrand.contactPhone||"";}}catch(brandError){console.warn("Brand belum tersedia atau Rules belum diperbarui",brandError);}
+
   $("groupDescription").textContent=(group.name||"Kelompok siswa")+" · "+(group.className||"Kelas belum diisi")+" · "+((group.memberUids||[]).length)+" anggota";
   renderMembers(group.memberNames||[],group.memberEmails||[],user.uid);
   currentGroupId=profile.groupId;
