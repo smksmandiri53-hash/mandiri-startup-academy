@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b1730">
+<meta name="description" content="Peta jalan usaha siswa Mandiri Startup Academy dari riset pasar hingga penjualan marketplace.">
+<title>Peta Jalan Usaha | Mandiri Startup Academy</title>
+<style>
+:root{--navy:#0b1730;--navy2:#142747;--gold:#d8b56a;--bg:#f4f6fa;--text:#24334b;--muted:#718096;--border:#e4e9f1;--green:#067647;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--text)}a{color:inherit;text-decoration:none}button,input{font:inherit}
+header{background:var(--navy);color:#fff;padding:17px max(18px,calc((100% - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:11px}.logo{width:43px;height:43px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold);font-weight:900;font-size:21px}.brand strong{display:block;font-size:13px}.brand small{display:block;color:#bac5d5;font-size:11px;margin-top:4px}.nav{display:flex;gap:8px;flex-wrap:wrap}.nav a,.nav button{border:1px solid #ffffff45;border-radius:8px;padding:9px 12px;color:#fff;background:transparent;font-size:12px;cursor:pointer}
+.hero{background:linear-gradient(115deg,var(--navy),var(--navy2));color:#fff;padding:34px 20px}.inner,.container{max-width:1120px;margin:auto}.eyebrow{color:#e6ca88;font-size:10px;font-weight:800;letter-spacing:2px}.hero h1{font-size:clamp(28px,4vw,40px);margin:10px 0}.hero p{color:#d1d9e5;line-height:1.75;max-width:760px;margin:0}.container{padding:22px 18px 55px}.status{padding:13px 15px;border:1px solid var(--border);border-radius:10px;background:#fff;font-size:13px;line-height:1.6;margin-bottom:16px;overflow-wrap:anywhere}.status.error{color:var(--red);background:#fff0ef;border-color:#ffd5d1}.status.success{color:var(--green);background:#ecfdf3;border-color:#abefc6}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:20px}.metric,.card{background:#fff;border:1px solid var(--border);border-radius:13px;padding:17px;min-width:0}.metric span{display:block;font-size:11px;color:var(--muted)}.metric strong{display:block;font-size:24px;color:var(--navy);margin-top:5px;overflow-wrap:anywhere}.section-title{font-size:20px;color:var(--navy);margin:26px 0 7px}.muted{font-size:12px;color:var(--muted);line-height:1.7;margin:0 0 15px}
+.roadmap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.stage{background:#fff;border:1px solid var(--border);border-radius:13px;padding:18px;display:flex;gap:13px;align-items:flex-start}.num{width:37px;height:37px;border-radius:10px;background:#f5eedf;color:#8a6828;display:grid;place-items:center;font-weight:900;flex-shrink:0}.stage h3{font-size:15px;color:var(--navy);margin:0 0 6px}.stage p{font-size:12px;color:var(--muted);line-height:1.7;margin:0}.pill{display:inline-block;font-size:10px;font-weight:800;border-radius:20px;padding:5px 9px;margin-top:10px;background:#eef2f7;color:#526176}.pill.done{background:#ecfdf3;color:var(--green)}.pill.pending{background:#fff7e6;color:#8a5b00}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.btn{display:inline-block;border:0;border-radius:8px;padding:11px 14px;background:var(--navy);color:#fff;font-size:12px;font-weight:750;cursor:pointer}.btn.secondary{background:#f5eedf;color:#71551c;border:1px solid #f0e0b9}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field{display:grid;gap:6px;min-width:0}.field label{font-size:12px;font-weight:750}.field input{width:100%;min-width:0;padding:11px;border:1px solid var(--border);border-radius:8px;background:#fff;font-size:13px}.field.full{grid-column:1/-1}.note{background:#fffaf0;border:1px solid #f0e0b9;border-radius:10px;padding:13px;color:#71551c;font-size:12px;line-height:1.7;margin-top:14px}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
+@media(max-width:700px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.roadmap,.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.hero{padding:27px 17px}.container{padding:18px 13px 40px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">M</div><div><strong>MANDIRI STARTUP ACADEMY</strong><small>Studio Perjalanan Usaha Siswa</small></div></div><nav class="nav"><a href="dashboard/student.html">Dashboard Siswa</a><a href="marketplace-hub.html">Hub Marketplace</a><button id="logoutButton" type="button">Keluar ↗</button></nav></header>
+<section class="hero"><div class="inner"><div class="eyebrow">DARI IDE SAMPAI TRANSAKSI NYATA</div><h1>Peta Jalan Usaha Kelompok</h1><p>Bangun usaha secara bertahap: cari masalah pelanggan, buat produk dan brand, hitung kelayakan, siapkan toko, lalu layani pelanggan. Status di bawah dihitung dari pekerjaan yang sudah dicatat di dashboard kelompok.</p></div></section>
+<main class="container">
+<div id="status" class="status" role="status" aria-live="polite">Memeriksa akun dan data kelompok…</div>
+<div class="summary">
+<div class="metric"><span>Produk tercatat</span><strong id="productCount">—</strong></div>
+<div class="metric"><span>Promosi tercatat</span><strong id="promotionCount">—</strong></div>
+<div class="metric"><span>Transaksi tercatat</span><strong id="transactionCount">—</strong></div>
+<div class="metric"><span>Tahap selesai</span><strong id="stageCount">—/5</strong></div>
+</div>
+<h2 class="section-title">Tahapan kerja nyata</h2><p class="muted">Selesaikan pekerjaan dan simpan buktinya di Meja Kerja Usaha. Tahap yang ditandai selesai berdasarkan data sistem, bukan sekadar centang manual.</p>
+<div id="roadmap" class="roadmap">
+<article class="stage"><div class="num">01</div><div><h3>Riset kebutuhan pelanggan</h3><p>Wawancarai calon pembeli, catat masalah yang ingin diselesaikan, dan tentukan target pasar. Bawa hasil riset ke diskusi dengan guru.</p><span class="pill pending">Menunggu data</span></div></article>
+<article class="stage"><div class="num">02</div><div><h3>Brand dan produk</h3><p>Simpan identitas brand dan minimal satu produk dengan biaya, harga jual, stok, serta deskripsi yang jelas.</p><span class="pill pending">Menunggu data</span></div></article>
+<article class="stage"><div class="num">03</div><div><h3>Promosi dan validasi</h3><p>Catat materi promosi, kanal yang dipakai, tanggal, status, dan respons calon pelanggan.</p><span class="pill pending">Menunggu data</span></div></article>
+<article class="stage"><div class="num">04</div><div><h3>Toko marketplace siap</h3><p>Siapkan toko kelompok sendiri di marketplace ketika memenuhi syarat. Simpan tautan toko di bagian bawah halaman ini.</p><span class="pill pending">Menunggu data</span></div></article>
+<article class="stage"><div class="num">05</div><div><h3>Pesanan dan pembukuan</h3><p>Catat pemasukan serta pengeluaran berdasarkan transaksi yang benar-benar terjadi. Evaluasi laba/rugi dan pengalaman pelanggan.</p><span class="pill pending">Menunggu data</span></div></article>
+</div>
+<div class="actions"><a class="btn" href="dashboard/student.html">Buka Meja Kerja Usaha ↗</a><a class="btn secondary" href="storefront.html">Lihat Etalase Digital ↗</a><a class="btn secondary" href="marketplace-hub.html">Panduan Marketplace ↗</a></div>
+<section class="card" style="margin-top:24px"><h2 class="section-title" style="margin-top:0">Tautan toko marketplace kelompok</h2><p class="muted">Masukkan tautan publik toko kelompok setelah akun penjual dibuat. Ini hanya menyimpan tautan; website belum tersambung otomatis ke API Shopee atau TikTok Shop.</p>
+<form id="storeForm" class="form-grid">
+<div class="field"><label for="shopeeUrl">Tautan toko Shopee</label><input id="shopeeUrl" type="url" placeholder="https://shopee.co.id/namatoko"></div>
+<div class="field"><label for="tiktokUrl">Tautan toko TikTok Shop</label><input id="tiktokUrl" type="url" placeholder="https://www.tiktok.com/@namatoko"></div>
+<div class="field full"><button class="btn" type="submit">Simpan tautan toko</button><div id="storeStatus" class="status" aria-live="polite">Tautan toko belum dimuat.</div></div>
+</form>
+<div class="note"><strong>Keamanan akun:</strong> jangan masukkan kata sandi, OTP, token API, atau data rekening ke website sekolah. Siswa mengelola akun marketplace mereka sendiri. Gunakan tautan toko publik saja.</div>
+</section>
+</main>
+<footer>Mandiri Startup Academy · SMKS Mandiri Bandar Agung</footer>
+<script type="module">
+import {auth,db,authPersistenceReady} from "./js/firebase.js";
+import {onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import {doc,getDoc,collection,getDocs,query,where,setDoc,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+const $=id=>document.getElementById(id);let userNow=null,groupId=null,brandData={};
+function message(id,text,type=""){const e=$(id);e.textContent=text;e.className="status"+(type?" "+type:"");}
+function validPublicUrl(value){if(!value)return true;try{const u=new URL(value);return u.protocol==="https:";}catch{return false;}}
+function setStage(i,done){const card=$("roadmap").children[i];const pill=card.querySelector(".pill");pill.textContent=done?"SELESAI BERDASARKAN DATA":"BELUM LENGKAP";pill.className="pill "+(done?"done":"pending");}
+async function loadRoadmap(){
+ const [pSnap,mSnap,tSnap,bSnap]=await Promise.all([
+  getDocs(query(collection(db,"Products"),where("groupId","==",groupId))),
+  getDocs(query(collection(db,"Promotions"),where("groupId","==",groupId))),
+  getDocs(query(collection(db,"Transactions"),where("groupId","==",groupId))),
+  getDoc(doc(db,"Brands",groupId))
+ ]);
+ const products=pSnap.docs.map(d=>d.data()),promos=mSnap.docs.map(d=>d.data()),transactions=tSnap.docs.map(d=>d.data());
+ brandData=bSnap.exists()?bSnap.data():{};
+ $("productCount").textContent=products.length;$("promotionCount").textContent=promos.length;$("transactionCount").textContent=transactions.length;
+ $("shopeeUrl").value=brandData.shopeeStoreUrl||"";$("tiktokUrl").value=brandData.tiktokStoreUrl||"";
+ const brandDone=!!(brandData.brandName&&brandData.description);
+ const productDone=products.some(p=>p.name&&p.description&&Number(p.price)>0&&Number(p.cost)>=0);
+ const promoDone=promos.length>0;
+ const storeDone=!!(brandData.shopeeStoreUrl||brandData.tiktokStoreUrl);
+ const financeDone=transactions.some(t=>["pemasukan","pengeluaran"].includes(t.type)&&Number(t.amount)>0);
+ setStage(0,promoDone);setStage(1,brandDone&&productDone);setStage(2,promoDone);setStage(3,storeDone);setStage(4,financeDone);
+ const completed=[promoDone,brandDone&&productDone,promoDone,storeDone,financeDone].filter(Boolean).length;
+ $("stageCount").textContent=completed+"/5";
+ message("status","Akun aktif. Data usaha kelompok berhasil dimuat. Tahap riset dianggap memiliki bukti awal jika kelompok sudah mencatat promosi; lengkapi riset pelanggan secara nyata bersama guru.","success");
+}
+await authPersistenceReady;
+onAuthStateChanged(auth,async user=>{
+ if(!user){window.location.replace("./login.html");return;}
+ try{
+  let snap=await getDoc(doc(db,"Users",user.uid));if(!snap.exists())snap=await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){message("status","Profil akun belum ditemukan. Hubungi admin.","error");return;}
+  const profile=snap.data(),role=String(profile.role||"").toLowerCase();
+  if(role==="admin"){window.location.replace("./dashboard/admin.html");return;}
+  if(!["student","siswa"].includes(role)){message("status","Peran akun tidak dikenali.","error");return;}
+  if(profile.status!=="active"){message("status","Akun belum aktif. Hubungi administrator.","error");return;}
+  if(!profile.groupId){message("status","Akun aktif, tetapi belum masuk kelompok. Admin akan mengatur kelompok berisi 3–4 siswa.","error");return;}
+  userNow=user;groupId=profile.groupId;await loadRoadmap();
+ }catch(e){console.error(e);message("status","Gagal memuat data kelompok ("+(e.code||"error")+"). Periksa Firestore Rules dan koneksi.","error");}
+});
+$("storeForm").addEventListener("submit",async e=>{
+ e.preventDefault();if(!userNow||!groupId){message("storeStatus","Akun/kelompok belum siap.","error");return;}
+ const shopeeUrl=$("shopeeUrl").value.trim(),tiktokStoreUrl=$("tiktokUrl").value.trim();
+ if(!validPublicUrl(shopeeUrl)||!validPublicUrl(tiktokStoreUrl)){message("storeStatus","Gunakan tautan publik yang diawali https://.","error");return;}
+ const button=e.currentTarget.querySelector("button");button.disabled=true;
+ try{
+  await setDoc(doc(db,"Brands",groupId),{groupId,shopeeStoreUrl:shopeeUrl,tiktokStoreUrl,marketplaceLinksUpdatedBy:userNow.uid,marketplaceLinksUpdatedAt:serverTimestamp()},{merge:true});
+  brandData={...brandData,shopeeStoreUrl:shopeeUrl,tiktokStoreUrl};message("storeStatus","Tautan toko berhasil disimpan.","success");await loadRoadmap();
+ }catch(err){console.error(err);message("storeStatus","Gagal menyimpan tautan ("+(err.code||"error")+"). Pastikan Firestore Rules mengizinkan anggota kelompok mengubah dokumen Brands miliknya.","error");}
+ finally{button.disabled=false;}
+});
+$("logoutButton").addEventListener("click",async()=>{try{await signOut(auth);window.location.replace("./login.html");}catch(e){message("status","Logout gagal. Coba lagi.","error");}});
+</script>
+</body></html>
