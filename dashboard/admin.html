@@ -755,7 +755,7 @@ td { overflow-wrap: anywhere; }
 
       <article class="stat">
         <div class="stat-top">
-          <span class="stat-label">Guru Aktif</span>
+          <span class="stat-label">Kelompok Siswa</span>
           <span class="stat-icon">♧</span>
         </div>
         <div class="stat-value" id="totalTeachers">—</div>
@@ -1168,6 +1168,7 @@ function clearBody(tbodyId) {
 async function loadGroups() {
   const snapshot = await getDocsFromServer(collection(db, "Groups"));
   cachedGroups = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  $("totalTeachers").textContent = cachedGroups.length;
   const groupsBody = $("groupsBody");
   groupsBody.replaceChildren();
   if (!cachedGroups.length) {
