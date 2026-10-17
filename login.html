@@ -619,8 +619,7 @@
         console.log("Login UID:", signedInUser.uid);
 
         // 2. Cari profil berdasarkan UID pada users/{UID}.
-        const profileRef = doc(db, "users", signedInUser.uid);
-
+       const profileRef = doc(db, "Users", signedInUser.uid);
         console.log("Firestore document path:", profileRef.path);
 
         const profileSnapshot = await getDocFromServer(profileRef);
