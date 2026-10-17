@@ -66,7 +66,8 @@ async function loadRoadmap(){
  brandData=bSnap.exists()?bSnap.data():{};
  $("productCount").textContent=products.length;$("promotionCount").textContent=promos.length;$("transactionCount").textContent=transactions.length;
  $("shopeeUrl").value=brandData.shopeeStoreUrl||"";$("tiktokUrl").value=brandData.tiktokStoreUrl||"";
- const researchDone=!!(brandData.researchTarget&&brandData.researchProblem&&brandData.researchEvidence&&String(brandData.researchEvidence).trim().length>=20);\n const brandDone=!!(brandData.brandName&&brandData.description);
+ const researchDone=!!(brandData.researchTarget&&brandData.researchProblem&&brandData.researchEvidence&&String(brandData.researchEvidence).trim().length>=20);
+ const brandDone=!!(brandData.brandName&&brandData.description);
  const productDone=products.some(p=>p.name&&p.description&&Number(p.price)>0&&Number(p.cost)>=0);
  const promoDone=promos.length>0;
  const storeDone=!!(brandData.shopeeStoreUrl||brandData.tiktokStoreUrl);
@@ -74,7 +75,8 @@ async function loadRoadmap(){
  setStage(0,researchDone);setStage(1,brandDone&&productDone);setStage(2,promoDone);setStage(3,storeDone);setStage(4,financeDone);
  const completed=[researchDone,brandDone&&productDone,promoDone,storeDone,financeDone].filter(Boolean).length;
  $("stageCount").textContent=completed+"/5";
- $("researchTarget").value=brandData.researchTarget||"";$("researchProblem").value=brandData.researchProblem||"";$("researchEvidence").value=brandData.researchEvidence||"";\n message("status","Akun aktif. Data usaha kelompok berhasil dimuat.","success");
+ $("researchTarget").value=brandData.researchTarget||"";$("researchProblem").value=brandData.researchProblem||"";$("researchEvidence").value=brandData.researchEvidence||"";
+ message("status","Akun aktif. Data usaha kelompok berhasil dimuat.","success");
 }
 await authPersistenceReady;
 onAuthStateChanged(auth,async user=>{
@@ -101,6 +103,7 @@ $("storeForm").addEventListener("submit",async e=>{
  }catch(err){console.error(err);message("storeStatus","Gagal menyimpan tautan ("+(err.code||"error")+"). Pastikan Firestore Rules mengizinkan anggota kelompok mengubah dokumen Brands miliknya.","error");}
  finally{button.disabled=false;}
 });
-$("researchForm").addEventListener("submit",async e=>{e.preventDefault();if(!userNow||!groupId){message("researchStatus","Akun/kelompok belum siap.","error");return;}const researchTarget=$("researchTarget").value.trim(),researchProblem=$("researchProblem").value.trim(),researchEvidence=$("researchEvidence").value.trim();if(!researchTarget||!researchProblem||researchEvidence.length<20){message("researchStatus","Isi target, kebutuhan, dan bukti riset minimal 20 karakter.","error");return;}const button=e.currentTarget.querySelector("button");button.disabled=true;try{await setDoc(doc(db,"Brands",groupId),{groupId,researchTarget,researchProblem,researchEvidence,updatedBy:userNow.uid,researchUpdatedAt:serverTimestamp()},{merge:true});brandData={...brandData,researchTarget,researchProblem,researchEvidence};message("researchStatus","Bukti riset berhasil disimpan. Pastikan isinya sesuai kegiatan nyata.","success");await loadRoadmap();}catch(err){console.error(err);message("researchStatus","Gagal menyimpan riset ("+(err.code||"error")+"). Periksa Firestore Rules.","error");}finally{button.disabled=false;}});\n$("logoutButton").addEventListener("click",async()=>{try{await signOut(auth);window.location.replace("./login.html");}catch(e){message("status","Logout gagal. Coba lagi.","error");}});
+$("researchForm").addEventListener("submit",async e=>{e.preventDefault();if(!userNow||!groupId){message("researchStatus","Akun/kelompok belum siap.","error");return;}const researchTarget=$("researchTarget").value.trim(),researchProblem=$("researchProblem").value.trim(),researchEvidence=$("researchEvidence").value.trim();if(!researchTarget||!researchProblem||researchEvidence.length<20){message("researchStatus","Isi target, kebutuhan, dan bukti riset minimal 20 karakter.","error");return;}const button=e.currentTarget.querySelector("button");button.disabled=true;try{await setDoc(doc(db,"Brands",groupId),{groupId,researchTarget,researchProblem,researchEvidence,updatedBy:userNow.uid,researchUpdatedAt:serverTimestamp()},{merge:true});brandData={...brandData,researchTarget,researchProblem,researchEvidence};message("researchStatus","Bukti riset berhasil disimpan. Pastikan isinya sesuai kegiatan nyata.","success");await loadRoadmap();}catch(err){console.error(err);message("researchStatus","Gagal menyimpan riset ("+(err.code||"error")+"). Periksa Firestore Rules.","error");}finally{button.disabled=false;}});
+$("logoutButton").addEventListener("click",async()=>{try{await signOut(auth);window.location.replace("./login.html");}catch(e){message("status","Logout gagal. Coba lagi.","error");}});
 </script>
 </body></html>
