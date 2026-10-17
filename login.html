@@ -430,7 +430,9 @@
 
     import {
       doc,
-      getDoc
+      getDoc,
+      updateDoc,
+      serverTimestamp
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
     const form = document.getElementById("loginForm");
@@ -466,9 +468,13 @@
     async function routeUser(user) {
       if (!user) return;
 
-      let userSnap = await getDoc(doc(db, "Users", user.uid));
+      let profileCollection = "Users";
+      let userSnap = await getDoc(doc(db, profileCollection, user.uid));
       // Kompatibilitas sementara dengan profil lama pada koleksi users.
-      if (!userSnap.exists()) userSnap = await getDoc(doc(db, "users", user.uid));
+      if (!userSnap.exists()) {
+        profileCollection = "users";
+        userSnap = await getDoc(doc(db, profileCollection, user.uid));
+      }
 
       if (!userSnap.exists()) {
         throw new Error(
@@ -476,17 +482,32 @@
         );
       }
 
-      const profile = userSnap.data();
+      let profile = userSnap.data();
       const role = String(profile.role || "").trim().toLowerCase();
-      const status = String(profile.status || "active").trim().toLowerCase();
+      let status = String(profile.status || "active").trim().toLowerCase();
+      const normalizedRole = role === "siswa" ? "student" : role;
 
-      if (status !== "active") {
-        throw new Error(
-          "Status akun Anda belum aktif. Hubungi administrator."
-        );
+      // Migrasi aman akun siswa lama: aktifkan akun pending tanpa memberi hak memilih kelompok.
+      if (normalizedRole === "student" && status === "pending"
+          && (profile.groupId == null || profile.groupId === "")) {
+        try {
+          await updateDoc(doc(db, profileCollection, user.uid), {
+            status: "active",
+            updatedAt: serverTimestamp()
+          });
+          profile = { ...profile, status: "active" };
+          status = "active";
+        } catch (migrationError) {
+          console.error("Gagal mengaktifkan akun siswa lama:", migrationError);
+          throw new Error(
+            "Akun siswa lama masih menunggu. Terapkan Firestore Rules terbaru dari repositori di Firebase Console > Firestore Database > Rules, klik Publish, lalu coba login kembali."
+          );
+        }
       }
 
-      const normalizedRole = role === "siswa" ? "student" : role;
+      if (status !== "active") {
+        throw new Error("Status akun tidak aktif. Hubungi administrator untuk pemeriksaan akun.");
+      }
       const routes = {
         admin: "./dashboard/admin.html",
         student: "./dashboard/student.html"
