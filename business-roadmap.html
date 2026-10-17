@@ -37,7 +37,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:20px}
 <article class="stage"><div class="num">05</div><div><h3>Pesanan dan pembukuan</h3><p>Catat pemasukan serta pengeluaran berdasarkan transaksi yang benar-benar terjadi. Evaluasi laba/rugi dan pengalaman pelanggan.</p><span class="pill pending">Menunggu data</span></div></article>
 </div>
 <div class="actions"><a class="btn" href="dashboard/student.html">Buka Meja Kerja Usaha ↗</a><a class="btn secondary" href="storefront.html">Lihat Etalase Digital ↗</a><a class="btn secondary" href="marketplace-hub.html">Panduan Marketplace ↗</a></div>
-<section class="card" style="margin-top:24px"><h2 class="section-title" style="margin-top:0">Tautan toko marketplace kelompok</h2><p class="muted">Masukkan tautan publik toko kelompok setelah akun penjual dibuat. Ini hanya menyimpan tautan; website belum tersambung otomatis ke API Shopee atau TikTok Shop.</p>
+<section class="card" style="margin-top:24px"><h2 class="section-title" style="margin-top:0">Bukti riset pelanggan</h2><p class="muted">Catat hasil wawancara/observasi yang benar-benar dilakukan. Jangan mengarang data pelanggan.</p><form id="researchForm" class="form-grid"><div class="field"><label for="researchTarget">Target pelanggan</label><input id="researchTarget" required maxlength="180" placeholder="Contoh: siswa yang membutuhkan camilan terjangkau"></div><div class="field"><label for="researchProblem">Masalah/kebutuhan yang ditemukan</label><input id="researchProblem" required maxlength="300" placeholder="Masalah utama calon pembeli"></div><div class="field full"><label for="researchEvidence">Ringkasan bukti riset (siapa yang ditanya, berapa orang, responsnya)</label><input id="researchEvidence" required maxlength="1000" placeholder="Tuliskan ringkasan hasil observasi atau wawancara nyata"></div><div class="field full"><button class="btn" type="submit">Simpan bukti riset</button><div id="researchStatus" class="status" aria-live="polite">Bukti riset belum dimuat.</div></div></form></section><section class="card" style="margin-top:24px"><h2 class="section-title" style="margin-top:0">Tautan toko marketplace kelompok</h2><p class="muted">Masukkan tautan publik toko kelompok setelah akun penjual dibuat. Ini hanya menyimpan tautan; website belum tersambung otomatis ke API Shopee atau TikTok Shop.</p>
 <form id="storeForm" class="form-grid">
 <div class="field"><label for="shopeeUrl">Tautan toko Shopee</label><input id="shopeeUrl" type="url" placeholder="https://shopee.co.id/namatoko"></div>
 <div class="field"><label for="tiktokUrl">Tautan toko TikTok Shop</label><input id="tiktokUrl" type="url" placeholder="https://www.tiktok.com/@namatoko"></div>
@@ -66,15 +66,15 @@ async function loadRoadmap(){
  brandData=bSnap.exists()?bSnap.data():{};
  $("productCount").textContent=products.length;$("promotionCount").textContent=promos.length;$("transactionCount").textContent=transactions.length;
  $("shopeeUrl").value=brandData.shopeeStoreUrl||"";$("tiktokUrl").value=brandData.tiktokStoreUrl||"";
- const brandDone=!!(brandData.brandName&&brandData.description);
+ const researchDone=!!(brandData.researchTarget&&brandData.researchProblem&&brandData.researchEvidence&&String(brandData.researchEvidence).trim().length>=20);\n const brandDone=!!(brandData.brandName&&brandData.description);
  const productDone=products.some(p=>p.name&&p.description&&Number(p.price)>0&&Number(p.cost)>=0);
  const promoDone=promos.length>0;
  const storeDone=!!(brandData.shopeeStoreUrl||brandData.tiktokStoreUrl);
  const financeDone=transactions.some(t=>["pemasukan","pengeluaran"].includes(t.type)&&Number(t.amount)>0);
- setStage(0,promoDone);setStage(1,brandDone&&productDone);setStage(2,promoDone);setStage(3,storeDone);setStage(4,financeDone);
- const completed=[promoDone,brandDone&&productDone,promoDone,storeDone,financeDone].filter(Boolean).length;
+ setStage(0,researchDone);setStage(1,brandDone&&productDone);setStage(2,promoDone);setStage(3,storeDone);setStage(4,financeDone);
+ const completed=[researchDone,brandDone&&productDone,promoDone,storeDone,financeDone].filter(Boolean).length;
  $("stageCount").textContent=completed+"/5";
- message("status","Akun aktif. Data usaha kelompok berhasil dimuat. Tahap riset dianggap memiliki bukti awal jika kelompok sudah mencatat promosi; lengkapi riset pelanggan secara nyata bersama guru.","success");
+ $("researchTarget").value=brandData.researchTarget||"";$("researchProblem").value=brandData.researchProblem||"";$("researchEvidence").value=brandData.researchEvidence||"";\n message("status","Akun aktif. Data usaha kelompok berhasil dimuat.","success");
 }
 await authPersistenceReady;
 onAuthStateChanged(auth,async user=>{
@@ -96,11 +96,11 @@ $("storeForm").addEventListener("submit",async e=>{
  if(!validPublicUrl(shopeeUrl)||!validPublicUrl(tiktokStoreUrl)){message("storeStatus","Gunakan tautan publik yang diawali https://.","error");return;}
  const button=e.currentTarget.querySelector("button");button.disabled=true;
  try{
-  await setDoc(doc(db,"Brands",groupId),{groupId,shopeeStoreUrl:shopeeUrl,tiktokStoreUrl,marketplaceLinksUpdatedBy:userNow.uid,marketplaceLinksUpdatedAt:serverTimestamp()},{merge:true});
+  await setDoc(doc(db,"Brands",groupId),{groupId,shopeeStoreUrl:shopeeUrl,tiktokStoreUrl,updatedBy:userNow.uid,marketplaceLinksUpdatedBy:userNow.uid,marketplaceLinksUpdatedAt:serverTimestamp()},{merge:true});
   brandData={...brandData,shopeeStoreUrl:shopeeUrl,tiktokStoreUrl};message("storeStatus","Tautan toko berhasil disimpan.","success");await loadRoadmap();
  }catch(err){console.error(err);message("storeStatus","Gagal menyimpan tautan ("+(err.code||"error")+"). Pastikan Firestore Rules mengizinkan anggota kelompok mengubah dokumen Brands miliknya.","error");}
  finally{button.disabled=false;}
 });
-$("logoutButton").addEventListener("click",async()=>{try{await signOut(auth);window.location.replace("./login.html");}catch(e){message("status","Logout gagal. Coba lagi.","error");}});
+$("researchForm").addEventListener("submit",async e=>{e.preventDefault();if(!userNow||!groupId){message("researchStatus","Akun/kelompok belum siap.","error");return;}const researchTarget=$("researchTarget").value.trim(),researchProblem=$("researchProblem").value.trim(),researchEvidence=$("researchEvidence").value.trim();if(!researchTarget||!researchProblem||researchEvidence.length<20){message("researchStatus","Isi target, kebutuhan, dan bukti riset minimal 20 karakter.","error");return;}const button=e.currentTarget.querySelector("button");button.disabled=true;try{await setDoc(doc(db,"Brands",groupId),{groupId,researchTarget,researchProblem,researchEvidence,updatedBy:userNow.uid,researchUpdatedAt:serverTimestamp()},{merge:true});brandData={...brandData,researchTarget,researchProblem,researchEvidence};message("researchStatus","Bukti riset berhasil disimpan. Pastikan isinya sesuai kegiatan nyata.","success");await loadRoadmap();}catch(err){console.error(err);message("researchStatus","Gagal menyimpan riset ("+(err.code||"error")+"). Periksa Firestore Rules.","error");}finally{button.disabled=false;}});\n$("logoutButton").addEventListener("click",async()=>{try{await signOut(auth);window.location.replace("./login.html");}catch(e){message("status","Logout gagal. Coba lagi.","error");}});
 </script>
 </body></html>
