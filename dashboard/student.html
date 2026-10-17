@@ -15,6 +15,7 @@ main{max-width:1120px;margin:auto;padding:28px 20px}.hero{background:linear-grad
 .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:18px}.panel{background:white;border:1px solid var(--border);border-radius:14px;padding:22px;min-width:0}.panel h2{font-size:17px;color:var(--navy);margin:0 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.7}.status{padding:13px 15px;border-radius:10px;background:#f8f9fc;border:1px solid var(--border);font-size:13px;line-height:1.7;overflow-wrap:anywhere}.status.error{color:var(--red);background:#fff0ef;border-color:#ffd5d1}.status.success{color:var(--green);background:#ecfdf3;border-color:#abefc6}
 .members{display:grid;gap:10px;margin-top:15px}.member{border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:11px}.avatar{width:36px;height:36px;border-radius:50%;background:#f5eedf;color:#8a6828;display:grid;place-items:center;font-weight:800;flex-shrink:0}.member strong{display:block;font-size:13px}.member small{color:var(--muted);font-size:11px;overflow-wrap:anywhere}
 .steps{display:grid;gap:11px;margin-top:15px}.step{display:flex;gap:12px;padding:13px;border:1px solid var(--border);border-radius:10px}.number{width:30px;height:30px;border-radius:9px;background:#f5eedf;color:#8a6828;display:grid;place-items:center;font-weight:800;flex-shrink:0}.step strong{display:block;font-size:13px}.step p{font-size:12px;color:var(--muted);line-height:1.6;margin:4px 0 0}
+.work-section{margin-top:20px}.section-heading{display:flex;justify-content:space-between;align-items:end;gap:12px;flex-wrap:wrap;margin:25px 0 14px}.section-heading h2{margin:0;color:var(--navy);font-size:20px}.section-heading p{margin:5px 0 0}.work-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.work-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;min-width:0}.work-card h3{margin:0 0 7px;color:var(--navy);font-size:16px}.work-card>p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}.work-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-top:15px}.work-field{display:grid;gap:6px;min-width:0}.work-field.full{grid-column:1/-1}.work-field label{font-size:12px;font-weight:700}.work-field input,.work-field select,.work-field textarea{width:100%;min-width:0;padding:10px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:12px;color:var(--text);background:#fff}.work-field textarea{min-height:75px;resize:vertical}.work-button{border:0;border-radius:8px;padding:11px 14px;background:var(--navy);color:white;font-size:12px;font-weight:750}.work-button:disabled{opacity:.6;cursor:wait}.work-result{margin-top:12px}.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.metric{border:1px solid var(--border);background:#fafbfe;border-radius:10px;padding:13px;min-width:0}.metric span{display:block;color:var(--muted);font-size:11px}.metric strong{display:block;color:var(--navy);font-size:18px;margin-top:6px;overflow-wrap:anywhere}.work-list{display:grid;gap:9px;margin-top:14px}.work-item{border:1px solid var(--border);border-radius:9px;padding:11px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.work-item strong{font-size:12px;display:block}.work-item small{font-size:11px;color:var(--muted);line-height:1.6}.work-empty{font-size:12px;color:var(--muted);padding:12px;border:1px dashed var(--border);border-radius:9px;margin-top:12px}.helper{background:#fffaf0;border:1px solid #f0e0b9;border-radius:9px;padding:11px;color:#71551c;font-size:11px;line-height:1.7;margin-top:12px}
 footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
 @media(max-width:720px){main{padding:17px 13px}.grid{grid-template-columns:1fr}.hero{padding:22px}.panel{padding:17px}}
 </style>
@@ -33,13 +34,136 @@ footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
 <div class="step"><div class="number">4</div><div><strong>Catat keuangan dan evaluasi</strong><p>Hitung pemasukan, pengeluaran, laba/rugi, serta perbaikan yang perlu dilakukan.</p></div></div>
 </div></section>
 </div>
+<section class="work-section">
+  <div class="section-heading"><div><h2>Meja Kerja Usaha</h2><p class="muted">Lakukan pekerjaan usaha sungguhan secara bertahap. Data yang disimpan akan masuk ke catatan kelompok.</p></div></div>
+  <div class="status" id="workStatus" role="status" aria-live="polite">Menyiapkan ruang kerja...</div>
+  <div class="work-grid" style="margin-top:15px">
+    <section class="work-card">
+      <h3>01 · Riset dan Rencana Produk</h3><p>Mulai dari kebutuhan pelanggan, tentukan produk, hitung biaya dan tetapkan harga jual yang masuk akal.</p>
+      <div class="helper">Sebelum mengisi: diskusikan siapa calon pembeli, masalah apa yang mereka hadapi, dan apa keunggulan produk kelompok.</div>
+      <form id="productForm" class="work-form">
+        <div class="work-field full"><label for="productName">Nama produk</label><input id="productName" required maxlength="80" placeholder="Contoh: Paket camilan hemat"></div>
+        <div class="work-field"><label for="productCategory">Kategori</label><select id="productCategory" required><option value="">Pilih kategori</option><option>Makanan/minuman</option><option>Kerajinan</option><option>Jasa</option><option>Produk digital</option><option>Fashion</option><option>Lainnya</option></select></div>
+        <div class="work-field"><label for="productStock">Stok awal</label><input id="productStock" type="number" min="0" step="1" required value="0"></div>
+        <div class="work-field"><label for="productCost">Total biaya produksi (Rp)</label><input id="productCost" type="number" min="0" step="1" required placeholder="Contoh: 75000"></div>
+        <div class="work-field"><label for="productPrice">Harga jual per unit (Rp)</label><input id="productPrice" type="number" min="1" step="1" required placeholder="Contoh: 10000"></div>
+        <div class="work-field full"><label for="productDescription">Masalah pelanggan, target pembeli, dan keunggulan</label><textarea id="productDescription" required maxlength="1200" placeholder="Jelaskan siapa calon pembeli dan alasan mereka memilih produk ini."></textarea></div>
+        <div class="work-field full"><button class="work-button" type="submit">Simpan rencana produk</button></div>
+      </form><div id="productStatus" class="work-result"></div>
+    </section>
+    <section class="work-card">
+      <h3>02 · Promosi dan Layanan Pelanggan</h3><p>Rencanakan kampanye yang benar-benar bisa dijalankan. Pilih kanal, tulis pesan promosi, lalu catat hasilnya.</p>
+      <form id="promotionForm" class="work-form">
+        <div class="work-field full"><label for="promotionTitle">Judul kampanye</label><input id="promotionTitle" required maxlength="100" placeholder="Contoh: Promo pembukaan toko"></div>
+        <div class="work-field"><label for="promotionChannel">Kanal promosi</label><select id="promotionChannel" required><option value="">Pilih kanal</option><option>WhatsApp</option><option>Instagram</option><option>TikTok</option><option>Marketplace</option><option>Promosi langsung</option><option>Poster/flyer</option></select></div>
+        <div class="work-field"><label for="promotionDate">Tanggal pelaksanaan</label><input id="promotionDate" type="date" required></div>
+        <div class="work-field"><label for="promotionStatus">Status pekerjaan</label><select id="promotionStatus" required><option>Rencana</option><option>Sedang berjalan</option><option>Selesai</option><option>Perlu diperbaiki</option></select></div>
+        <div class="work-field full"><label for="promotionDescription">Naskah promosi dan target hasil</label><textarea id="promotionDescription" required maxlength="1200" placeholder="Tulis pesan untuk pelanggan, ajakan membeli, target respons, dan cara menanggapi komplain."></textarea></div>
+        <div class="work-field full"><button class="work-button" type="submit">Simpan rencana promosi</button></div>
+      </form><div id="promotionStatusMessage" class="work-result"></div>
+      <div class="helper">Latihan profesional: jangan menjanjikan hal yang tidak bisa dipenuhi. Jika pelanggan komplain, catat masalah, tawarkan solusi, dan tindak lanjuti.</div>
+    </section>
+    <section class="work-card">
+      <h3>03 · Kasir dan Pembukuan</h3><p>Catat setiap uang masuk dan uang keluar. Gunakan bukti transaksi dan keterangan yang jelas.</p>
+      <form id="transactionForm" class="work-form">
+        <div class="work-field"><label for="transactionType">Jenis transaksi</label><select id="transactionType" required><option value="pemasukan">Pemasukan</option><option value="pengeluaran">Pengeluaran</option></select></div>
+        <div class="work-field"><label for="transactionDate">Tanggal</label><input id="transactionDate" type="date" required></div>
+        <div class="work-field"><label for="transactionAmount">Nominal (Rp)</label><input id="transactionAmount" type="number" min="1" step="1" required placeholder="Contoh: 25000"></div>
+        <div class="work-field full"><label for="transactionDescription">Keterangan / bukti transaksi</label><textarea id="transactionDescription" required maxlength="500" placeholder="Contoh: penjualan 3 produk, atau pembelian bahan baku beserta nomor bukti."></textarea></div>
+        <div class="work-field full"><button class="work-button" type="submit">Catat transaksi</button></div>
+      </form><div id="transactionStatusMessage" class="work-result"></div>
+      <div class="metrics"><div class="metric"><span>Total pemasukan</span><strong id="totalIncome">Rp0</strong></div><div class="metric"><span>Total pengeluaran</span><strong id="totalExpense">Rp0</strong></div><div class="metric"><span>Saldo sementara</span><strong id="netBalance">Rp0</strong></div></div>
+    </section>
+    <section class="work-card">
+      <h3>04 · Pemeriksaan Hasil Kerja</h3><p>Periksa hasil yang sudah dicatat sebelum melapor ke kelompok. Gunakan data untuk menentukan tindakan berikutnya.</p>
+      <div class="section-heading" style="margin:14px 0 8px"><div><h2 style="font-size:13px">Produk kelompok</h2></div></div><div id="productList" class="work-list"><div class="work-empty">Belum ada produk tercatat.</div></div>
+      <div class="section-heading" style="margin:17px 0 8px"><div><h2 style="font-size:13px">Aktivitas promosi</h2></div></div><div id="promotionList" class="work-list"><div class="work-empty">Belum ada promosi tercatat.</div></div>
+      <div class="section-heading" style="margin:17px 0 8px"><div><h2 style="font-size:13px">Transaksi terakhir</h2></div></div><div id="transactionList" class="work-list"><div class="work-empty">Belum ada transaksi tercatat.</div></div>
+      <button type="button" id="refreshWork" class="work-button" style="margin-top:14px">Muat ulang catatan kelompok</button>
+    </section>
+  </div>
+</section>
 </main><footer>© <span id="year"></span> Mandiri Startup Academy · SMKS Mandiri Bandar Agung</footer>
 <script type="module">
 import {auth,db,authPersistenceReady} from "../js/firebase.js";
 import {onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import {doc,getDoc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import {doc,getDoc,collection,addDoc,getDocs,query,where,serverTimestamp} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 const $=id=>document.getElementById(id);
 $("year").textContent=new Date().getFullYear();
+const localToday=new Date().toLocaleDateString("en-CA");
+$("promotionDate").value=localToday;
+$("transactionDate").value=localToday;
+let currentUser=null,currentGroupId=null;
+const money=value=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(value)||0);
+function workStatus(message,type=""){ $("workStatus").textContent=message;$("workStatus").className="status"+(type?" "+type:"");}
+function fieldStatus(id,message,type=""){const el=$(id);el.textContent=message;el.className="status"+(type?" "+type:"");}
+function appendWorkItem(container,title,detail,meta=""){
+ const box=$(container);const item=document.createElement("div");item.className="work-item";
+ const left=document.createElement("div");const strong=document.createElement("strong");strong.textContent=title||"Catatan";
+ const small=document.createElement("small");small.textContent=detail||"";
+ left.append(strong,small);item.append(left);
+ if(meta){const badge=document.createElement("span");badge.className="pill";badge.textContent=meta;item.append(badge);}
+ box.append(item);
+}
+async function loadWorkData(){
+ if(!currentUser||!currentGroupId)return;
+ workStatus("Memuat catatan kerja kelompok...");
+ try{
+  const [productsSnap,promotionsSnap,transactionsSnap]=await Promise.all([
+   getDocs(query(collection(db,"Products"),where("groupId","==",currentGroupId))),
+   getDocs(query(collection(db,"Promotions"),where("groupId","==",currentGroupId))),
+   getDocs(query(collection(db,"Transactions"),where("groupId","==",currentGroupId)))
+  ]);
+  const products=productsSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  const promotions=promotionsSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  const transactions=transactionsSnap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  $("productList").replaceChildren();$("promotionList").replaceChildren();$("transactionList").replaceChildren();
+  if(!products.length)$("productList").innerHTML='<div class="work-empty">Belum ada produk tercatat. Mulai dari formulir rencana produk.</div>';
+  products.slice(0,5).forEach(p=>appendWorkItem("productList",p.name,(p.category||"Kategori belum diisi")+" · Biaya "+money(p.cost||0)+" · Harga jual "+money(p.price)+" · Stok "+(p.stock??0),"Produk"));
+  if(!promotions.length)$("promotionList").innerHTML='<div class="work-empty">Belum ada promosi tercatat.</div>';
+  promotions.slice(0,5).forEach(p=>appendWorkItem("promotionList",p.title,(p.channel||"Kanal belum diisi")+" · "+(p.date||"Tanggal belum diisi"),p.status||"Rencana"));
+  if(!transactions.length)$("transactionList").innerHTML='<div class="work-empty">Belum ada transaksi tercatat.</div>';
+  transactions.slice(0,5).forEach(t=>appendWorkItem("transactionList",t.description,t.date||"Tanggal belum diisi",(t.type==="pemasukan"?"+ ":"− ")+money(t.amount)));
+  let income=0,expense=0;
+  transactions.forEach(t=>{if(t.type==="pemasukan")income+=Number(t.amount)||0;else if(t.type==="pengeluaran")expense+=Number(t.amount)||0;});
+  $("totalIncome").textContent=money(income);$("totalExpense").textContent=money(expense);$("netBalance").textContent=money(income-expense);
+  workStatus("Catatan kelompok berhasil dimuat: "+products.length+" produk, "+promotions.length+" promosi, "+transactions.length+" transaksi.","success");
+ }catch(error){console.error("Gagal memuat catatan kerja:",error);workStatus("Catatan belum dapat dimuat ("+(error.code||"error")+"). Pastikan Firestore Rules mengizinkan anggota membaca data dengan groupId kelompoknya.","error");}
+}
+async function saveWorkDocument(collectionName,data,formId,statusId){
+ if(!currentUser||!currentGroupId){fieldStatus(statusId,"Anda harus bergabung ke kelompok sebelum menyimpan pekerjaan.","error");return;}
+ const form=$(formId),button=form.querySelector('button[type="submit"]');button.disabled=true;
+ try{
+  await addDoc(collection(db,collectionName),{...data,groupId:currentGroupId,createdBy:currentUser.uid,createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  form.reset();
+  if(collectionName==="Products")$("productStock").value="0";
+  if(collectionName==="Promotions")$("promotionDate").value=localToday;
+  if(collectionName==="Transactions")$("transactionDate").value=localToday;
+  await loadWorkData();
+  fieldStatus(statusId,"Berhasil disimpan ke catatan kerja kelompok.","success");
+ }catch(error){console.error("Gagal menyimpan "+collectionName,error);fieldStatus(statusId,"Gagal menyimpan ("+(error.code||"error")+"). Pastikan kelompok sudah ditetapkan admin dan Firestore Rules terbaru sudah dipublikasikan.","error");}
+ finally{button.disabled=false;}
+}
+$("productForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const name=$("productName").value.trim(),category=$("productCategory").value,stock=Number($("productStock").value),cost=Number($("productCost").value),price=Number($("productPrice").value),description=$("productDescription").value.trim();
+ if(!name||!category||!Number.isSafeInteger(stock)||stock<0||!Number.isSafeInteger(cost)||cost<0||!Number.isSafeInteger(price)||price<=0||!description){fieldStatus("productStatus","Lengkapi data produk. Stok dan biaya tidak boleh negatif; harga jual harus lebih dari nol.","error");return;}
+ if(price<cost/Math.max(stock,1)){if(!confirm("Harga jual per unit lebih rendah daripada perkiraan biaya per unit. Tetap simpan rencana ini?"))return;}
+ await saveWorkDocument("Products",{name,category,stock,cost,price,description},"productForm","productStatus");
+});
+$("promotionForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const title=$("promotionTitle").value.trim(),channel=$("promotionChannel").value,date=$("promotionDate").value,status=$("promotionStatus").value,description=$("promotionDescription").value.trim();
+ if(!title||!channel||!date||!status||!description){fieldStatus("promotionStatusMessage","Lengkapi semua data promosi sebelum disimpan.","error");return;}
+ await saveWorkDocument("Promotions",{title,channel,date,status,description},"promotionForm","promotionStatusMessage");
+});
+$("transactionForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ const type=$("transactionType").value,amount=Number($("transactionAmount").value),date=$("transactionDate").value,description=$("transactionDescription").value.trim();
+ if(!["pemasukan","pengeluaran"].includes(type)||!Number.isSafeInteger(amount)||amount<=0||!date||!description){fieldStatus("transactionStatusMessage","Periksa jenis, nominal, tanggal, dan keterangan transaksi.","error");return;}
+ await saveWorkDocument("Transactions",{type,amount,date,description},"transactionForm","transactionStatusMessage");
+});
+$("refreshWork").addEventListener("click",loadWorkData);
 function status(text,type=""){ $("accountStatus").textContent=text;$("accountStatus").className="status"+(type?" "+type:"");}
 function renderMembers(names,emails,uid){const box=$("members");box.replaceChildren();(names||[]).forEach((name,i)=>{const item=document.createElement("div");item.className="member";const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent=String(name||"S").trim().charAt(0).toUpperCase();const details=document.createElement("div");const strong=document.createElement("strong");strong.textContent=name||"Siswa";const small=document.createElement("small");small.textContent=(emails||[])[i]||"";details.append(strong,small);item.append(avatar,details);box.append(item);});}
 await authPersistenceReady;
@@ -49,7 +173,7 @@ onAuthStateChanged(auth,async user=>{
   let snap=await getDoc(doc(db,"Users",user.uid));
   if(!snap.exists())snap=await getDoc(doc(db,"users",user.uid));
   if(!snap.exists()){status("Profil akun belum ditemukan. Hubungi administrator untuk pemeriksaan profil.","error");return;}
-  const profile=snap.data();const role=String(profile.role||"").toLowerCase();const normalized=role==="siswa"?"student":role;
+  const profile=snap.data();currentUser=user;const role=String(profile.role||"").toLowerCase();const normalized=role==="siswa"?"student":role;
   if(normalized==="admin"){window.location.replace("./admin.html");return;}
   if(normalized!=="student"){status("Peran akun tidak dikenali. Hubungi administrator.","error");return;}
   $("welcomeTitle").textContent="Halo, "+(profile.displayName||user.displayName||"Siswa")+"!";
@@ -60,7 +184,9 @@ onAuthStateChanged(auth,async user=>{
   const group=groupSnap.data();
   $("groupDescription").textContent=(group.name||"Kelompok siswa")+" · "+(group.className||"Kelas belum diisi")+" · "+((group.memberUids||[]).length)+" anggota";
   renderMembers(group.memberNames||[],group.memberEmails||[],user.uid);
+  currentGroupId=profile.groupId;
   status("Akun aktif dan kelompok berhasil dimuat. Selamat bekerja bersama tim!","success");
+  await loadWorkData();
  }catch(error){console.error(error);status("Gagal memuat profil atau kelompok dari Firebase ("+(error.code||"error")+"). Periksa Firestore Rules dan koneksi.","error");}
 });
 $("logoutButton").addEventListener("click",async()=>{try{await signOut(auth);window.location.replace("../login.html");}catch(error){status("Logout gagal. Periksa koneksi dan coba lagi.","error");}});
