@@ -10,7 +10,7 @@
 :root{--navy:#0b1730;--navy2:#142747;--gold:#d8b56a;--bg:#f4f6fa;--white:#fff;--text:#24334b;--muted:#718096;--border:#e4e9f1;--red:#b42318;--green:#067647}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,"Segoe UI",Arial,sans-serif}
-button,a{font:inherit}
+button,input,select,textarea{font:inherit}
 button{cursor:pointer}
 .layout{min-height:100vh;display:grid;grid-template-columns:250px minmax(0,1fr)}
 .sidebar{background:var(--navy);color:#fff;padding:24px 17px;display:flex;flex-direction:column;gap:28px}
@@ -25,7 +25,7 @@ button{cursor:pointer}
 .nav a span:first-child{width:22px;text-align:center;font-size:17px}
 .sidebar-note{margin-top:auto;padding:14px;border:1px solid #34415a;border-radius:12px;color:#c5cede;font-size:11px;line-height:1.7}
 .main{min-width:0}
-.topbar{height:76px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 30px;gap:14px}
+.topbar{min-height:76px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:14px 30px;gap:14px}
 .topbar h1{font-size:19px;color:var(--navy);margin:0}
 .topbar p{font-size:12px;color:var(--muted);margin:5px 0 0}
 .user-area{display:flex;align-items:center;gap:12px}
@@ -51,7 +51,7 @@ button{cursor:pointer}
 .stat-icon{width:36px;height:36px;border-radius:10px;background:#f5eedf;color:#8a6828;display:grid;place-items:center;font-size:18px}
 .stat-value{font-size:29px;font-weight:850;color:var(--navy);margin-top:12px;overflow-wrap:anywhere}
 .stat-foot{font-size:11px;color:var(--muted);margin-top:5px}
-.panel{background:white;border:1px solid var(--border);border-radius:13px;padding:21px;margin-top:22px}
+.panel{background:white;border:1px solid var(--border);border-radius:13px;padding:21px;margin-top:22px;scroll-margin-top:18px}
 .panel h2{font-size:16px;margin:0;color:var(--navy)}
 .panel>p{font-size:12px;color:var(--muted);line-height:1.7}
 .quick-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:17px}
@@ -62,20 +62,41 @@ button{cursor:pointer}
 .status{padding:13px 15px;border-radius:10px;background:#f8f9fc;border:1px solid var(--border);font-size:12px;line-height:1.7;overflow-wrap:anywhere}
 .status.error{color:var(--red);background:#fff0ef;border-color:#ffd5d1}
 .status.success{color:var(--green);background:#ecfdf3;border-color:#abefc6}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:17px}
+.field{display:grid;gap:6px;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;font-weight:700;color:var(--text)}
+.field input,.field select,.field textarea{width:100%;min-width:0;padding:11px 12px;border:1px solid var(--border);border-radius:9px;background:white;color:var(--text);font-size:13px}
+.field textarea{min-height:76px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid #d8b56a66;border-color:var(--gold)}
+.btn{border:0;border-radius:9px;padding:11px 15px;font-size:12px;font-weight:750}
+.btn-primary{background:var(--navy);color:white}
+.btn-primary:hover{background:var(--navy2)}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn-delete{background:#fff0ef;color:var(--red);border:1px solid #ffd5d1;padding:7px 10px;border-radius:7px;font-size:11px}
+.form-actions{grid-column:1/-1;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.module-status{margin-top:12px}
+.table-wrap{overflow-x:auto;margin-top:18px}
+table{border-collapse:collapse;width:100%;font-size:12px;min-width:570px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+th{background:#f8f9fc;color:var(--muted);font-size:11px;white-space:nowrap}
+td{overflow-wrap:anywhere}
+.empty{text-align:center;color:var(--muted);padding:22px}
+.pill{display:inline-block;border-radius:20px;padding:4px 8px;font-size:10px;font-weight:750;background:#f5eedf;color:#8a6828}
+.balance-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:16px}
+.balance-card{padding:16px;border:1px solid var(--border);border-radius:11px;background:#fafbfe}
+.balance-card span{display:block;font-size:11px;color:var(--muted)}
+.balance-card strong{display:block;font-size:19px;color:var(--navy);margin-top:8px;overflow-wrap:anywhere}
 .footer{padding:25px 0 10px;color:var(--muted);font-size:11px;text-align:center}
-.mobile-menu{display:none}
-@media(max-width:1050px){.layout{grid-template-columns:215px minmax(0,1fr)}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:23px 20px}.topbar{padding:0 20px}}
-@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{padding:13px 16px;gap:12px}.brand{padding-bottom:12px}.nav-label,.sidebar-note{display:none}.nav{display:flex;overflow-x:auto;padding-bottom:3px}.nav a{white-space:nowrap;padding:9px 11px}.topbar{height:auto;min-height:70px;padding:14px 16px}.topbar h1{font-size:16px}.user-info{display:none}.content{padding:17px 13px}.welcome{padding:22px}.cards{gap:10px}.stat{padding:14px}.stat-value{font-size:25px}.quick-grid{grid-template-columns:1fr}.panel{padding:16px}.logout{padding:9px}}
+@media(max-width:1050px){.layout{grid-template-columns:215px minmax(0,1fr)}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.content{padding:23px 20px}.topbar{padding:14px 20px}}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.sidebar{padding:13px 16px;gap:12px}.brand{padding-bottom:12px}.nav-label,.sidebar-note{display:none}.nav{display:flex;overflow-x:auto;padding-bottom:3px}.nav a{white-space:nowrap;padding:9px 11px}.topbar{padding:14px 16px}.topbar h1{font-size:16px}.user-info{display:none}.content{padding:17px 13px}.welcome{padding:22px}.cards{gap:10px}.stat{padding:14px}.stat-value{font-size:25px}.quick-grid,.form-grid,.balance-grid{grid-template-columns:1fr}.field.full,.form-actions{grid-column:auto}.panel{padding:16px}.logout{padding:9px}}
 @media(max-width:370px){.cards{grid-template-columns:1fr}.user-area{gap:6px}}
 </style>
 </head>
 <body>
 <div class="layout">
 <aside class="sidebar">
-  <div class="brand">
-    <div class="logo">M</div>
-    <div><strong>MANDIRI STARTUP ACADEMY</strong><small>SMKS Mandiri Bandar Agung</small></div>
-  </div>
+  <div class="brand"><div class="logo">M</div><div><strong>MANDIRI STARTUP ACADEMY</strong><small>SMKS Mandiri Bandar Agung</small></div></div>
   <div class="nav-label">MENU UTAMA</div>
   <nav class="nav" aria-label="Menu dashboard">
     <a class="active" href="admin.html"><span>▦</span>Ringkasan</a>
@@ -90,11 +111,7 @@ button{cursor:pointer}
 <main class="main">
 <header class="topbar">
   <div><h1>Dashboard Administrator</h1><p>Ringkasan Mandiri Startup Academy</p></div>
-  <div class="user-area">
-    <div class="avatar" id="avatar">A</div>
-    <div class="user-info"><strong id="userName">Administrator</strong><small id="userEmail">Memeriksa akun...</small></div>
-    <button class="logout" id="logoutButton" type="button">Keluar ↗</button>
-  </div>
+  <div class="user-area"><div class="avatar" id="avatar">A</div><div class="user-info"><strong id="userName">Administrator</strong><small id="userEmail">Memeriksa akun...</small></div><button class="logout" id="logoutButton" type="button">Keluar ↗</button></div>
 </header>
 
 <div class="content">
@@ -114,20 +131,58 @@ button{cursor:pointer}
   <section class="panel" id="pengguna">
     <h2>Status Koneksi dan Data</h2>
     <p id="connectionStatus" class="status">Memverifikasi sesi administrator dan membaca data...</p>
-    <p>Jika data gagal dibaca, periksa Firestore Rules dan nama collection di Firebase Console. Angka tidak akan diisi dengan data contoh.</p>
+    <p>Ringkasan pengguna diambil dari koleksi Users. Jika pembacaan gagal, periksa Firestore Rules.</p>
   </section>
 
   <section class="panel" id="bisnis">
-    <h2>Modul Inkubator Bisnis</h2>
-    <p>Navigasi ini merupakan rancangan awal. Modul brand, produk, promosi, dan keuangan belum terhubung ke koleksi bisnis sampai struktur data aplikasi ditentukan.</p>
-    <div class="quick-grid">
-      <a class="quick" href="#bisnis"><strong>◇ Brand &amp; Produk</strong><span>Tempat pengembangan identitas merek dan katalog produk siswa.</span></a>
-      <a class="quick" href="#promosi"><strong>▷ Promosi Digital</strong><span>Rencana pengelolaan materi promosi dan pemasaran digital.</span></a>
-      <a class="quick" href="#keuangan"><strong>Rp Keuangan Usaha</strong><span>Rencana pencatatan modal, biaya, pendapatan, dan laba usaha.</span></a>
-    </div>
+    <h2>Brand &amp; Produk</h2>
+    <p>Tambahkan produk usaha siswa. Data disimpan ke Firestore dan dapat dibuka kembali setelah halaman dimuat ulang.</p>
+    <form id="productForm" class="form-grid">
+      <div class="field"><label for="productName">Nama produk *</label><input id="productName" maxlength="120" required placeholder="Contoh: Keripik pisang"></div>
+      <div class="field"><label for="productCategory">Kategori *</label><input id="productCategory" maxlength="80" required placeholder="Contoh: Makanan"></div>
+      <div class="field"><label for="productPrice">Harga (Rp) *</label><input id="productPrice" type="number" min="0" step="1" required placeholder="15000"></div>
+      <div class="field"><label for="productStock">Stok *</label><input id="productStock" type="number" min="0" step="1" required value="0"></div>
+      <div class="field full"><label for="productDescription">Deskripsi</label><textarea id="productDescription" maxlength="1000" placeholder="Deskripsi singkat produk"></textarea></div>
+      <div class="form-actions"><button class="btn btn-primary" type="submit">+ Simpan Produk</button></div>
+    </form>
+    <p id="productStatus" class="status module-status" aria-live="polite">Menunggu verifikasi admin.</p>
+    <div class="table-wrap"><table><thead><tr><th>Nama Produk</th><th>Kategori</th><th>Harga</th><th>Stok</th><th>Aksi</th></tr></thead><tbody id="productsBody"><tr><td colspan="5" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
   </section>
-  <section class="panel" id="promosi"><h2>Promosi Digital</h2><p>Modul belum terhubung ke penyimpanan promosi. Belum ada data promosi yang ditampilkan.</p></section>
-  <section class="panel" id="keuangan"><h2>Keuangan Usaha</h2><p>Modul belum terhubung ke penyimpanan keuangan. Belum ada data keuangan yang ditampilkan.</p></section>
+
+  <section class="panel" id="promosi">
+    <h2>Promosi Digital</h2>
+    <p>Catat rencana promosi dan kanal pemasaran produk.</p>
+    <form id="promotionForm" class="form-grid">
+      <div class="field"><label for="promotionTitle">Judul promosi *</label><input id="promotionTitle" maxlength="120" required placeholder="Contoh: Promo produk baru"></div>
+      <div class="field"><label for="promotionChannel">Kanal promosi *</label><select id="promotionChannel" required><option value="">Pilih kanal</option><option>Instagram</option><option>TikTok</option><option>Facebook</option><option>WhatsApp</option><option marketplace</option><option>Offline</option><option>Lainnya</option></select></div>
+      <div class="field"><label for="promotionDate">Tanggal promosi *</label><input id="promotionDate" type="date" required></div>
+      <div class="field"><label for="promotionStatus">Status *</label><select id="promotionStatus" required><option value="Rencana">Rencana</option><option value="Berjalan">Berjalan</option><option value="Selesai">Selesai</option></select></div>
+      <div class="field full"><label for="promotionDescription">Keterangan</label><textarea id="promotionDescription" maxlength="1000" placeholder="Target promosi, tautan, atau catatan"></textarea></div>
+      <div class="form-actions"><button class="btn btn-primary" type="submit">+ Simpan Promosi</button></div>
+    </form>
+    <p id="promotionStatusMessage" class="status module-status" aria-live="polite">Menunggu verifikasi admin.</p>
+    <div class="table-wrap"><table><thead><tr><th>Judul</th><th>Kanal</th><th>Tanggal</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="promotionsBody"><tr><td colspan="5" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
+  </section>
+
+  <section class="panel" id="keuangan">
+    <h2>Keuangan Usaha</h2>
+    <p>Catat pemasukan dan pengeluaran. Saldo dihitung dari seluruh transaksi yang berhasil dibaca.</p>
+    <div class="balance-grid">
+      <div class="balance-card"><span>Total Pemasukan</span><strong id="totalIncome">—</strong></div>
+      <div class="balance-card"><span>Total Pengeluaran</span><strong id="totalExpense">—</strong></div>
+      <div class="balance-card"><span>Saldo</span><strong id="netBalance">—</strong></div>
+    </div>
+    <form id="transactionForm" class="form-grid">
+      <div class="field"><label for="transactionType">Jenis transaksi *</label><select id="transactionType" required><option value="pemasukan">Pemasukan</option><option value="pengeluaran">Pengeluaran</option></select></div>
+      <div class="field"><label for="transactionAmount">Nominal (Rp) *</label><input id="transactionAmount" type="number" min="1" step="1" required placeholder="50000"></div>
+      <div class="field"><label for="transactionDate">Tanggal *</label><input id="transactionDate" type="date" required></div>
+      <div class="field"><label for="transactionDescription">Keterangan *</label><input id="transactionDescription" maxlength="200" required placeholder="Contoh: Penjualan produk"></div>
+      <div class="form-actions"><button class="btn btn-primary" type="submit">+ Simpan Transaksi</button></div>
+    </form>
+    <p id="transactionStatusMessage" class="status module-status" aria-live="polite">Menunggu verifikasi admin.</p>
+    <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Keterangan</th><th>Nominal</th><th>Aksi</th></tr></thead><tbody id="transactionsBody"><tr><td colspan="5" class="empty">Data belum dimuat.</td></tr></tbody></table></div>
+  </section>
+
   <footer class="footer">© <span id="year"></span> Mandiri Startup Academy · SMKS Mandiri Bandar Agung</footer>
 </div>
 </main>
@@ -136,10 +191,13 @@ button{cursor:pointer}
 <script type="module">
 import { initializeApp, getApp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
-import { getFirestore, doc, getDocFromServer, collection, getDocsFromServer } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+import {
+  getFirestore, doc, getDocFromServer, collection, getDocsFromServer,
+  addDoc, deleteDoc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud8-9pvYGNr0",
+  apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud-8-9pvYGNr0",
   authDomain: "mandiri-startup-academy.firebaseapp.com",
   projectId: "mandiri-startup-academy",
   storageBucket: "mandiri-startup-academy.firebasestorage.app",
@@ -153,17 +211,307 @@ const app = (() => {
 })();
 const auth = getAuth(app);
 const db = getFirestore(app, "(default)");
-
 const $ = id => document.getElementById(id);
+
+let currentAdmin = null;
+let authReady = false;
+
 $("year").textContent = new Date().getFullYear();
 $("currentDate").textContent = new Intl.DateTimeFormat("id-ID", {
   weekday:"long", day:"numeric", month:"long", year:"numeric"
 }).format(new Date());
 
-function showStatus(message, type="") {
-  $("connectionStatus").textContent = message;
-  $("connectionStatus").className = "status" + (type ? " " + type : "");
+const today = new Date();
+const localToday = `${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
+$("promotionDate").value = localToday;
+$("transactionDate").value = localToday;
+
+function showStatus(id, message, type="") {
+  const el = $(id);
+  el.textContent = message;
+  el.className = "status" + (type ? " " + type : "");
 }
+
+function money(value) {
+  return new Intl.NumberFormat("id-ID", {
+    style:"currency", currency:"IDR", maximumFractionDigits:0
+  }).format(Number(value) || 0);
+}
+
+function makeCell(row, value) {
+  const td = document.createElement("td");
+  td.textContent = value == null ? "—" : String(value);
+  row.appendChild(td);
+  return td;
+}
+
+function makeAction(row, collectionName, id, label="Hapus") {
+  const td = document.createElement("td");
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "btn-delete";
+  button.textContent = label;
+  button.addEventListener("click", async () => {
+    if (!currentAdmin) return;
+    if (!confirm(`Yakin ingin menghapus data ini dari ${collectionName}?`)) return;
+
+    button.disabled = true;
+    try {
+      await deleteDoc(doc(db, collectionName, id));
+      await loadBusinessData();
+      showStatus(statusIdFor(collectionName), "Data berhasil dihapus.", "success");
+    } catch (error) {
+      console.error("Gagal menghapus dokumen:", error);
+      showStatus(statusIdFor(collectionName), friendlyError(error), "error");
+      button.disabled = false;
+    }
+  });
+  td.appendChild(button);
+  row.appendChild(td);
+}
+
+function statusIdFor(collectionName) {
+  return {
+    Products:"productStatus",
+    Promotions:"promotionStatusMessage",
+    Transactions:"transactionStatusMessage"
+  }[collectionName];
+}
+
+function friendlyError(error) {
+  if (error?.code === "permission-denied") {
+    return "Akses ditolak oleh Firestore Rules. Periksa izin untuk admin aktif pada koleksi terkait.";
+  }
+  if (error?.code === "unavailable") {
+    return "Firebase tidak tersedia saat ini. Periksa koneksi internet lalu coba lagi.";
+  }
+  if (error?.code === "unauthenticated") {
+    return "Sesi login tidak valid. Silakan login kembali.";
+  }
+  return `Operasi gagal: ${error?.message || "kesalahan tidak diketahui"}`;
+}
+
+function setEmpty(tbodyId, columns, message) {
+  const body = $(tbodyId);
+  body.replaceChildren();
+  const row = document.createElement("tr");
+  const cell = document.createElement("td");
+  cell.colSpan = columns;
+  cell.className = "empty";
+  cell.textContent = message;
+  row.appendChild(cell);
+  body.appendChild(row);
+}
+
+function clearBody(tbodyId) {
+  $(tbodyId).replaceChildren();
+}
+
+async function loadUsers() {
+  try {
+    const snapshot = await getDocsFromServer(collection(db, "Users"));
+    const users = snapshot.docs.map(d => d.data());
+    $("totalUsers").textContent = users.length;
+    $("totalStudents").textContent = users.filter(u => u.role === "siswa" && u.status === "active").length;
+    $("totalTeachers").textContent = users.filter(u => u.role === "guru" && u.status === "active").length;
+    $("pendingUsers").textContent = users.filter(u => u.status !== "active").length;
+    showStatus("connectionStatus", "Login admin terverifikasi. Ringkasan pengguna berhasil dibaca dari Firestore.", "success");
+  } catch (error) {
+    console.error("Gagal membaca Users:", error);
+    $("totalUsers").textContent = "—";
+    $("totalStudents").textContent = "—";
+    $("totalTeachers").textContent = "—";
+    $("pendingUsers").textContent = "—";
+    showStatus("connectionStatus", "Login berhasil, tetapi koleksi Users tidak dapat dibaca. Periksa Firestore Rules.", "error");
+  }
+}
+
+async function loadProducts() {
+  const snapshot = await getDocsFromServer(collection(db, "Products"));
+  clearBody("productsBody");
+  if (snapshot.empty) {
+    setEmpty("productsBody", 5, "Belum ada produk. Tambahkan produk melalui formulir di atas.");
+    return;
+  }
+  const items = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
+  items.sort((a,b) => String(b.createdAt?.seconds || 0).localeCompare(String(a.createdAt?.seconds || 0)));
+  for (const item of items) {
+    const row = document.createElement("tr");
+    makeCell(row, item.name);
+    makeCell(row, item.category);
+    makeCell(row, money(item.price));
+    makeCell(row, item.stock);
+    makeAction(row, "Products", item.id);
+    $("productsBody").appendChild(row);
+  }
+}
+
+async function loadPromotions() {
+  const snapshot = await getDocsFromServer(collection(db, "Promotions"));
+  clearBody("promotionsBody");
+  if (snapshot.empty) {
+    setEmpty("promotionsBody", 5, "Belum ada promosi. Tambahkan promosi melalui formulir di atas.");
+    return;
+  }
+  const items = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
+  items.sort((a,b) => String(b.date || "").localeCompare(String(a.date || "")));
+  for (const item of items) {
+    const row = document.createElement("tr");
+    makeCell(row, item.title);
+    makeCell(row, item.channel);
+    makeCell(row, item.date);
+    const statusCell = makeCell(row, item.status);
+    const pill = document.createElement("span");
+    pill.className = "pill";
+    pill.textContent = item.status || "Rencana";
+    statusCell.replaceChildren(pill);
+    makeAction(row, "Promotions", item.id);
+    $("promotionsBody").appendChild(row);
+  }
+}
+
+async function loadTransactions() {
+  const snapshot = await getDocsFromServer(collection(db, "Transactions"));
+  clearBody("transactionsBody");
+  let income = 0;
+  let expense = 0;
+  const items = snapshot.docs.map(d => ({id:d.id, ...d.data()}));
+
+  for (const item of items) {
+    const amount = Number(item.amount) || 0;
+    if (item.type === "pemasukan") income += amount;
+    if (item.type === "pengeluaran") expense += amount;
+  }
+
+  $("totalIncome").textContent = money(income);
+  $("totalExpense").textContent = money(expense);
+  $("netBalance").textContent = money(income - expense);
+
+  if (!items.length) {
+    setEmpty("transactionsBody", 5, "Belum ada transaksi keuangan.");
+    return;
+  }
+
+  items.sort((a,b) => String(b.date || "").localeCompare(String(a.date || "")));
+  for (const item of items) {
+    const row = document.createElement("tr");
+    makeCell(row, item.date);
+    const typeCell = makeCell(row, "");
+    const pill = document.createElement("span");
+    pill.className = "pill";
+    pill.textContent = item.type === "pemasukan" ? "Pemasukan" : "Pengeluaran";
+    typeCell.appendChild(pill);
+    makeCell(row, item.description);
+    makeCell(row, money(item.amount));
+    makeAction(row, "Transactions", item.id);
+    $("transactionsBody").appendChild(row);
+  }
+}
+
+async function loadBusinessData() {
+  if (!currentAdmin) return;
+
+  const jobs = [
+    ["Products", loadProducts, "productsBody", 5],
+    ["Promotions", loadPromotions, "promotionsBody", 5],
+    ["Transactions", loadTransactions, "transactionsBody", 5]
+  ];
+
+  const results = await Promise.allSettled(jobs.map(job => job[1]()));
+  results.forEach((result, index) => {
+    if (result.status === "rejected") {
+      const [name, , bodyId, columns] = jobs[index];
+      console.error(`Gagal membaca ${name}:`, result.reason);
+      setEmpty(bodyId, columns, `Gagal membaca ${name}. Periksa izin read pada Firestore Rules.`);
+      showStatus(statusIdFor(name), friendlyError(result.reason), "error");
+      if (name === "Transactions") {
+        $("totalIncome").textContent = "—";
+        $("totalExpense").textContent = "—";
+        $("netBalance").textContent = "—";
+      }
+    }
+  });
+}
+
+async function saveDocument(collectionName, data, formId, statusId) {
+  if (!currentAdmin || !authReady) {
+    showStatus(statusId, "Sesi admin belum siap. Login kembali lalu coba lagi.", "error");
+    return;
+  }
+
+  const form = $(formId);
+  const submit = form.querySelector('button[type="submit"]');
+  submit.disabled = true;
+
+  try {
+    await addDoc(collection(db, collectionName), {
+      ...data,
+      createdBy: currentAdmin.uid,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp()
+    });
+    form.reset();
+    if (collectionName === "Promotions") $("promotionDate").value = localToday;
+    if (collectionName === "Transactions") $("transactionDate").value = localToday;
+    if (collectionName === "Products") $("productStock").value = "0";
+    await loadBusinessData();
+    showStatus(statusId, "Data berhasil disimpan ke Firestore.", "success");
+  } catch (error) {
+    console.error(`Gagal menyimpan ${collectionName}:`, error);
+    showStatus(statusId, friendlyError(error), "error");
+  } finally {
+    submit.disabled = false;
+  }
+}
+
+$("productForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const name = $("productName").value.trim();
+  const category = $("productCategory").value.trim();
+  const price = Number($("productPrice").value);
+  const stock = Number($("productStock").value);
+  if (!name || !category || !Number.isSafeInteger(price) || price < 0 ||
+      !Number.isSafeInteger(stock) || stock < 0) {
+    showStatus("productStatus", "Periksa nama, kategori, harga, dan stok produk.", "error");
+    return;
+  }
+  await saveDocument("Products", {
+    name, category, price, stock,
+    description: $("productDescription").value.trim()
+  }, "productForm", "productStatus");
+});
+
+$("promotionForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const title = $("promotionTitle").value.trim();
+  const channel = $("promotionChannel").value;
+  const date = $("promotionDate").value;
+  const status = $("promotionStatus").value;
+  if (!title || !channel || !date || !status) {
+    showStatus("promotionStatusMessage", "Lengkapi semua kolom wajib promosi.", "error");
+    return;
+  }
+  await saveDocument("Promotions", {
+    title, channel, date, status,
+    description: $("promotionDescription").value.trim()
+  }, "promotionForm", "promotionStatusMessage");
+});
+
+$("transactionForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  const type = $("transactionType").value;
+  const amount = Number($("transactionAmount").value);
+  const date = $("transactionDate").value;
+  const description = $("transactionDescription").value.trim();
+  if (!["pemasukan","pengeluaran"].includes(type) ||
+      !Number.isSafeInteger(amount) || amount <= 0 || !date || !description) {
+    showStatus("transactionStatusMessage", "Periksa jenis, nominal, tanggal, dan keterangan transaksi.", "error");
+    return;
+  }
+  await saveDocument("Transactions", {
+    type, amount, date, description
+  }, "transactionForm", "transactionStatusMessage");
+});
 
 $("logoutButton").addEventListener("click", async () => {
   $("logoutButton").disabled = true;
@@ -172,71 +520,52 @@ $("logoutButton").addEventListener("click", async () => {
     window.location.replace("../login.html");
   } catch (error) {
     console.error(error);
-    showStatus("Logout gagal. Periksa koneksi lalu coba kembali.", "error");
+    showStatus("connectionStatus", "Logout gagal. Periksa koneksi lalu coba kembali.", "error");
     $("logoutButton").disabled = false;
   }
 });
 
-let handlingAuth = false;
-
 onAuthStateChanged(auth, async user => {
-  if (handlingAuth) return;
   if (!user) {
+    currentAdmin = null;
     window.location.replace("../login.html");
     return;
   }
 
-  handlingAuth = true;
+  authReady = false;
+  currentAdmin = null;
   $("userEmail").textContent = user.email || "Email tidak tersedia";
 
   try {
-    const profileRef = doc(db, "Users", user.uid);
-    const profileSnapshot = await getDocFromServer(profileRef);
-
+    const profileSnapshot = await getDocFromServer(doc(db, "Users", user.uid));
     if (!profileSnapshot.exists()) {
-      showStatus("Profil akun tidak ditemukan di Users/" + user.uid + ".", "error");
+      showStatus("connectionStatus", "Profil akun tidak ditemukan di Users. Silakan periksa data profil.", "error");
       await signOut(auth);
       window.location.replace("../login.html");
       return;
     }
 
     const profile = profileSnapshot.data();
-
     if (profile.status !== "active" || profile.role !== "admin") {
-      showStatus("Akses ditolak. Halaman ini hanya untuk akun admin aktif.", "error");
+      showStatus("connectionStatus", "Akses ditolak. Halaman ini hanya untuk akun admin aktif.", "error");
       await signOut(auth);
       window.location.replace("../login.html");
       return;
     }
 
+    currentAdmin = user;
+    authReady = true;
     const name = profile.displayName || user.displayName || "Administrator";
     $("userName").textContent = name;
     $("welcomeTitle").textContent = "Selamat datang, " + name + "!";
     $("avatar").textContent = name.trim().charAt(0).toUpperCase() || "A";
 
-    try {
-      const usersSnapshot = await getDocsFromServer(collection(db, "Users"));
-      const users = usersSnapshot.docs.map(d => d.data());
-
-      $("totalUsers").textContent = users.length;
-      $("totalStudents").textContent = users.filter(u => u.role === "siswa" && u.status === "active").length;
-      $("totalTeachers").textContent = users.filter(u => u.role === "guru" && u.status === "active").length;
-      $("pendingUsers").textContent = users.filter(u => u.status !== "active").length;
-
-      showStatus("Login terverifikasi sebagai admin. Data profil berhasil dibaca dari Firestore.", "success");
-    } catch (dataError) {
-      console.error("Gagal membaca ringkasan pengguna:", dataError);
-      showStatus("Login admin berhasil, tetapi daftar pengguna tidak dapat dibaca. Periksa izin read pada collection Users.", "error");
-      $("totalUsers").textContent = "—";
-      $("totalStudents").textContent = "—";
-      $("totalTeachers").textContent = "—";
-      $("pendingUsers").textContent = "—";
-    }
+    await Promise.allSettled([loadUsers(), loadBusinessData()]);
   } catch (error) {
     console.error("Pemeriksaan profil gagal:", error);
+    currentAdmin = null;
+    authReady = false;
     showStatus("Gagal memverifikasi profil admin. Periksa koneksi Firestore dan Security Rules.", "error");
-  } finally {
-    handlingAuth = false;
   }
 });
 </script>
