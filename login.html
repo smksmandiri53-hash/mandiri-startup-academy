@@ -577,6 +577,7 @@
         await routeUser(credential.user);
       } catch (error) {
         showMessage(error.message?.startsWith("Akun berhasil login") ||
+                    error.message?.startsWith("Akun siswa lama") ||
                     error.message?.startsWith("Status akun") ||
                     error.message?.startsWith("Peran akun")
           ? error.message
