@@ -1295,7 +1295,7 @@ async function loadUsers() {
     $("totalUsers").textContent = users.length;
 
     $("totalStudents").textContent =
-      users.filter(u => u.role === "siswa" && u.status === "active").length;
+      users.filter(u => ["student", "siswa"].includes(String(u.role || "").toLowerCase()) && u.status === "active").length;
 
     $("totalTeachers").textContent =
       users.filter(u => u.role === "guru" && u.status === "active").length;
@@ -1629,8 +1629,8 @@ $("logoutButton").addEventListener("click", async () => {
       "Ringkasan Mandiri Startup Academy"
     ],
     pengguna: [
-      "Data Pengguna",
-      "Status koneksi dan ringkasan pengguna"
+      "Data Pengguna & Kelompok",
+      "Setujui siswa dan atur kelompok berisi 3–4 anggota"
     ],
     bisnis: [
       "Brand & Produk",
