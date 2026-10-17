@@ -243,7 +243,7 @@
 
   <script type="module">
     import { auth, db, authPersistenceReady } from "./js/firebase.js";
-    import { createUserWithEmailAndPassword, updateProfile, signOut } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+    import { createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
     import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
     const form = document.getElementById("registerForm");
@@ -313,20 +313,19 @@
             displayName,
             email: user.email,
             role: "student",
-            status: "pending",
+            status: "active",
             groupId: null,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
           });
-          await signOut(auth);
         } catch (profileError) {
           console.error("Profile creation error:", profileError);
           showMessage("Akun autentikasi sudah dibuat, tetapi profil belum berhasil disimpan. Jangan mendaftar berulang kali. Hubungi admin untuk memeriksa profil Firebase.");
           return;
         }
 
-        form.reset();
-        showMessage("Pendaftaran berhasil! Akun Anda menunggu persetujuan administrator. Setelah disetujui, admin akan memasukkan Anda ke kelompok berisi 3–4 siswa.", "success");
+        showMessage("Pendaftaran berhasil! Akun Anda sudah aktif. Anda akan diarahkan ke dashboard; admin akan mengatur kelompok berisi 3–4 siswa.", "success");
+        window.location.replace("./dashboard/student.html");
       } catch (error) {
         console.error("Registration error:", error);
         showMessage(errorText(error));
