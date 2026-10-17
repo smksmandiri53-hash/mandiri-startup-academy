@@ -764,11 +764,11 @@ td { overflow-wrap: anywhere; }
 
       <article class="stat">
         <div class="stat-top">
-          <span class="stat-label">Menunggu Aktivasi</span>
+          <span class="stat-label">Akun Perlu Pemeriksaan</span>
           <span class="stat-icon">◷</span>
         </div>
         <div class="stat-value" id="pendingUsers">—</div>
-        <div class="stat-foot">Profil berstatus selain aktif</div>
+        <div class="stat-foot">Akun lama atau profil yang statusnya belum aktif</div>
       </article>
     </section>
   </section>
@@ -780,8 +780,7 @@ td { overflow-wrap: anywhere; }
       Memverifikasi sesi administrator dan membaca data...
     </p>
     <p>
-      Admin menyetujui pendaftaran dan membentuk kelompok berisi 3–4 siswa.
-      Siswa baru berstatus menunggu sampai admin mengaktifkan dan menempatkannya.
+      Akun siswa langsung aktif setelah pendaftaran. Admin bertugas membentuk kelompok berisi 3–4 siswa dan menempatkan akun yang belum memiliki kelompok.
     </p>
     <h2 style="margin-top:24px">Buat Kelompok Siswa</h2>
     <form id="groupForm" class="form-grid">
@@ -1201,7 +1200,7 @@ function refreshGroupMemberOptions() {
     const option = document.createElement("option");
     option.value = user.uid || user.id;
     option.textContent = (user.displayName || "Siswa") + " — " + (user.email || "tanpa email") +
-      (user.status === "active" ? "" : " (menunggu aktivasi)");
+      (user.status === "active" ? "" : " (perlu pemeriksaan status)");
     select.appendChild(option);
   }
   if (!students.length) {
@@ -1278,7 +1277,7 @@ $("groupForm").addEventListener("submit", async event => {
     }
     $("groupForm").reset();
     await Promise.all([loadUsers(), loadGroups()]);
-    showStatus("groupStatus", "Kelompok berhasil dibuat dan akun siswa yang dipilih telah diaktifkan.", "success");
+    showStatus("groupStatus", "Kelompok berhasil dibuat. Siswa yang dipilih telah ditempatkan ke kelompok.", "success");
   } catch (error) {
     console.error("Gagal membuat kelompok:", error);
     showStatus("groupStatus", friendlyError(error) + " Jika proses terhenti di tengah, periksa dokumen Groups dan Users di Firestore sebelum mengulangi.", "error");
@@ -1631,7 +1630,7 @@ $("logoutButton").addEventListener("click", async () => {
     ],
     pengguna: [
       "Data Pengguna & Kelompok",
-      "Setujui siswa dan atur kelompok berisi 3–4 anggota"
+      "Pantau akun siswa dan atur kelompok berisi 3–4 anggota"
     ],
     bisnis: [
       "Brand & Produk",
