@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142640">
+  <title>Daftar Siswa | Mandiri Startup Academy</title>
+
+  <style>
+    :root {
+      --navy: #142640;
+      --navy-light: #203b5e;
+      --gold: #c9a65d;
+      --bg: #f4f6fa;
+      --text: #263449;
+      --muted: #69778b;
+      --border: #dfe5ed;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background:
+        radial-gradient(circle at top right, #e9dfc8 0, transparent 30%),
+        var(--bg);
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+    }
+
+    .register-card {
+      width: 100%;
+      max-width: 470px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 18px 55px rgba(20, 38, 64, .10);
+    }
+
+    .logo {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: var(--gold);
+      color: var(--navy);
+      font-size: 27px;
+      font-weight: 800;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      color: var(--navy);
+      font-size: 27px;
+      margin: 0 0 8px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0 0 24px;
+    }
+
+    .field { margin-bottom: 17px; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font: inherit;
+      font-size: 14px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201, 166, 93, .16);
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: 0;
+      border-radius: 9px;
+      background: var(--navy);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover { background: var(--navy-light); }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+
+    .message {
+      display: none;
+      padding: 12px;
+      border-radius: 9px;
+      margin-bottom: 17px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.show { display: block; }
+    .message.error { background: #fff0f0; color: #a12626; }
+    .message.success { background: #eaf8ef; color: #17683b; }
+
+    .links {
+      display: grid;
+      gap: 13px;
+      margin-top: 22px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    a {
+      color: var(--navy-light);
+      font-weight: 700;
+    }
+
+    .back {
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    @media (max-width: 480px) {
+      .register-card { padding: 25px 21px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="register-card">
+    <div class="logo">M</div>
+
+    <h1>Buat Akun Siswa</h1>
+
+    <p class="subtitle">
+      Mulai perjalanan membangun brand, mengembangkan produk,
+      dan belajar mengelola bisnis melalui Mandiri Startup Academy.
+    </p>
+
+    <div id="message" class="message" role="status"
+         aria-live="polite"></div>
+
+    <form id="registerForm">
+      <div class="field">
+        <label for="displayName">Nama lengkap</label>
+        <input
+          id="displayName"
+          name="displayName"
+          type="text"
+          autocomplete="name"
+          maxlength="100"
+          placeholder="Masukkan nama lengkap"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="email">Email aktif</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autocomplete="email"
+          maxlength="254"
+          placeholder="nama@email.com"
+          required
+        >
+      </div>
+
+      <div class="field">
+        <label for="password">Kata sandi</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          minlength="8"
+          maxlength="128"
+          placeholder="Minimal 8 karakter"
+          required
+        >
+        <div class="hint">
+          Gunakan kata sandi yang kuat dan jangan membagikannya
+          kepada orang lain.
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="confirmPassword">Konfirmasi kata sandi</label>
+        <input
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          autocomplete="new-password"
+          minlength="8"
+          maxlength="128"
+          placeholder="Ulangi kata sandi"
+          required
+        >
+      </div>
+
+      <button id="registerButton" type="submit">
+        Daftar sebagai Siswa
+      </button>
+    </form>
+
+    <div class="links">
+      <a href="login.html">Sudah memiliki akun? Masuk</a>
+      <a class="back" href="index.html">← Kembali ke beranda</a>
+    </div>
+  </main>
+
+  <script type="module">
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud8-9pvYGNr0",
+      authDomain: "mandiri-startup-academy.firebaseapp.com",
+      projectId: "mandiri-startup-academy",
+      storageBucket: "mandiri-startup-academy.firebasestorage.app",
+      messagingSenderId: "245277580741",
+      appId: "1:245277580741:web:2e534e65504ba6800c3fac"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    const form = document.getElementById("registerForm");
+    const button = document.getElementById("registerButton");
+    const message = document.getElementById("message");
+    const nameInput = document.getElementById("displayName");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmInput = document.getElementById("confirmPassword");
+
+    function showMessage(text, type = "error") {
+      message.textContent = text;
+      message.className = `message show ${type}`;
+    }
+
+    function errorText(error) {
+      const errors = {
+        "auth/invalid-email":
+          "Format email tidak valid.",
+
+        "auth/email-already-in-use":
+          "Email sudah terdaftar. Silakan masuk menggunakan akun tersebut.",
+
+        "auth/weak-password":
+          "Kata sandi terlalu lemah. Gunakan minimal 8 karakter.",
+
+        "auth/operation-not-allowed":
+          "Aktifkan metode Email/Password pada Firebase Authentication.",
+
+        "auth/network-request-failed":
+          "Koneksi internet bermasalah. Periksa jaringan Anda.",
+
+        "permission-denied":
+          "Penyimpanan profil ditolak oleh aturan Firestore. Periksa Security Rules.",
+
+        "unavailable":
+          "Layanan database sementara tidak tersedia. Coba lagi nanti."
+      };
+
+      return errors[error.code] ||
+        "Pendaftaran belum berhasil. Periksa koneksi dan pengaturan Firebase.";
+    }
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (button.disabled) return;
+
+      const displayName = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const confirmPassword = confirmInput.value;
+
+      if (displayName.length < 2) {
+        showMessage("Nama lengkap minimal 2 karakter.");
+        nameInput.focus();
+        return;
+      }
+
+      if (password.length < 8) {
+        showMessage("Kata sandi harus minimal 8 karakter.");
+        passwordInput.focus();
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage("Konfirmasi kata sandi tidak sama.");
+        confirmInput.focus();
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Membuat akun...";
+      message.className = "message";
+
+      try {
+        // Pendaftaran publik hanya membuat akun siswa.
+        const credential = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+        const user = credential.user;
+
+        try {
+          await updateProfile(user, { displayName });
+
+          // Aturan Firestore wajib membatasi role dan status
+          // agar pendaftar tidak bisa membuat akun admin.
+          await setDoc(doc(db, "users", user.uid), {
+            displayName: displayName,
+            email: user.email,
+            role: "siswa",
+            status: "pending",
+            createdAt: serverTimestamp()
+          });
+
+        } catch (profileError) {
+          console.error("Profile creation error:", profileError);
+
+          showMessage(
+            "Akun autentikasi sudah dibuat, tetapi profil database belum berhasil disimpan. Jangan mendaftar berulang kali. Hubungi admin untuk memeriksa akun dan profil Firebase."
+          );
+          return;
+        }
+
+        form.reset();
+
+        showMessage(
+          "Pendaftaran berhasil! Akun Anda menunggu persetujuan administrator sebelum dapat digunakan untuk masuk.",
+          "success"
+        );
+
+      } catch (error) {
+        console.error("Registration error:", error);
+        showMessage(errorText(error));
+
+      } finally {
+        button.disabled = false;
+        button.textContent = "Daftar sebagai Siswa";
+      }
+    });
+  </script>
+</body>
+</html>
