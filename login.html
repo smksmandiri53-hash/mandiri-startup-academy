@@ -19,7 +19,9 @@
       --success: #067647;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -78,7 +80,9 @@
       align-items: center;
     }
 
-    .intro { padding: 10px 0; }
+    .intro {
+      padding: 10px 0;
+    }
 
     .eyebrow {
       color: #8a6b2c;
@@ -97,7 +101,9 @@
       color: var(--navy);
     }
 
-    h1 span { color: #a98132; }
+    h1 span {
+      color: #a98132;
+    }
 
     .intro p {
       color: #64748b;
@@ -140,7 +146,9 @@
       box-shadow: 0 22px 60px rgba(11, 23, 48, .09);
     }
 
-    .card-heading { margin-bottom: 28px; }
+    .card-heading {
+      margin-bottom: 28px;
+    }
 
     .card-heading h2 {
       margin: 0 0 9px;
@@ -154,7 +162,9 @@
       line-height: 1.6;
     }
 
-    .field { margin-bottom: 19px; }
+    .field {
+      margin-bottom: 19px;
+    }
 
     label {
       display: block;
@@ -180,9 +190,13 @@
       box-shadow: 0 0 0 3px rgba(216, 181, 106, .18);
     }
 
-    .password-wrap { position: relative; }
+    .password-wrap {
+      position: relative;
+    }
 
-    .password-wrap input { padding-right: 100px; }
+    .password-wrap input {
+      padding-right: 100px;
+    }
 
     .show-password {
       position: absolute;
@@ -212,7 +226,9 @@
       text-decoration: none;
     }
 
-    a:hover { text-decoration: underline; }
+    a:hover {
+      text-decoration: underline;
+    }
 
     .primary-button {
       width: 100%;
@@ -295,7 +311,9 @@
         padding: 34px 18px;
       }
 
-      .intro { text-align: center; }
+      .intro {
+        text-align: center;
+      }
 
       .intro p {
         margin-left: auto;
@@ -309,15 +327,27 @@
         text-align: left;
       }
 
-      h1 { font-size: 36px; }
+      h1 {
+        font-size: 36px;
+      }
 
-      .login-card { padding: 26px 22px; }
+      .login-card {
+        padding: 26px 22px;
+      }
     }
 
     @media (max-width: 380px) {
-      .brand-title { font-size: 15px; }
-      .brand-subtitle { font-size: 11px; }
-      h1 { font-size: 31px; }
+      .brand-title {
+        font-size: 15px;
+      }
+
+      .brand-subtitle {
+        font-size: 11px;
+      }
+
+      h1 {
+        font-size: 31px;
+      }
     }
   </style>
 </head>
@@ -351,10 +381,12 @@
           <div class="feature-icon">01</div>
           <span>Kelola identitas dan merek bisnis siswa.</span>
         </div>
+
         <div class="feature">
           <div class="feature-icon">02</div>
           <span>Kembangkan produk dan promosi digital.</span>
         </div>
+
         <div class="feature">
           <div class="feature-icon">03</div>
           <span>Belajar mengelola usaha secara terstruktur.</span>
@@ -394,9 +426,11 @@
               autocomplete="current-password"
               required
             >
-            <button class="show-password" id="togglePassword" type="button">
-              Lihat
-            </button>
+            <button
+              class="show-password"
+              id="togglePassword"
+              type="button"
+            >Lihat</button>
           </div>
         </div>
 
@@ -443,9 +477,10 @@
       getDocFromServer
     } from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
 
-    // Konfigurasi Firebase proyek Mandiri Startup Academy.
+    // Konfigurasi Firebase Mandiri Startup Academy.
+    // Pastikan apiKey disalin persis dari Firebase Console.
     const firebaseConfig = {
-      apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud-8v9pvYGNr0",
+      apiKey: "AIzaSyAjqFRkuO5dlBU_VW0kIMPud8-9pvYGNr0",
       authDomain: "mandiri-startup-academy.firebaseapp.com",
       projectId: "mandiri-startup-academy",
       storageBucket: "mandiri-startup-academy.firebasestorage.app",
@@ -457,9 +492,8 @@
     const auth = getAuth(app);
     const db = getFirestore(app, "(default)");
 
-    console.log("Mandiri Startup Academy - konfigurasi Firebase");
+    console.log("Mandiri Startup Academy");
     console.log("Firebase project:", app.options.projectId);
-    console.log("Firebase app name:", app.name);
     console.log("Firestore database:", "(default)");
 
     const loginForm = document.getElementById("loginForm");
@@ -470,7 +504,8 @@
     const togglePassword = document.getElementById("togglePassword");
     const forgotPassword = document.getElementById("forgotPassword");
 
-    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("year").textContent =
+      new Date().getFullYear();
 
     function showMessage(message, type = "error") {
       messageBox.textContent = message;
@@ -486,19 +521,34 @@
       console.error("Firebase error:", error.code, error.message);
 
       switch (error.code) {
+        case "auth/invalid-api-key":
+        case "auth/api-key-not-valid":
+          return "API Key Firebase tidak valid. Salin ulang konfigurasi Web dari Firebase Console dan pastikan berasal dari project mandiri-startup-academy.";
+
         case "auth/invalid-email":
           return "Format email tidak valid.";
 
         case "auth/invalid-credential":
+        case "auth/invalid-login-credentials":
         case "auth/wrong-password":
         case "auth/user-not-found":
           return "Email atau kata sandi tidak cocok dengan akun Firebase.";
 
+        case "auth/user-disabled":
+          return "Akun ini dinonaktifkan di Firebase Authentication.";
+
+        case "auth/operation-not-allowed":
+          return "Metode login Email/Password belum diaktifkan di Firebase Authentication.";
+
         case "auth/too-many-requests":
-          return "Terlalu banyak percobaan login. Silakan tunggu sebelum mencoba kembali.";
+          return "Terlalu banyak percobaan login. Tunggu beberapa saat sebelum mencoba kembali.";
 
         case "auth/network-request-failed":
           return "Koneksi internet bermasalah. Periksa koneksi Anda.";
+
+        case "auth/unauthorized-domain":
+        case "auth/app-not-authorized":
+          return "Domain website belum diizinkan di pengaturan Firebase Authentication.";
 
         case "permission-denied":
         case "firestore/permission-denied":
@@ -510,9 +560,9 @@
     }
 
     togglePassword.addEventListener("click", () => {
-      const isPassword = passwordInput.type === "password";
-      passwordInput.type = isPassword ? "text" : "password";
-      togglePassword.textContent = isPassword ? "Sembunyikan" : "Lihat";
+      const show = passwordInput.type === "password";
+      passwordInput.type = show ? "text" : "password";
+      togglePassword.textContent = show ? "Sembunyikan" : "Lihat";
     });
 
     forgotPassword.addEventListener("click", async (event) => {
@@ -556,7 +606,7 @@
       let signedInUser = null;
 
       try {
-        // 1. Login ke Firebase Authentication.
+        // 1. Login menggunakan Firebase Authentication.
         const credential = await signInWithEmailAndPassword(
           auth,
           email,
@@ -565,44 +615,31 @@
 
         signedInUser = credential.user;
 
-        // 2. Diagnostik lokasi akun dan dokumen profil.
-        console.log("=== MANDIRI STARTUP ACADEMY DIAGNOSTIK ===");
-        console.log("Firebase project:", app.options.projectId);
-        console.log("Firebase app name:", app.name);
-        console.log("Firestore database:", "(default)");
         console.log("Login email:", signedInUser.email);
         console.log("Login UID:", signedInUser.uid);
 
-        // 3. Baca dokumen langsung dari server Firestore.
+        // 2. Cari profil berdasarkan UID pada users/{UID}.
         const profileRef = doc(db, "users", signedInUser.uid);
 
         console.log("Firestore document path:", profileRef.path);
-        console.log("Firestore document ID:", profileRef.id);
 
         const profileSnapshot = await getDocFromServer(profileRef);
 
         console.log("Profile exists on server:", profileSnapshot.exists());
 
-        if (profileSnapshot.exists()) {
-          console.log("Profile data:", profileSnapshot.data());
-        }
-
-        console.log("=== AKHIR DIAGNOSTIK ===");
-
-        // 4. Jangan lanjutkan jika profil belum ditemukan.
         if (!profileSnapshot.exists()) {
           await signOut(auth);
           signedInUser = null;
 
           showMessage(
-            "Login Firebase berhasil, tetapi dokumen users dengan UID akun ini tidak ditemukan di server Firestore. Pastikan Document ID sama persis dengan Login UID dan dokumen berada di proyek mandiri-startup-academy, database (default). Periksa Console browser untuk diagnostik."
+            "Login Firebase berhasil, tetapi dokumen users/{UID} tidak ditemukan pada database (default). Periksa Document ID dan project Firebase."
           );
           return;
         }
 
         const profile = profileSnapshot.data();
 
-        // 5. Periksa status akun.
+        // 3. Pastikan akun aktif.
         if (profile.status !== "active") {
           await signOut(auth);
           signedInUser = null;
@@ -613,7 +650,7 @@
           return;
         }
 
-        // 6. Arahkan ke dashboard berdasarkan peran.
+        // 4. Arahkan pengguna berdasarkan peran di Firestore.
         const destinations = {
           siswa: "dashboard/student.html",
           guru: "dashboard/teacher.html",
@@ -627,12 +664,16 @@
           signedInUser = null;
 
           showMessage(
-            "Peran akun belum valid. Periksa field role pada dokumen profil pengguna."
+            "Peran akun belum valid. Hubungi administrator untuk memeriksa profil pengguna."
           );
           return;
         }
 
-        showMessage("Login berhasil. Mengalihkan ke dashboard...", "success");
+        showMessage(
+          "Login berhasil. Mengalihkan ke dashboard...",
+          "success"
+        );
+
         window.location.assign(destination);
 
       } catch (error) {
@@ -645,6 +686,7 @@
         }
 
         showMessage(firebaseErrorMessage(error));
+
       } finally {
         loginButton.disabled = false;
         loginButton.textContent = "Masuk ke Akun";
