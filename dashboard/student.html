@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b1730">
+<title>Dashboard Siswa | Mandiri Startup Academy</title>
+<style>
+:root{--navy:#0b1730;--navy2:#142747;--gold:#d8b56a;--bg:#f4f6fa;--text:#24334b;--muted:#718096;--border:#e4e9f1;--green:#067647;--red:#b42318}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,"Segoe UI",Arial,sans-serif;color:var(--text)}button{font:inherit;cursor:pointer}
+header{background:var(--navy);color:white;padding:19px max(20px,calc((100% - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center}.logo{height:43px;width:43px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold);font-weight:900;font-size:22px}.brand strong{display:block;font-size:13px}.brand small{display:block;color:#bac5d5;font-size:11px;margin-top:4px}
+.logout{border:1px solid #ffffff55;background:transparent;color:white;border-radius:9px;padding:10px 14px;font-weight:700}
+main{max-width:1120px;margin:auto;padding:28px 20px}.hero{background:linear-gradient(115deg,var(--navy),var(--navy2));color:white;padding:28px;border-radius:17px}.eyebrow{color:#e6ca88;font-size:10px;font-weight:800;letter-spacing:2px}.hero h1{font-size:clamp(24px,4vw,34px);margin:10px 0}.hero p{color:#d1d9e5;line-height:1.7;margin:0}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;margin-top:18px}.panel{background:white;border:1px solid var(--border);border-radius:14px;padding:22px;min-width:0}.panel h2{font-size:17px;color:var(--navy);margin:0 0 8px}.muted{color:var(--muted);font-size:13px;line-height:1.7}.status{padding:13px 15px;border-radius:10px;background:#f8f9fc;border:1px solid var(--border);font-size:13px;line-height:1.7;overflow-wrap:anywhere}.status.error{color:var(--red);background:#fff0ef;border-color:#ffd5d1}.status.success{color:var(--green);background:#ecfdf3;border-color:#abefc6}
+.members{display:grid;gap:10px;margin-top:15px}.member{border:1px solid var(--border);border-radius:10px;padding:12px;display:flex;align-items:center;gap:11px}.avatar{width:36px;height:36px;border-radius:50%;background:#f5eedf;color:#8a6828;display:grid;place-items:center;font-weight:800;flex-shrink:0}.member strong{display:block;font-size:13px}.member small{color:var(--muted);font-size:11px;overflow-wrap:anywhere}
+.steps{display:grid;gap:11px;margin-top:15px}.step{display:flex;gap:12px;padding:13px;border:1px solid var(--border);border-radius:10px}.number{width:30px;height:30px;border-radius:9px;background:#f5eedf;color:#8a6828;display:grid;place-items:center;font-weight:800;flex-shrink:0}.step strong{display:block;font-size:13px}.step p{font-size:12px;color:var(--muted);line-height:1.6;margin:4px 0 0}
+footer{text-align:center;padding:22px;color:var(--muted);font-size:11px}
+@media(max-width:720px){main{padding:17px 13px}.grid{grid-template-columns:1fr}.hero{padding:22px}.panel{padding:17px}}
+</style>
+</head>
+<body>
+<header><div class="brand"><div class="logo">M</div><div><strong>MANDIRI STARTUP ACADEMY</strong><small>SMKS Mandiri Bandar Agung · Portal Siswa</small></div></div><button id="logoutButton" class="logout" type="button">Keluar ↗</button></header>
+<main>
+<section class="hero"><div class="eyebrow">STUDENT BUSINESS WORKSPACE</div><h1 id="welcomeTitle">Selamat datang di ruang kerja bisnis!</h1><p>Kerjakan proyek kewirausahaan bersama kelompok. Setiap anggota bertanggung jawab, berdiskusi, membuat produk, mempromosikan, dan mencatat keuangan secara kolaboratif.</p></section>
+<div id="accountStatus" class="status" style="margin-top:16px" role="status" aria-live="polite">Memeriksa akun...</div>
+<div class="grid">
+<section class="panel"><h2>Kelompok Saya</h2><p class="muted" id="groupDescription">Informasi kelompok akan muncul setelah akun diaktifkan dan admin menetapkan kelompok.</p><div id="members" class="members"></div></section>
+<section class="panel"><h2>Alur Kerja Kelompok</h2><p class="muted">Gunakan pembagian tugas berikut agar seluruh anggota terlibat aktif.</p><div class="steps">
+<div class="step"><div class="number">1</div><div><strong>Riset masalah pelanggan</strong><p>Diskusikan kebutuhan calon pembeli dan tulis alasan produk kelompok layak dibuat.</p></div></div>
+<div class="step"><div class="number">2</div><div><strong>Rancang brand dan produk</strong><p>Tentukan nama, target pasar, keunikan, biaya produksi, dan harga jual.</p></div></div>
+<div class="step"><div class="number">3</div><div><strong>Buat promosi dan penjualan</strong><p>Siapkan foto atau video promosi, pilih kanal, lalu catat respons pelanggan.</p></div></div>
+<div class="step"><div class="number">4</div><div><strong>Catat keuangan dan evaluasi</strong><p>Hitung pemasukan, pengeluaran, laba/rugi, serta perbaikan yang perlu dilakukan.</p></div></div>
+</div></section>
+</div>
+</main><footer>© <span id="year"></span> Mandiri Startup Academy · SMKS Mandiri Bandar Agung</footer>
+<script type="module">
+import {auth,db,authPersistenceReady} from "../js/firebase.js";
+import {onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-auth.js";
+import {doc,getDoc} from "https://www.gstatic.com/firebasejs/11.6.0/firebase-firestore.js";
+const $=id=>document.getElementById(id);
+$("year").textContent=new Date().getFullYear();
+function status(text,type=""){ $("accountStatus").textContent=text;$("accountStatus").className="status"+(type?" "+type:"");}
+function renderMembers(names,emails,uid){const box=$("members");box.replaceChildren();(names||[]).forEach((name,i)=>{const item=document.createElement("div");item.className="member";const avatar=document.createElement("div");avatar.className="avatar";avatar.textContent=String(name||"S").trim().charAt(0).toUpperCase();const details=document.createElement("div");const strong=document.createElement("strong");strong.textContent=name||"Siswa";const small=document.createElement("small");small.textContent=(emails||[])[i]||"";details.append(strong,small);item.append(avatar,details);box.append(item);});}
+await authPersistenceReady;
+onAuthStateChanged(auth,async user=>{
+ if(!user){window.location.replace("../login.html");return;}
+ try{
+  let snap=await getDoc(doc(db,"Users",user.uid));
+  if(!snap.exists())snap=await getDoc(doc(db,"users",user.uid));
+  if(!snap.exists()){status("Profil akun belum ditemukan. Hubungi administrator untuk pemeriksaan profil.","error");return;}
+  const profile=snap.data();const role=String(profile.role||"").toLowerCase();const normalized=role==="siswa"?"student":role;
+  if(normalized==="admin"){window.location.replace("./admin.html");return;}
+  if(normalized!=="student"){status("Peran akun tidak dikenali. Hubungi administrator.","error");return;}
+  $("welcomeTitle").textContent="Halo, "+(profile.displayName||user.displayName||"Siswa")+"!";
+  if(profile.status!=="active"){status("Pendaftaran diterima. Akun Anda masih menunggu persetujuan admin dan penempatan ke kelompok.","error");$("groupDescription").textContent="Kelompok akan terlihat setelah akun disetujui administrator.";return;}
+  if(!profile.groupId){status("Akun aktif, tetapi belum ditempatkan ke kelompok. Hubungi administrator.","error");$("groupDescription").textContent="Admin perlu memasukkan Anda ke kelompok berisi 3–4 siswa.";return;}
+  const groupSnap=await getDoc(doc(db,"Groups",profile.groupId));
+  if(!groupSnap.exists()){status("ID kelompok tidak ditemukan. Hubungi administrator.","error");return;}
+  const group=groupSnap.data();
+  $("groupDescription").textContent=(group.name||"Kelompok siswa")+" · "+(group.className||"Kelas belum diisi")+" · "+((group.memberUids||[]).length)+" anggota";
+  renderMembers(group.memberNames||[],group.memberEmails||[],user.uid);
+  status("Akun aktif dan kelompok berhasil dimuat. Selamat bekerja bersama tim!","success");
+ }catch(error){console.error(error);status("Gagal memuat profil atau kelompok dari Firebase ("+(error.code||"error")+"). Periksa Firestore Rules dan koneksi.","error");}
+});
+$("logoutButton").addEventListener("click",async()=>{try{await signOut(auth);window.location.replace("../login.html");}catch(error){status("Logout gagal. Periksa koneksi dan coba lagi.","error");}});
+</script>
+</body></html>
